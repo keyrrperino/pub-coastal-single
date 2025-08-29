@@ -47,7 +47,7 @@ function extractSubSector(value: string): string | null {
 
 export function getCutScenes(minSeaLevel = 0.3, randomizeEffect: number, activities: ActivityLogType[]) {
   // For each sub-sector, find the latest activity and get the cutscene
-  const cutScenes: CutScenesEnum[] = subSectors.map(({ sector, subSector }) => {
+  const cutScenes: (CutScenesEnum | null | undefined)[] = subSectors.map(({ sector, subSector }) => {
     // Find the latest activity for this sector/subSector
     const activity = activities
       .filter((a) => {

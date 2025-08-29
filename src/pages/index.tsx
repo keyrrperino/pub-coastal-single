@@ -60,7 +60,8 @@ export default function Home() {
       <GameProvider>
         {!room && "Room Loading...."}
         {/* {room && <SplineFirebase roomName={room} />} */}
-        {sector && room && <SectorControl onClickSector={onClickSector} sector={sector} roomName={room} />}
+        {/* {sector && room && <SectorControl onClickSector={onClickSector} sector={sector} roomName={room} />} */}
+        <div>loading...</div>
       </GameProvider>
     </>
   );
