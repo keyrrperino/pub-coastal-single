@@ -402,6 +402,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     (!triggersLoading && isGameOnGoing(lobbyState.gameLobbyStatus) && cutSceneStatus !== CutScenesStatusEnum.STARTED) && 
       <ProgressBar
           containerClassName="fixed z-10 top-[9vh] left-[30vw] px-[1vw] py-[1.3vw] w-[40vw]"
+          style={{display: "none"}}
           key={`${lobbyState.round ?? 1}-${lobbyState.gameLobbyStatus}`}
           duration={lobbyState.phaseDuration}
           onTimeUp={onRoundGameplayTimeUp}
@@ -414,7 +415,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.INTRODUCTION) && 
     <div 
       className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-      style={{ borderRadius: 0 }}
+      style={{ borderRadius: 0, display: "none" }}
     >
       {currentTutorial === 0 && <TutorialScreen1 phaseStartTime={lobbyState.phaseStartTime} />}
       {currentTutorial === 1 && <TutorialScreen2 phaseStartTime={lobbyState.phaseStartTime} />}
@@ -497,7 +498,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     <>
       <div
         className="fixed inset-0 w-screen h-screen m-0 p-0 bg-black z-0"
-        style={{ borderRadius: 0, gap: 0 }}
+        // style={{ borderRadius: 0, gap: 0 }}
       >
         {/* Only show Spline when triggers are done loading */}
         
@@ -519,7 +520,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         />
 
         {/* {renderScore} */}
-        {/* {renderProgressBar} */}
+        {renderProgressBar}
         {/* {renderInstroductions} */}
         {/* {renderStoryLine} */}
         {renderEndingScreen}

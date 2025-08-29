@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
-import SplineFirebase from '@/components/SplineFirebase';
 import { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import dynamic from 'next/dynamic';
 
-export default function AdminPhaseControl() {
+const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
+
+function HomePage() {
   const [room, setRoom] = useState<string | null>(null);
 
   useEffect(() => {
@@ -53,9 +55,14 @@ export default function AdminPhaseControl() {
         <meta name="msapplication-TileImage" content="/assets/icon-512x512.png" />
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
-      <GameProvider>
-        {sector && room && <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />}
-      </GameProvider>
+      <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+        <GameProvider>
+          {sector && room && (
+            <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />
+          )}
+        </GameProvider>
+      </main>
     </>
   );
 }
+export default dynamic(() => Promise.resolve(HomePage), { ssr: false });

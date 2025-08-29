@@ -34,16 +34,16 @@ const Timer: React.FC<TimerProps> = ({
   });
 
   return (
-    <div className="flex flex-row items-center justify-center gap-4 xl:gap-8">
+    <div className="flex flex-row items-center justify-center gap-4 w-full">
       {/* Left: column with white box (clock+bar) and hint below */}
-      <div className="flex flex-col justify-start items-center w-[95vw]">
+      <div className="flex flex-col justify-start items-center w-full">
         {/* Round indicator */}
         {/* White box: clock + bar */}
-        <div className="flex flex-row items-center w-full rounded-[1vh] bg-white px-3 py-1.5 mb-1.5 opacity-40">
+        <div className="flex flex-row items-center w-full rounded-[1vh] bg-white px-[0.2vh] py-[0.2vh] opacity-40">
           {/* Clock icon */}
           <svg
-            width="12"
-            height="12"
+            width="15"
+            height="15"
             viewBox="0 0 34 35"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -54,12 +54,12 @@ const Timer: React.FC<TimerProps> = ({
             <rect x="22.458" y="16.7571" width="3.96262" height="7.92523" transform="rotate(90 22.458 16.7571)" fill="black" />
           </svg>
           {/* Progress bar */}
-          <div className="relative flex-1 h-[1vh] rounded-[1vh] overflow-hidden bg-white">
+          <div className="relative flex-1 h-[1.3vh] rounded-[1.3vh] overflow-hidden bg-white">
             <div
               className="absolute left-0 top-0 h-full transition-all duration-1000 ease-linear bg-[#002CFF]"
               style={{
                 width: `${progressPercentage}%`,
-                borderRadius: '8px',
+                borderRadius: '0.7vh',
               }}
             />
           </div>

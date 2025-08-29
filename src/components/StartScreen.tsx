@@ -111,34 +111,23 @@ export default function StartScreen({
           {/* Player and Buttons Section */}
           <div className="flex flex-col items-center gap-4 w-full">
             {/* Player Indicator */}
-            <div className="px-3 py-2.5">
-              <span
-                className="text-white text-3xl"
-                style={{
-                  fontFamily: 'novecento-sans-narrow, sans-serif',
-                  fontWeight: 700,
-                }}
-              >
-                ˗ˏˋ Player {playerNumber} ˎˊ˗
-              </span>
-            </div>
 
             {/* Buttons */}
             <div className="flex flex-row justify-center gap-5 w-full">
               <button
                 onClick={onStartGame}
-                className="min-w-[450px] h-[83px] py-4 px-8 bg-[#005DFF] text-white text-2xl rounded-full hover:bg-[#0052e6] active:scale-95 transition-all duration-200 whitespace-nowrap"
+                className="h-[100px] px-[5vw] bg-[#005DFF] text-white text-2xl rounded-full hover:bg-[#0052e6] active:scale-95 transition-all duration-200 whitespace-nowrap"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
                 }}
               >
-                Start Game For All
+                Start Game
               </button>
 
               <button
                 onClick={onShowLeaderboard}
-                className="min-w-[450px] h-[83px] py-4 px-8 bg-white text-[#005DFF] text-2xl rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-200 whitespace-nowrap"
+                className="h-[100px] px-[5vw] bg-white text-[#005DFF] text-2xl rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-200 whitespace-nowrap"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,

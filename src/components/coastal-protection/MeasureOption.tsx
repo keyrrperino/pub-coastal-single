@@ -29,14 +29,14 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
             background: 'radial-gradient(circle at 10.5% 16.4%, #FFD700 0%, #FFA500 100%)',
             boxShadow: '0px 5.91px 29.56px 0px rgba(255, 215, 0, 0.4), 0px 0px 20px 0px rgba(255, 215, 0, 0.6)',
             borderRadius: '63.28px',
-            border: '3px solid #FFD700'
+            border: '0.2vh solid #FFD700'
           };
         case ActionStatus.REPLACED:
           return {
             background: 'radial-gradient(circle at 10.5% 16.4%, #DAA520 0%, #CD853F 100%)',
             boxShadow: '0px 5.91px 29.56px 0px rgba(218, 165, 32, 0.3)',
             borderRadius: '63.28px',
-            border: '2px solid #CD853F',
+            border: '0.2vh solid #CD853F',
             opacity: 0.8
           };
         case ActionStatus.SELECTABLE:
@@ -68,7 +68,7 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
         background: 'radial-gradient(circle at 10.5% 16.4%, #FFD700 0%, #FFA500 100%)',
         boxShadow: '0px 5.91px 29.56px 0px rgba(255, 215, 0, 0.4), 0px 0px 20px 0px rgba(255, 215, 0, 0.6)',
         borderRadius: '63.28px',
-        border: '3px solid #FFD700'
+        border: '0.2vh solid #FFD700'
       };
     }
     if (disabled) {
@@ -121,14 +121,14 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
   const shouldPulse = status ? status === ActionStatus.COMPLETED : isSelected;
 
   return (
-    <div className={`flex flex-col items-center ${shouldShowAnimation ? 'floatAnimation' : ''} gap-[1vw]`}>
+    <div className={`flex flex-col items-center gap-[0.5vh] ${shouldShowAnimation ? 'floatAnimation' : ''}`}>
       <button
         onClick={buttonDisabled ? undefined : onClick}
         disabled={buttonDisabled}
-        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[4vw] h-[4vw] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
+        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[4.5vh] h-[4.5vh] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
         style={getButtonStyle()}
       >
-        <div className={`text-center text-[1vw] font-bold ${styles.novecentoBold} uppercase`} 
+        <div className={`text-center text-[1.5vh] font-bold ${styles.novecentoBold} uppercase`} 
              style={{ color: getTextColor() }}>
           {title.split(' ').map((line, index) => (
             <div key={index}>{line}</div>

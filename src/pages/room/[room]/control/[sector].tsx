@@ -2,9 +2,10 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import SplineFirebase from '@/components/SplineFirebase';
 import { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+
+const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -27,7 +28,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: { room, sector },
   };
 };
-export default function SectorPage() {
+function SectorPageInner() {
   const [room, setRoom] = useState<string | null>(null);
 
   useEffect(() => {
@@ -76,9 +77,14 @@ export default function SectorPage() {
         <meta name="msapplication-TileImage" content="/assets/icon-512x512.png" />
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
-      <GameProvider>
-        {sector && room && <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />}
-      </GameProvider>
+      <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+        <GameProvider>
+          {sector && room && (
+            <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />
+          )}
+        </GameProvider>
+      </main>
     </>
   );
 }
+export default dynamic(() => Promise.resolve(SectorPageInner), { ssr: false });

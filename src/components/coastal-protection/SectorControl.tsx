@@ -965,6 +965,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
     sectorId: string,
     title: string,
     progressionState: any,
+    titleReverse: boolean
   ) => {
     // progression state is now passed as parameter to avoid calling hooks conditionally
 
@@ -1186,6 +1187,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
         title={title}
         measures={measures as any}
         demolishOption={demolishOption}
+        titleReverse={titleReverse}
       />
     );
   };
@@ -1195,36 +1197,34 @@ const SectorControl: React.FC<SectorControlProps> = ({
     currentPhase === GameLobbyStatus.PREPARING;
 
   const renderScore = (
-    <div className="fixed inset-0 w-screen h-screen m-0 p-0 z-10">
-      <div className="flex w-full justify-between px-2 py-1  text-white text-[2vw]">
-        <div className="flex flex-col">
-          <h1>
-            {coinsLeft > 0 ? "BUDGET" : "NO MORE COINS"}
-          </h1>
-          <div className="grid grid-cols-5 gap-2">
-          {Array.from({ length: coinsLeft }).map((_, idx) => (
-            <img
-              key={'coin-' + idx}
-              src="/games/pub-coastal-spline/images/coin.svg"
-              alt="coin"
-              className="w-[1.5vw] h-[1.5vw]"
-            />
-          ))}
-          </div>
+    <div className="flex w-full justify-between text-white text-[3vh]">
+      <div className="flex flex-col">
+        <h1>
+          {coinsLeft > 0 ? "BUDGET" : "NO MORE COINS"}
+        </h1>
+        <div className="grid grid-cols-5 gap-2">
+        {Array.from({ length: coinsLeft }).map((_, idx) => (
+          <img
+            key={'coin-' + idx}
+            src="/games/pub-coastal-spline/images/coin.svg"
+            alt="coin"
+            className="w-[1.8vh] h-[1.8vh]"
+          />
+        ))}
         </div>
-        <div className="flex flex-col justify-end">
-        <h1 className="text-center text-[3vw]">
-            Round {lobbyState.round ?? 1}
-          </h1>
-        </div>
-        <div className="flex flex-col">
-          <h1 className="text-right">
-            SCORE
-          </h1>
-          <h2 className="text-right number-enhanced">
-            {totalScore} PTS
-          </h2>
-        </div>
+      </div>
+      <div className="flex flex-col justify-end">
+      <h1 className="text-center text-[3vw]">
+          Round {lobbyState.round ?? 1}
+        </h1>
+      </div>
+      <div className="flex flex-col">
+        <h1 className="text-right">
+          SCORE
+        </h1>
+        <h2 className="text-right number-enhanced">
+          {totalScore} PTS
+        </h2>
       </div>
     </div>
   )
@@ -1234,8 +1234,10 @@ const SectorControl: React.FC<SectorControlProps> = ({
       {/* Main content */}
 
       <div
-        className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] p-2"
-        style={isBottom ? { bottom: 0 } : {}}
+        className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] px-[2vw] py-[1vh]"
+        style={isBottom ? { bottom: 0 } : {
+          ...(currentPhase === GameLobbyStatus.ROUND_CUTSCENES ? { display: "none"} : {})
+        }}
       >
         <div className="absolute left-1/2 -translate-x-1/2 w-full z-10 p-2 mt-[-11vh]">
           {/* Budget display left */}
@@ -1247,21 +1249,20 @@ const SectorControl: React.FC<SectorControlProps> = ({
             // Gameplay phases: Show Timer, Budget, and Sectors
             if (
               currentPhase === GameLobbyStatus.ROUND_GAMEPLAY ||
-              currentPhase === GameLobbyStatus.ROUND_CUTSCENES ||
               currentPhase === GameLobbyStatus.ROUND_SCORE_BREAKDOWN
             ) {
               return (
-                <>
+                <div className="w-full flex flex-col">
                   {/* Top bar: Budget left, Timer taking remaining space */}
                   <div
-                    className="w-full flex flex-row items-start gap-4"
+                    className="w-full flex flex-row items-start gap-[1vh]"
                     style={{
                       alignItems: totalCoins > 0 ? 'start' : 'center',
                     }}
                   >
 
                     {/* Timer taking remaining space */}
-                    <div className="flex-1 flex justify-center">
+                    <div className="flex-1 flex justify-center w-full">
                       {(() => {
                         const timerDuration = showCutscene
                           ? 0
@@ -1291,43 +1292,48 @@ const SectorControl: React.FC<SectorControlProps> = ({
                   </div>
 
                   {/* Sector sections */}
-                  <div className="flex flex-row w-full items-end justify-center">
+                  <div className="flex flex-row w-full items-center justify-center gap-[1vh] mt-[1vh]">
+                    
                     {renderSectorSection(
                       sectorAId,
                       sectorTitles.sectorA,
                       progressionStateA,
+                      false
                     )}
 
-                    {/* Center sector selector */}
-                    <div className="flex flex-row items-end justify-center">
-                      {/* left divider */}
-                      {/* <div className="w-px h-[15vh] bg-white/30" /> */}
 
-                      <div className="flex flex-col items-center gap-3">
+                    {/* Center sector selector */}
+                    {/* style={{ borderLeft: '0.1vw solid rgba(255, 255, 255, 0.2)', borderRight: '0.1vw solid rgba(255, 255, 255, 0.2)' }} */}
+                    <div className="flex flex-row items-end justify-center pl-[1vw] pr-[1vw] self-end">
+                      {/* left divider */}
+
+                      <div className="w-px h-[14vh] bg-white/30 self-end mr-[1vw]" />
+
+                      <div className="flex flex-col items-center gap-[1vh] mb-[1vh]">
                         {[1, 2, 3].map((num) => {
                           const id = `sector-${num}`;
                           const isSelected = sector === id;
                           return (
                             <div key={id} className="flex items-center">
                               {isSelected && (
-                                <span className="w-0 h-0 border-y-[0.8vw] border-y-transparent border-l-[1vw] border-l-[#FFD447]" />
+                                <span className="w-0 h-0 border-y-[0.8vh] border-y-transparent border-l-[1vh] border-l-[#FFD447]" />
                               )}
                               <button
                                 onClick={() => onClickSector && onClickSector(id)}
                                 className={
                                   isSelected
-                                    ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-[#0F2C4C] bg-[#FFD447] shadow-[0_6px_0_rgba(0,0,0,0.2)] border-2 border-[#FFE58A]'
+                                    ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-[#0F2C4C] bg-[#FFD447] shadow-[0_6px_0_rgba(0,0,0,0.2)] border-[0.2vh] border-[#FFE58A]'
                                     : num === 2
-                                      ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#2e6e49] to-[#274d3a] border border-white/40'
+                                      ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-white bg-gradient-to-b from-[#2e6e49] to-[#274d3a] border border-white/40'
                                       : num === 3
-                                        ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#2f4f8a] to-[#283f6d] border border-white/40'
-                                        : 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#8a7f2f] to-[#6d6528] border border-white/40'
+                                        ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-white bg-gradient-to-b from-[#2f4f8a] to-[#283f6d] border border-white/40'
+                                        : 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-white bg-gradient-to-b from-[#8a7f2f] to-[#6d6528] border border-white/40'
                                 }
                               >
                                 {`SECTOR ${num}`}
                               </button>
                               {isSelected && (
-                                <span className="w-0 h-0 border-y-[0.8vw] border-y-transparent border-r-[1vw] border-r-[#FFD447]" />
+                                <span className="w-0 h-0 border-y-[0.8vh] border-y-transparent border-r-[1vh] border-r-[#FFD447]" />
                               )}
                             </div>
                           );
@@ -1335,16 +1341,18 @@ const SectorControl: React.FC<SectorControlProps> = ({
                       </div>
 
                       {/* right divider */}
-                      {/* <div className="w-px h-[15vh] bg-white/30" /> */}
+                      <div className="w-px h-[14vh] bg-white/30 self-end ml-[1vw]" />
+                      
                     </div>
 
                     {renderSectorSection(
                       sectorBId,
                       sectorTitles.sectorB,
                       progressionStateB,
+                      true
                     )}
                   </div>
-                </>
+                </div>
               );
             }
 
@@ -1411,9 +1419,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
             // Other phases: Show circular loader
             return (
-              <div className="w-full h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-              </div>
+              null
             );
           })()}
         </div>
@@ -1455,9 +1461,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
         }
       />
 
-      <PlayerCutsceneModal
+      {/* <PlayerCutsceneModal
         isOpen={showCutscene}
-      ></PlayerCutsceneModal>
+      ></PlayerCutsceneModal> */}
 
       <EndingModal
         isOpen={showEnding}

@@ -69,7 +69,7 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
 
   return (
     <div
-      className={`${styles.coastalProtectionCard} flex flex-col justify-center items-center w-auto`}
+      className={`${styles.coastalProtectionCard} flex flex-col justify-center items-center w-auto gap-[0.5vh]`}
       style={{
         opacity: isActive ? 1 : 0.4,
         pointerEvents: isActive ? 'auto' : 'none',
@@ -88,7 +88,7 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
             className="w-[1.5vw] h-[1.5vw] object-cover"
           />
         </div>
-        <div className="flex flex-col justify-center gap-0.5">
+        <div className="flex flex-col justify-center">
           <div className={`${styles.novecentoBold} text-[1vw] leading-[14px] text-white uppercase`} style={{lineHeight: '0.8em'}}>
             {title}
           </div>
@@ -99,9 +99,9 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
           )}
         </div>
       </div>
-      <div className="flex flex-row justify-center gap-[0.4vw] w-full mt-1.5">
+      <div className="flex flex-row justify-center gap-[0.4vw] w-full">
         {hasNoMoreAvailableUpgrades ? (
-          <div className="flex flex-col items-center gap-[6px]" style={{gap: '6px'}}>
+          <div className="flex flex-col items-center">
             <div className="flex flex-col justify-center items-center w-[76px] h-[76px]">
               <div className={`${styles.novecentoBold} text-[14px] font-bold leading-[14px] text-white uppercase text-center`}>
                 NO MORE<br/>AVAILABLE<br/>UPGRADES
