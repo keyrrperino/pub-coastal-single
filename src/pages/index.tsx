@@ -1,14 +1,10 @@
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import SplineFirebase from '@/components/SplineFirebase';
 import { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
-
-export default function Home() {
+export default function AdminPhaseControl() {
   const [room, setRoom] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,10 +54,7 @@ export default function Home() {
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
       <GameProvider>
-        {!room && "Room Loading...."}
-        {/* {room && <SplineFirebase roomName={room} />} */}
-        {/* {sector && room && <SectorControl onClickSector={onClickSector} sector={sector} roomName={room} />} */}
-        <div>loading...</div>
+        {sector && room && <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />}
       </GameProvider>
     </>
   );
