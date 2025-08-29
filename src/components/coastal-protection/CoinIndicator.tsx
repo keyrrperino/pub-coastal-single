@@ -46,7 +46,7 @@ const CoinIndicator: React.FC<CoinIndicatorProps> = ({ count = 1, direction = 'r
     return (
       <div
         key={count}
-        className={`grid gap-x-[12px] gap-y-[12px]`}
+        className={`grid`}
         style={{ gridTemplateColumns: `repeat(${columns}, 1fr)`, width: 'auto', marginTop: direction === 'row' ? '8px' : '0' }}
       >
         {coins.map((_, index) => (
@@ -64,8 +64,7 @@ const CoinIndicator: React.FC<CoinIndicatorProps> = ({ count = 1, direction = 'r
   return (
     <div
       key={count}
-      className={`flex ${direction === 'row' ? 'flex-row' : 'flex-col'} gap-[3.99px] w-auto items-center`}
-      style={{ marginTop: direction === 'row' ? '8px' : '0' }}
+      className={`flex ${direction === 'row' ? 'flex-row' : 'flex-col'} gap-[0.2vw] w-auto items-center`}
     >
       {coins.map((_, index) => (
         <span

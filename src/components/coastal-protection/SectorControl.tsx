@@ -74,6 +74,8 @@ import RoundStartAnimationModal from '@/games/pub-coastal-game/compontents/Round
 interface SectorControlProps {
   sector: string;
   roomName: string;
+  onClickSector: (value: string) => void;
+  isSplineLoading: boolean;
 }
 
 // Helper function to get player number from sector
@@ -118,6 +120,8 @@ type RoundStartButtonSets = Record<
 const SectorControl: React.FC<SectorControlProps> = ({
   sector,
   roomName,
+  onClickSector,
+  isSplineLoading
 }) => {
   const { triggerSingleBuild } = useGameContext();
   const { updateFromGameRoomService } = useServerTime();
@@ -1186,35 +1190,58 @@ const SectorControl: React.FC<SectorControlProps> = ({
     );
   };
 
+  const isBottom = 
+    currentPhase === GameLobbyStatus.ROUND_GAMEPLAY || 
+    currentPhase === GameLobbyStatus.PREPARING;
+
+  const renderScore = (
+    <div className="fixed inset-0 w-screen h-screen m-0 p-0 z-10">
+      <div className="flex w-full justify-between px-2 py-1  text-white text-[2vw]">
+        <div className="flex flex-col">
+          <h1>
+            {coinsLeft > 0 ? "BUDGET" : "NO MORE COINS"}
+          </h1>
+          <div className="grid grid-cols-5 gap-2">
+          {Array.from({ length: coinsLeft }).map((_, idx) => (
+            <img
+              key={'coin-' + idx}
+              src="/games/pub-coastal-spline/images/coin.svg"
+              alt="coin"
+              className="w-[1.5vw] h-[1.5vw]"
+            />
+          ))}
+          </div>
+        </div>
+        <div className="flex flex-col justify-end">
+        <h1 className="text-center text-[3vw]">
+            Round {lobbyState.round ?? 1}
+          </h1>
+        </div>
+        <div className="flex flex-col">
+          <h1 className="text-right">
+            SCORE
+          </h1>
+          <h2 className="text-right number-enhanced">
+            {totalScore} PTS
+          </h2>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Background with blur effect */}
-      <div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          backgroundImage: 'url(/assets/controller-background.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(100px)',
-        }}
-      />
-
-      {/* Dark overlay */}
-      <div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          backgroundColor:
-            sector === 'sector-2'
-              ? 'rgba(95, 143, 51, 0.6)'
-              : sector === 'sector-3'
-                ? 'rgba(143, 51, 102, 0.6)'
-                : 'rgba(51, 92, 143, 0.6)', // sector-1 default
-        }}
-      />
-
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
-        <div className="w-full max-w-[900px] xl:max-w-[1160px] mx-auto px-[15px] xl:px-[20px] py-[15px] xl:py-[20px]">
+
+      <div
+        className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] p-2"
+        style={isBottom ? { bottom: 0 } : {}}
+      >
+        <div className="absolute left-1/2 -translate-x-1/2 w-full z-10 p-2 mt-[-11vh]">
+          {/* Budget display left */}
+          {renderScore}
+        </div>
+        <div className="w-full flex flex-col gap-[1vh]">
           {/* Render content based on current phase */}
           {(() => {
             // Gameplay phases: Show Timer, Budget, and Sectors
@@ -1232,10 +1259,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
                       alignItems: totalCoins > 0 ? 'start' : 'center',
                     }}
                   >
-                    {/* Budget display left */}
-                    <div className="flex-shrink-0">
-                      <BudgetDisplay totalCoins={totalCoins} />
-                    </div>
 
                     {/* Timer taking remaining space */}
                     <div className="flex-1 flex justify-center">
@@ -1268,14 +1291,52 @@ const SectorControl: React.FC<SectorControlProps> = ({
                   </div>
 
                   {/* Sector sections */}
-                  <div className="flex flex-row gap-[25px] xl:gap-[40px] mt-[70px] xl:mt-[48px] w-full items-center">
+                  <div className="flex flex-row w-full items-end justify-center">
                     {renderSectorSection(
                       sectorAId,
                       sectorTitles.sectorA,
                       progressionStateA,
                     )}
 
-                    
+                    {/* Center sector selector */}
+                    <div className="flex flex-row items-end justify-center">
+                      {/* left divider */}
+                      {/* <div className="w-px h-[15vh] bg-white/30" /> */}
+
+                      <div className="flex flex-col items-center gap-3">
+                        {[1, 2, 3].map((num) => {
+                          const id = `sector-${num}`;
+                          const isSelected = sector === id;
+                          return (
+                            <div key={id} className="flex items-center">
+                              {isSelected && (
+                                <span className="w-0 h-0 border-y-[0.8vw] border-y-transparent border-l-[1vw] border-l-[#FFD447]" />
+                              )}
+                              <button
+                                onClick={() => onClickSector && onClickSector(id)}
+                                className={
+                                  isSelected
+                                    ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-[#0F2C4C] bg-[#FFD447] shadow-[0_6px_0_rgba(0,0,0,0.2)] border-2 border-[#FFE58A]'
+                                    : num === 2
+                                      ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#2e6e49] to-[#274d3a] border border-white/40'
+                                      : num === 3
+                                        ? 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#2f4f8a] to-[#283f6d] border border-white/40'
+                                        : 'rounded-[1.2vh] px-6 py-3 font-extrabold tracking-wide text-[1vw] text-nowrap text-white bg-gradient-to-b from-[#8a7f2f] to-[#6d6528] border border-white/40'
+                                }
+                              >
+                                {`SECTOR ${num}`}
+                              </button>
+                              {isSelected && (
+                                <span className="w-0 h-0 border-y-[0.8vw] border-y-transparent border-r-[1vw] border-r-[#FFD447]" />
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* right divider */}
+                      {/* <div className="w-px h-[15vh] bg-white/30" /> */}
+                    </div>
 
                     {renderSectorSection(
                       sectorBId,

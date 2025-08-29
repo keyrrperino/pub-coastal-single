@@ -43,12 +43,21 @@ import TutorialScreen5 from "@/components/TutorialScreen5";
 import { useLobbyRoundBreakdown } from "./hooks/useLobbyRoundBreakdown";
 import { useLobbyRoundAnimation } from "./hooks/useLobbyRoundAnimation";
 import { useServerTime } from './ServerTimeContext';
+import dynamic from "next/dynamic";
+
+const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
 interface SplineFirebaseProps {
   roomName: string;
+  onClickSector: (value: string) => void;
+  sector: string;
 }
 
-const SplineFirebase: React.FC<SplineFirebaseProps> = ({ roomName }) => {
+const SplineFirebase: React.FC<SplineFirebaseProps> = ({
+  roomName,
+  onClickSector,
+  sector,
+}) => {
   const { getAdjustedCurrentTime } = useServerTime();
   const {
     canvasRef,
@@ -61,8 +70,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({ roomName }) => {
     triggersLoading, setTriggersLoading,
     triggerProgress, setTriggerProgress,
   } = useInitialize(roomName);
-
-  console.log("activiies here: ", activities);
 
   const [totalScore, setTotalScore] = useState<number>(2500);
   useHideAllTriggers(isLoaded, splineAppRef, lobbyState);
@@ -487,58 +494,61 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({ roomName }) => {
   };
 
   return (
-    <div
-      className="fixed inset-0 w-screen h-screen m-0 p-0 bg-black z-0"
-      style={{ borderRadius: 0, gap: 0 }}
-    >
-      {/* Only show Spline when triggers are done loading */}
-      
-      {renderAllCutScences}
+    <>
+      <div
+        className="fixed inset-0 w-screen h-screen m-0 p-0 bg-black z-0"
+        style={{ borderRadius: 0, gap: 0 }}
+      >
+        {/* Only show Spline when triggers are done loading */}
+        
+        {renderAllCutScences}
 
-      <audio
-        ref={audioRef}
-        src="/games/pub-coastal-spline/flash-reports/audio/news-background-music.mp3"
-      />
-      <audio
-        ref={calmAudioRef}
-        src="/games/pub-coastal-spline/flash-reports/audio/Calm Background Music.mp3"
-      />
+        <audio
+          ref={audioRef}
+          src="/games/pub-coastal-spline/flash-reports/audio/news-background-music.mp3"
+        />
+        <audio
+          ref={calmAudioRef}
+          src="/games/pub-coastal-spline/flash-reports/audio/Calm Background Music.mp3"
+        />
 
-      <canvas
-        ref={canvasRef}
-        className={"w-full z-9 h-full m-0 p-0 " + (triggersLoading && "d-none")}
-        style={{ display: "block", borderRadius: 0, border: "none" }}
-      />
+        <canvas
+          ref={canvasRef}
+          className={"w-full z-9 h-[70%] m-0 p-0 " + (triggersLoading && "d-none")}
+          style={{ display: "block", borderRadius: 0, border: "none" }}
+        />
 
-      {renderScore}
-      {/* {renderProgressBar} */}
-      {/* {renderInstroductions} */}
-      {/* {renderStoryLine} */}
-      {renderEndingScreen}
-      {renderInputTeamName}
-      {renderEndingLeaderBoard}
-      {renderRoundAnimation}
-      {renderRoundScoreBreakdown}
+        {/* {renderScore} */}
+        {/* {renderProgressBar} */}
+        {/* {renderInstroductions} */}
+        {/* {renderStoryLine} */}
+        {renderEndingScreen}
+        {renderInputTeamName}
+        {renderEndingLeaderBoard}
+        {renderRoundAnimation}
+        {renderRoundScoreBreakdown}
 
-      {/* Loading overlay with percentage */}
-      {(triggersLoading) && (
-        <div 
-          className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-          style={{ borderRadius: 0 }}
-        >
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
-          <span className="text-xl font-semibold text-blue-700 mb-2">
-            {isLoaded ? `Loading Map... ${triggerProgress}%` : "Loading Map..."}
-          </span>
-        </div>
-      )}
+        {/* Loading overlay with percentage */}
+        {(triggersLoading) && (
+          <div 
+            className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
+            style={{ borderRadius: 0 }}
+          >
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
+            <span className="text-xl font-semibold text-blue-700 mb-2">
+              {isLoaded ? `Loading Map... ${triggerProgress}%` : "Loading Map..."}
+            </span>
+          </div>
+        )}
 
-      {/* Leaderboard Overlay */}
-      <LeaderboardOverlay
-        isOpen={isLeaderboardOpen}
-        onClose={handleCloseLeaderboard}
-      />
-    </div>
+        {/* Leaderboard Overlay */}
+        <LeaderboardOverlay
+          isOpen={isLeaderboardOpen}
+          onClose={handleCloseLeaderboard}
+        />
+      </div>
+      {!triggersLoading && <SectorControl onClickSector={onClickSector} sector={sector} roomName={roomName} isSplineLoading={triggersLoading} />}
+    </>
   );
 };
 

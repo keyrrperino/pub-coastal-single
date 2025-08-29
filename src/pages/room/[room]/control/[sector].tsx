@@ -3,9 +3,8 @@ import dynamic from 'next/dynamic';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import SplineFirebase from '@/components/SplineFirebase';
-import { useState } from 'react';
-
-const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
+import { useEffect, useState } from 'react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -15,18 +14,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { room } = params as { room: string; };
+  const { room, sector } = params as { room: string; sector: string };
 
-  console.log('Room:', room);
+  console.log('Room:', room, 'Sector:', sector);
 
-  // const allowedSectors = ['sector-1', 'sector-2', 'sector-3'];
+  const allowedSectors = ['sector-1', 'sector-2', 'sector-3'];
+  if (!allowedSectors.includes(sector)) {
+    return { notFound: true };
+  }
 
   return {
-    props: { room },
+    props: { room, sector },
   };
 };
+export default function SectorPage() {
+  const [room, setRoom] = useState<string | null>(null);
 
-export default function SectorPage({ room }: { room: string }) {
+  useEffect(() => {
+    const getFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      if (result) {
+        setRoom(result.visitorId ?? null);
+      }
+    };
+    getFingerprint();
+  }, []);
+
+
   const [ sector, setSector ] = useState<string>("sector-1");
   const onClickSector = (sector: string) => {
     setSector(sector);
@@ -62,8 +77,7 @@ export default function SectorPage({ room }: { room: string }) {
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
       <GameProvider>
-        {/* <SplineFirebase roomName={room} /> */}
-        {sector && room && <SectorControl onClickSector={onClickSector} sector={sector} roomName={room} />}
+        {sector && room && <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />}
       </GameProvider>
     </>
   );

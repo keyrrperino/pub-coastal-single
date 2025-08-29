@@ -121,22 +121,22 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
   const shouldPulse = status ? status === ActionStatus.COMPLETED : isSelected;
 
   return (
-    <div className={`flex flex-col items-center gap-[6px] ${shouldShowAnimation ? 'floatAnimation' : ''}`} style={{gap: '6px'}}>
+    <div className={`flex flex-col items-center ${shouldShowAnimation ? 'floatAnimation' : ''} gap-[1vw]`}>
       <button
         onClick={buttonDisabled ? undefined : onClick}
         disabled={buttonDisabled}
-        className={`${styles.measureOptionButton} flex flex-col justify-center items-center gap-[12.66px] px-[25.31px] w-[76px] h-[76px] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
+        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[4vw] h-[4vw] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
         style={getButtonStyle()}
       >
-        <div className={`text-center text-[14px] font-bold leading-[14px] ${styles.novecentoBold} uppercase`} 
-             style={{ color: getTextColor(), lineHeight: '1em' }}>
+        <div className={`text-center text-[1vw] font-bold ${styles.novecentoBold} uppercase`} 
+             style={{ color: getTextColor() }}>
           {title.split(' ').map((line, index) => (
             <div key={index}>{line}</div>
           ))}
         </div>
       </button>
       
-      <CoinIndicator count={coinCount} direction="row" />
+      <CoinIndicator count={coinCount} direction="row" size={9} />
     </div>
   );
 };
