@@ -50,14 +50,14 @@ export default function PlayerRoundScreen({
       {/* Content Container */}
       <div
         className={cn(
-          'relative z-10 flex mx-auto flex-row justify-around items-center h-full w-screen max-w-[955px] 4k:max-w-[3600px]',
+          'relative z-10 flex mx-auto flex-row justify-around items-center h-full w-screen max-w-[75vw] gap-[2vh]',
           isControlScreen && 'justify-center',
         )}
       >
         {!isControlScreen && waterLevelIndicator}
         <div
           className={cn(
-            'flex flex-col flex-grow w-full gap-4 4k:gap-10',
+            'flex flex-col flex-grow w-full gap-4',
             isControlScreen
               ? 'justify-center items-center'
               : '4k:max-w-[2348px]',
@@ -71,10 +71,10 @@ export default function PlayerRoundScreen({
               isControlScreen && 'text-center',
             )}
           >
-            <h1 className="text-white text-7xl 4k:text-[140px] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
+            <h1 className="text-white text-[4vh] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
               ROUND {round}
             </h1>
-            <h2 className="text-white text-7xl 4k:text-[140px] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
+            <h2 className="text-white text-[4vh] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
               YEAR {year}
             </h2>
           </div>

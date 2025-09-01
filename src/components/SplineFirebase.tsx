@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from 'next/image';
 import { Application, SplineEventName } from "@splinetool/runtime";
 import { GameRoomService, getGlobalLeaderboard, ProcessedLeaderboardData } from "@/lib/gameRoom";
@@ -10,7 +10,7 @@ import { useInitialize } from "./hooks/initialize";
  
 import { useSplineTriggers } from "./hooks/useSplineTriggers";
 import { useLobbyPreparation } from "./hooks/useLobbyPreparation";
-import { isGameOnGoing } from "@/lib/utils";
+import { getPlayerNumber, isGameOnGoing } from "@/lib/utils";
 import { useSplineLoader } from "./hooks/useSplineLoader";
 import { CutScenesStatusEnum, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
 import { useHideAllTriggers } from "./hooks/useHideAllSplineTriggers";
@@ -44,6 +44,7 @@ import { useLobbyRoundBreakdown } from "./hooks/useLobbyRoundBreakdown";
 import { useLobbyRoundAnimation } from "./hooks/useLobbyRoundAnimation";
 import { useServerTime } from './ServerTimeContext';
 import dynamic from "next/dynamic";
+import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
@@ -213,8 +214,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   
   const [sectorPerformance, setSectorPerformance] = useState<SectorPerformance>('okay');
 
-  console.log(activities, "eyes here");
-
   const overAllScores = useSectorScores({
     activities: activities ?? [],
     lobbyState,
@@ -285,6 +284,13 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       playPromise?.catch(() => {});
     }
   }, [currentCutScene, lobbyState.gameLobbyStatus]);
+
+  const resetGame = async () => {
+    await gameRoomServiceRef.current?.deleteActivities();
+    await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
+    window.location.reload(); 
+  }
+
 
   // Main Progress logic
 
@@ -387,6 +393,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     >
       <EndingLeaderboardOverlay
         isOpen={true}
+        onClose={resetGame}
         topWinner={leaderboardData.topWinner || undefined}
         leaderboardData={leaderboardData.top5}
         bottomHighlight={leaderboardData.currentTeamEntry || { 
@@ -478,15 +485,20 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         breakdown={overAllScores}
         totalScore={totalScore}
         roundNumber={(lobbyState.round ?? 1) as 1|2|3}
+        upperContent={
+          <PostRoundModal
+            isOpen={true}
+            performance={sectorPerformance}
+            overallScoresData={overAllScores}
+            currentRound={lobbyState?.[LobbyStateEnum.ROUND] || 1}
+            sector={
+              ('user_sector_' + getPlayerNumber(sector)) as UserSectorEnum
+            }
+          />
+        }
       />
     )
   );
-
-  const resetGame = async () => {
-    await gameRoomServiceRef.current?.deleteActivities();
-    await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
-    window.location.reload(); 
-  }
 
   const handleCloseLeaderboard = async () => {
     // Reset Firebase state when closing leaderboard
@@ -519,16 +531,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           style={{ display: "block", borderRadius: 0, border: "none" }}
         />
 
-        {/* {renderScore} */}
-        {renderProgressBar}
-        {/* {renderInstroductions} */}
-        {/* {renderStoryLine} */}
-        {renderEndingScreen}
-        {renderInputTeamName}
-        {renderEndingLeaderBoard}
-        {renderRoundAnimation}
-        {renderRoundScoreBreakdown}
-
         {/* Loading overlay with percentage */}
         {(triggersLoading) && (
           <div 
@@ -549,6 +551,16 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         />
       </div>
       {!triggersLoading && <SectorControl onClickSector={onClickSector} sector={sector} roomName={roomName} isSplineLoading={triggersLoading} />}
+
+      {/* {renderScore} */}
+      {renderProgressBar}
+      {/* {renderInstroductions} */}
+      {renderStoryLine}
+      {renderEndingScreen}
+      {renderInputTeamName}
+      {renderEndingLeaderBoard}
+      {renderRoundAnimation}
+      {renderRoundScoreBreakdown}
     </>
   );
 };

@@ -70,6 +70,7 @@ import PostRoundModal from '@/components/PostRoundModal';
 import Modal from '@/games/pub-coastal-game/compontents/Modal';
 import PlayerCutsceneModal from '@/games/pub-coastal-game/compontents/PlayerCutsceneModal';
 import RoundStartAnimationModal from '@/games/pub-coastal-game/compontents/RoundStartAnimationModal';
+import { getPlayerNumber } from '@/lib/utils';
 
 interface SectorControlProps {
   sector: string;
@@ -77,12 +78,6 @@ interface SectorControlProps {
   onClickSector: (value: string) => void;
   isSplineLoading: boolean;
 }
-
-// Helper function to get player number from sector
-const getPlayerNumber = (sector: string): number => {
-  const match = sector.match(/sector-(\d+)/);
-  return match ? parseInt(match[1], 10) : 1;
-};
 
 // Helper function to get sector titles
 const getSectorTitles = (sector: string) => {
@@ -1194,7 +1189,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
   const isBottom = 
     currentPhase === GameLobbyStatus.ROUND_GAMEPLAY || 
-    currentPhase === GameLobbyStatus.PREPARING;
+    currentPhase === GameLobbyStatus.PREPARING || 
+    currentPhase === GameLobbyStatus.ROUND_SCORE_BREAKDOWN ||
+    currentPhase === GameLobbyStatus.ROUND_ANIMATION;
 
   const renderScore = (
     <div className="flex w-full justify-between text-white text-[3vh]">
@@ -1230,13 +1227,19 @@ const SectorControl: React.FC<SectorControlProps> = ({
   )
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden"
+      style={
+        {
+          ...([GameLobbyStatus.ROUND_CUTSCENES].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
+        }
+      }
+    >
       {/* Main content */}
 
       <div
         className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] px-[2vw] py-[1vh]"
         style={isBottom ? { bottom: 0 } : {
-          ...(currentPhase === GameLobbyStatus.ROUND_CUTSCENES ? { display: "none"} : {})
+          ...([GameLobbyStatus.ROUND_CUTSCENES].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
         }}
       >
         <div className="absolute left-1/2 -translate-x-1/2 w-full z-10 p-2 mt-[-11vh]">
@@ -1249,7 +1252,8 @@ const SectorControl: React.FC<SectorControlProps> = ({
             // Gameplay phases: Show Timer, Budget, and Sectors
             if (
               currentPhase === GameLobbyStatus.ROUND_GAMEPLAY ||
-              currentPhase === GameLobbyStatus.ROUND_SCORE_BREAKDOWN
+              currentPhase === GameLobbyStatus.ROUND_SCORE_BREAKDOWN ||
+              currentPhase === GameLobbyStatus.ROUND_ANIMATION
             ) {
               return (
                 <div className="w-full flex flex-col">
@@ -1408,15 +1412,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
               );
             }
 
-            if (currentPhase === GameLobbyStatus.ROUND_ANIMATION) {
-              return (
-                <RoundStartAnimationModal
-                  isOpen={true}
-                  round={lobbyState.round ?? 1}
-                />
-              );
-            }
-
             // Other phases: Show circular loader
             return (
               null
@@ -1441,7 +1436,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
         }
       />
 
-      <RoundInstructionsModal
+      {/* <RoundInstructionsModal
         isOpen={showRoundInstructions}
         round={firebaseRound as 1 | 2 | 3}
         duration={getPhaseDuration(GameLobbyStatus.ROUND_STORYLINE)}
@@ -1449,9 +1444,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
           lobbyState?.[LobbyStateEnum.PHASE_START_TIME] || undefined
         }
         onDurationComplete={() => {}}
-      />
+      /> */}
 
-      <PostRoundModal
+      {/* <PostRoundModal
         isOpen={showPostRound}
         performance={sectorPerformance}
         overallScoresData={overallScoresData}
@@ -1459,7 +1454,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
         sector={
           ('user_sector_' + getPlayerNumber(sector)) as UserSectorEnum
         }
-      />
+      /> */}
 
       {/* <PlayerCutsceneModal
         isOpen={showCutscene}
@@ -1560,7 +1555,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
       />
 
       {/* Leaderboard Overlay for ROUND_SCORE_BREAKDOWN phase */}
-      <EndingLeaderboardOverlay
+      {/* <EndingLeaderboardOverlay
         isOpen={showLeaderboardOverlay}
         topWinner={leaderboardData.topWinner || undefined}
         leaderboardData={leaderboardData.top5}
@@ -1572,7 +1567,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
             points: totalScore,
             position: 10,
           }
-        }
+        } */}
       />
     </div>
   );

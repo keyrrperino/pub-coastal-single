@@ -128,7 +128,7 @@ export default function WaterLevelIndicator({
   return (
     <div
       className={cn(
-        'flex w-auto items-end gap-4 h-[627px] 4k:h-[1254px]',
+        'flex w-auto items-end gap-4 h-[50vh]',
         className,
       )}
     >
@@ -138,17 +138,17 @@ export default function WaterLevelIndicator({
         initial={{ opacity: 0 }}
         animate={textControls}
       >
-        <div className="text-white text-[80px] font-bold text-nowrap leading-[1.3] text-right drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <div className="text-white text-[4vh] font-bold text-nowrap leading-[1.3] text-right drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
           Seawater level rise:
         </div>
-        <div className="text-[#FF6A6C] text-[80px] font-bold text-nowrap leading-[1.3] text-right drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <div className="text-[#FF6A6C] text-[4vh] font-bold text-nowrap leading-[1.3] text-right drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
           {minLevel} to <motion.span>{displayMaxLevel}</motion.span>{' '}
           {unit}
         </div>
       </motion.div>
 
       {/* Visual Water Level Gauge */}
-      <div className="flex flex-row h-full gap-3">
+      <div className="flex flex-row h-full gap-[1vh]">
         {/* Scale Labels */}
         <motion.div
           className="h-full flex flex-col justify-between items-start"
@@ -158,7 +158,7 @@ export default function WaterLevelIndicator({
           {scaleLabels.map((value, index) => (
             <span
               key={index}
-              className="text-white text-[20px] 4k:text-[40px] font-bold leading-[1.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]"
+              className="text-white text-[2vh] font-bold leading-[1.3] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]"
             >
               {value}
               {unit.charAt(0)}
@@ -174,8 +174,8 @@ export default function WaterLevelIndicator({
         >
           {/* Main container with border */}
           <div
-            className="w-[49px] 4k:w-[100px] border-2 border-white rounded-full relative overflow-hidden"
-            style={{ height: `${containerHeight}px` }}
+            className="w-[3vh] h-full border-[0.1vh] border-white rounded-full relative overflow-hidden"
+            style={{  }}
           >
             {/* Current water level */}
             <motion.div

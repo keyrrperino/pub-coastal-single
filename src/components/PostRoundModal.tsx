@@ -122,14 +122,16 @@ export default function PostRoundModal({
     }
   };
 
+{/* <div className="bg-[#7BFFD780] p-[1vh] rounded-md text-center mb-[1vh] border border-[white]">
+      <h2 className="text-white text-[3vh] font-bold">NO FLOODING</h2>
+      <p className="text-white text-[2vh] mt-[1vh]">
+        YOU'VE SUCCESSFULLY PROTECTED OUR COASTS – CONTINUE TO IMPLEMENT FURTHER ADAPTIVE MEASURES.
+      </p>
+    </div> */}
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-      onClick={handleBackdropClick}
-    >
-      {/* Main Modal Container */}
       <div
-        className="relative w-[752px] max-w-[70vw] px-[30px] py-5 rounded-[26px] backdrop-blur-[17px] shadow-lg border-2"
+        className="p-[1vh] rounded-[2vh] text-center mb-[1vh] backdrop-blur-[17px] shadow-lg border border-[white]"
         style={{
           backgroundColor: config.bgColor,
           borderColor: config.borderGradient,
@@ -145,7 +147,6 @@ export default function PostRoundModal({
           </p>
         </div>
       </div>
-    </div>
   );
 }
 

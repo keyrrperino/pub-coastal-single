@@ -16,8 +16,8 @@ export default function PlayerRound2Screen({
   isControlScreen = false,
 }: PlayerRound2ScreenProps) {
   const info = (
-    <div className="4k:px-[80px] 4k:py-[50px] py-6 px-9">
-      <p className="text-white text-2xl 4k:text-[60px] leading-normal drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
+    <div className="py-[0.5vh] px-[1vh]">
+      <p className="text-white text-[2vh] leading-normal drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
         Between now and 2075, mean sea levels are projected to rise by{' '}
         <span className="text-[#FF6A6C]">0.7 to 1.5 metres</span>.
         <br />
@@ -30,14 +30,14 @@ export default function PlayerRound2Screen({
         <br />
         <br />
         <div>
-          <p className="text-white leading-normal text-2xl 4k:text-[60px] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
+          <p className="text-white leading-normal text-[2vh] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
             In this round, you may:
           </p>
-          <ul className="list-disc mt-2 4k:pl-12 pl-6 flex flex-col gap-4">
-            <li className="text-white leading-normal text-2xl 4k:text-[60px] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
+          <ul className="list-disc mt-[1vh] pl-[2vh] flex flex-col gap-[2vh]">
+            <li className="text-white leading-normal text-[2vh] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
               Raise the heights of your existing defences or,
             </li>
-            <li className="text-white leading-normal text-2xl 4k:text-[60px] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
+            <li className="text-white leading-normal text-[2vh] drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
               Demolish and explore alternatives - but be warned: this
               costs money and lowers your score.
             </li>

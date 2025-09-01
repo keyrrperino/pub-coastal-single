@@ -15,18 +15,18 @@ export default function PlayerRound3Screen({
   isControlScreen = false,
 }: PlayerRound3ScreenProps) {
   const info = (
-    <div className="px-9 py-6 4k:px-[80px] 4k:py-[50px] space-y-6">
-      <p className="text-white text-3xl 4k:text-[80px] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
+    <div className="py-[1.5vh] px-[2vh]">
+      <p className="text-white text-[2.4vh] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
         This is the final stretch!
       </p>
 
-      <p className="text-white text-3xl 4k:text-[80px] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
+      <p className="text-white text-[2.4vh] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
         With sea levels projected to rise as{' '}
         <span className="text-[#FF6A6C]">high as 2 metres</span> by
         2100, the choices you make now will determine our future.
       </p>
 
-      <p className="text-white text-3xl 4k:text-[80px] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
+      <p className="text-white text-[2.4vh] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
         <span className="text-[#FFDD3D]">
           Strengthen your protection. Close the gaps.
         </span>{' '}
@@ -34,7 +34,7 @@ export default function PlayerRound3Screen({
         amenities to create value for your citizens.
       </p>
 
-      <p className="text-white text-3xl 4k:text-[80px] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
+      <p className="text-white text-[2.4vh] leading-relaxed drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
         We believe in you. Let's finish strong.
       </p>
     </div>

@@ -1477,3 +1477,8 @@ export function getMainScreenStoryline(
       };
   }
 }
+
+export const getPlayerNumber = (sector: string): number => {
+  const match = sector.match(/sector-(\d+)/);
+  return match ? parseInt(match[1], 10) : 1;
+};
