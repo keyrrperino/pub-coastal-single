@@ -1567,8 +1567,8 @@ const SectorControl: React.FC<SectorControlProps> = ({
             points: totalScore,
             position: 10,
           }
-        } */}
-      />
+        }
+      /> */}
     </div>
   );
 };
