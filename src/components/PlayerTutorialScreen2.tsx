@@ -67,7 +67,7 @@ export default function PlayerTutorialScreen2({
                   duration: 1,
                   ease: 'easeInOut',
                 }}
-                src="/assets/map-v2.svg"
+                src="/assets/map-v2.svg?v=1"
                 alt="Singapore Map"
                 width={1012}
                 height={567}
@@ -76,7 +76,7 @@ export default function PlayerTutorialScreen2({
             </div>
 
             {/* Map Highlight Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center -mt-[55px]">
               {/* Sector 1 Highlight */}
               <motion.img
                 initial={{ opacity: 0 }}

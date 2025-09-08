@@ -544,11 +544,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           </div>
         )}
 
-        {/* Leaderboard Overlay */}
-        <LeaderboardOverlay
-          isOpen={isLeaderboardOpen}
-          onClose={handleCloseLeaderboard}
-        />
       </div>
       {!triggersLoading && <SectorControl onClickSector={onClickSector} sector={sector} roomName={roomName} isSplineLoading={triggersLoading} />}
 

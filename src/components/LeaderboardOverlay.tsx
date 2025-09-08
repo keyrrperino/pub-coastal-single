@@ -57,16 +57,16 @@ export default function LeaderboardOverlay({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center">
       {/* Main Container - match Figma dimensions */}
-      <div className="relative w-[1256px] h-[1570px]">
+      <div className="relative w-[60vh] h-[70vh]">
         {/* Background container */}
         <div className="absolute inset-0 w-full h-full">
-          <div className="absolute top-0 left-0 w-full h-full z-20 drop-shadow-[20px_20px_0_#8491C6]">
+          <div className="absolute top-0 left-0 w-full z-20 drop-shadow-[20px_20px_0_#8491C6]">
             {/* Header section (white) */}
-            <div className="w-full h-[290px] bg-white rounded-t-[48px] flex items-center justify-center">
+            <div className="w-full p-[2vh] bg-white rounded-t-[2vh] flex items-center justify-center">
               <h2
-                className="text-[#202020] text-[6vh] font-bold text-center leading-[1.2] tracking-wide"
+                className="text-[#202020] text-[4vh] font-bold text-center leading-[1.2] tracking-wide"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
@@ -77,10 +77,10 @@ export default function LeaderboardOverlay({
             </div>
 
             {/* Top winner section (blue) */}
-            <div className="w-full h-[478px] bg-[#2A81FA] flex flex-col items-center justify-center px-[84px] py-[34px]">
+            <div className="w-full bg-[#2A81FA] flex flex-col items-center justify-center px-[1vh] py-[2vh]">
               <div className="flex items-stretch justify-between w-full mb-2">
                 <span
-                  className="text-white text-[90px] font-bold leading-[1.2]"
+                  className="text-white text-[3vh] font-bold leading-[1.2]"
                   style={{
                     fontFamily: 'novecento-sans-narrow, sans-serif',
                     fontWeight: 700,
@@ -89,7 +89,7 @@ export default function LeaderboardOverlay({
                   TOP 1
                 </span>
                 <span
-                  className="text-white font-bold leading-[1.2] text-[90px]"
+                  className="text-white font-bold leading-[1.2] text-[3vh]"
                   style={{
                     fontFamily: 'novecento-sans-narrow, sans-serif',
                     fontWeight: 700,
@@ -99,7 +99,7 @@ export default function LeaderboardOverlay({
                 </span>
               </div>
               <div
-                className="text-white text-[10vh] font-bold text-center leading-[1.2] tracking-wide"
+                className="text-white text-[3vh] font-bold text-center leading-[1.2] tracking-wide"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
@@ -110,14 +110,18 @@ export default function LeaderboardOverlay({
             </div>
 
             {/* Regular leaderboard section (white) - extends to bottom */}
-            <div className="w-full h-[826px] bg-white rounded-b-[48px] px-[114px] py-[26px]">
+            <div
+              className={cn(
+                'w-full bg-white px-[4vh] py-[4vh] h-auto min-h-[42vh] rounded-b-[2vh]'
+              )}
+            >
               {/* Header Row */}
-              <div className="flex items-center justify-between mb-[18px]">
+              <div className="flex items-center justify-between mb-[1vh]">
                 <motion.span
                   initial={{ opacity: 0, x: -100 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className="text-[#2A81FA] text-5xl font-bold leading-[1.2]"
+                  className="text-[#2A81FA] text-[3vh] font-bold leading-[1.2]"
                   style={{
                     fontFamily: 'novecento-sans-condensed, sans-serif',
                     fontWeight: 700,
@@ -135,7 +139,7 @@ export default function LeaderboardOverlay({
                   initial={{ opacity: 0, x: 100 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
-                  className="text-[#2A81FA] text-5xl font-bold leading-[1.2] text-right"
+                  className="text-[#2A81FA] text-[3vh] font-bold leading-[1.2] text-right"
                   style={{
                     fontFamily: 'novecento-sans-condensed, sans-serif',
                     fontWeight: 700,
@@ -146,7 +150,7 @@ export default function LeaderboardOverlay({
               </div>
 
               {/* Leaderboard entries - show top 5 teams */}
-              <div className="space-y-[18px] overflow-y-auto overflow-x-hidden max-h-[640px]">
+              <div className="space-y-[18px]">
                 {leaderboardData.top5.map((entry, index) => (
                   <div key={entry.name} className="flex items-center justify-between">
                     <motion.span
@@ -157,7 +161,7 @@ export default function LeaderboardOverlay({
                         delay: 0.2 * index,
                         ease: 'easeInOut',
                       }}
-                      className="text-[#202020] text-7xl font-bold leading-[1.2]"
+                      className="text-[#202020] text-[4vh] font-bold leading-[1.2]"
                       style={{
                         fontFamily: 'novecento-sans-condensed, sans-serif',
                         fontWeight: 700,
@@ -183,7 +187,7 @@ export default function LeaderboardOverlay({
                         delay: 0.2 * index,
                         ease: 'easeInOut',
                       }}
-                      className="text-[#202020] font-bold leading-[1.2] text-right text-7xl"
+                      className="text-[#202020] text-[4vh] font-bold leading-[1.2] text-right"
                       style={{
                         fontFamily: 'novecento-sans-narrow, sans-serif',
                         fontWeight: 700,
@@ -197,18 +201,18 @@ export default function LeaderboardOverlay({
             </div>
           </div>
         </div>
-
-        {/* Close Button (optional) */}
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white font-bold transition-colors z-10"
-            aria-label="Close leaderboard"
-          >
-            ×
-          </button>
-        )}
       </div>
+      {/* Close Button (optional) */}
+      {onClose && (
+          <div className="flex flex-col w-full items-center">
+            <button
+              onClick={onClose}
+              className="w-[40vh] py-[2vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-3xl font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
+            >
+              CLOSE
+            </button>
+          </div>
+        )}
     </div>
   );
 } 

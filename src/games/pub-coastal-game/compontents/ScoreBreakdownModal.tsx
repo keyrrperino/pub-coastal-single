@@ -244,7 +244,7 @@ export default function ScoreBreakdownModal({
                   playerData?.totalScoreToDeduct ?? 0;
                 const playerCoinsSpent =
                   playerData?.totalCoinsToDeduct ?? 0;
-                const playerName = `P${userSector.split('_').pop()}`;
+                const playerName = `S${userSector.split('_').pop()}`;
 
                 return (
                   <React.Fragment key={userSector}>
