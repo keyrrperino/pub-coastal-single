@@ -315,7 +315,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     Object.values(CutScenesEnum).map(value => {
       return (
         <div
-          className="fixed inset-0 w-screen h-screen m-0 p-0 bg-black z-10"
+          className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[101%]"
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
           <video
@@ -415,6 +415,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           onTimeUp={onRoundGameplayTimeUp}
           isRunning={!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_GAMEPLAY}
           syncWithTimestamp={lobbyState.phaseStartTime}
+          lobbyState={lobbyState}
         />
   )
 
@@ -509,7 +510,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   return (
     <>
       <div
-        className="fixed inset-0 w-screen h-screen m-0 p-0 bg-black z-0"
+        className="fixed inset-0 w-[101%] h-screen m-0 p-0 bg-black z-0"
         // style={{ borderRadius: 0, gap: 0 }}
       >
         {/* Only show Spline when triggers are done loading */}
@@ -552,7 +553,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       {/* {renderInstroductions} */}
       {renderStoryLine}
       {renderEndingScreen}
-      {renderInputTeamName}
+      {/* {renderInputTeamName} */}
       {renderEndingLeaderBoard}
       {renderRoundAnimation}
       {renderRoundScoreBreakdown}

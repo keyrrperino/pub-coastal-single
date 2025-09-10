@@ -125,13 +125,13 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
       <button
         onClick={buttonDisabled ? undefined : onClick}
         disabled={buttonDisabled}
-        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[4.5vh] h-[4.5vh] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
+        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[5vh] h-[5vh] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
         style={getButtonStyle()}
       >
-        <div className={`text-center text-[1.5vh] font-bold ${styles.novecentoBold} uppercase`} 
+        <div className={`text-center text-[1.5vh] font-bold mt-[-1vh] gap-[-0.1vh] flex flex-col ${styles.novecentoBold} uppercase`} 
              style={{ color: getTextColor() }}>
           {title.split(' ').map((line, index) => (
-            <div key={index}>{line}</div>
+            <div key={index} className="h-[1.2vh]">{line}</div>
           ))}
         </div>
       </button>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import styles from './PlayerTeamNameScreen.module.css';
 
 interface PlayerTeamNameScreenProps {
@@ -126,16 +127,21 @@ const PlayerTeamNameScreen: React.FC<PlayerTeamNameScreenProps> = ({
 
   return (
     <div className={styles.container}>
-      {/* Background Image */}
-      <div className={styles.backgroundImage} />
-      
-      {/* Overlay */}
-      <div className={styles.overlay} />
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/assets/start-screen-bg-updated.webp"
+          alt="Coastal background"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+
+      {/* Dark Overlay with Blur */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-[12px]" />
       
       {/* Content */}
       <div className={styles.content}>
-        {isPlayer1 ? (
-          // Player 1 - Input Screen
           <div className={styles.inputSection}>
             <div className={styles.inputWrapper}>
               <label className={`${styles.inputLabel} drop-shadow-[0px_2.823094606399536px_2.823094606399536px_0px_rgba(148,107,199,1)]`}>
@@ -188,17 +194,6 @@ const PlayerTeamNameScreen: React.FC<PlayerTeamNameScreenProps> = ({
               Save
             </button>
           </div>
-        ) : (
-          // Other Players - Informational Screen
-          <div className={styles.infoSection}>
-            <h1 className={`${styles.infoTitle} drop-shadow-[0px_2.823094606399536px_2.823094606399536px_0px_rgba(148,107,199,1)]`}>
-              Choose a team name
-            </h1>
-            <p className={`${styles.infoText} drop-shadow-[0px_1.6955209970474243px_1.6955209970474243px_0px_rgba(148,107,199,1)]`}>
-              and go to player 1 to save your team's name. See how you did on the leaderboards!
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

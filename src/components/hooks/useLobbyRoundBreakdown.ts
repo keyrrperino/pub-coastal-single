@@ -52,5 +52,16 @@ export function useLobbyRoundBreakdown(
     }
   }, [lobbyState.gameLobbyStatus, timeRemaining]);
 
+  useEffect(() => {
+    const currentTime = getAdjustedCurrentTime();
+    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_SCORE_BREAKDOWN) {
+      if (elapsed > lobbyState.phaseDuration) {
+        isScoreBreakdownTimesUp();
+      }
+    }
+  }, [lobbyState, timeRemaining]);
+
+
   return {timeRemaining};
 }

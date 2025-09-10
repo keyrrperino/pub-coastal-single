@@ -102,12 +102,12 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
       <div className="flex flex-row justify-center gap-[0.4vw] w-full">
         {hasNoMoreAvailableUpgrades ? (
           <div className="flex flex-col items-center">
-            <div className="flex flex-col justify-center items-center w-[76px] h-[76px]">
+            <div className="flex flex-col justify-center items-center">
               <div className={`${styles.novecentoBold} text-[14px] font-bold leading-[14px] text-white uppercase text-center`}>
                 NO MORE<br/>AVAILABLE<br/>UPGRADES
               </div>
             </div>
-            <div style={{height: '20px'}}></div> {/* Match CoinIndicator height */}
+            <div style={{height: '2.7vh'}}></div> {/* Match CoinIndicator height */}
           </div>
         ) : (
           options.map((option, index) => (

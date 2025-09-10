@@ -48,5 +48,15 @@ export function useLobbyStoryline(
     }
   }, [lobbyState.gameLobbyStatus, timeRemaining]);
 
+  useEffect(() => {
+    const currentTime = getAdjustedCurrentTime();
+    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_STORYLINE) {
+      if (elapsed > lobbyState.phaseDuration) {
+        onTimeUp();
+      }
+    }
+  }, [lobbyState, timeRemaining]);
+
   return {timeRemaining};
 }

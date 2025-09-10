@@ -40,5 +40,16 @@ export function useLobbyRoundAnimation(
     }
   }, [lobbyState.gameLobbyStatus, timeRemaining]);
 
+
+  useEffect(() => {
+    const currentTime = getAdjustedCurrentTime();
+    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_ANIMATION) {
+      if (elapsed > lobbyState.phaseDuration) {
+        isRoundAnimationTimesUp();
+      }
+    }
+  }, [lobbyState, timeRemaining]);
+
   return {timeRemaining};
 }

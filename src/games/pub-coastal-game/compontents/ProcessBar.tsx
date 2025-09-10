@@ -1,5 +1,7 @@
 import { useTimer } from '@/components/hooks/useTimer';
 import { useTimerBar } from '@/components/hooks/useTimerBar';
+import { GameLobbyStatus } from '@/lib/enums';
+import { LobbyStateType } from '@/lib/types';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
@@ -13,6 +15,7 @@ interface TimerProps {
   containerClassName?: string;
   style?: React.CSSProperties; // <-- added
   clockStyle?: React.CSSProperties;
+  lobbyState: LobbyStateType;
 }
 
 const ProgressBar: React.FC<TimerProps> = ({
@@ -22,7 +25,7 @@ const ProgressBar: React.FC<TimerProps> = ({
   syncWithTimestamp,
   containerClassName,
   style,
-  clockStyle,
+  lobbyState,
 }) => {
   // Log for ROUND_GAMEPLAY phase
   useEffect(() => {
@@ -47,12 +50,24 @@ const ProgressBar: React.FC<TimerProps> = ({
     }
   }, [duration, isRunning, syncWithTimestamp]);
 
-  const { progressPercentage } = useTimerBar({
+  const { progressPercentage, timeRemaining } = useTimerBar({
     duration,
     onTimeUp,
     startImmediately: isRunning,
     syncWithTimestamp,
   });
+
+  // useEffect(() => {
+  //   // Calculate the end time
+  //   const endTime = new Date(lobbyState.phaseStartTime).getTime() + duration * 1000;
+  //   const currentTime = Date.now();
+
+  //   // Check if the current time exceeds the end time
+  //   if (currentTime > endTime && timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_GAMEPLAY) {
+  //     onTimeUp && onTimeUp();
+  //   }
+  // }, []);
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

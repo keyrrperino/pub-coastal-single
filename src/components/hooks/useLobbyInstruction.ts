@@ -36,7 +36,6 @@ export function useLobbyInstruction(
   });
 
   useEffect(() => {
-    console.log("timeRemaining: ", timeRemaining);
     if (timeRemaining > 60) {
       setCurrentTutorial(0); // Tutorial 1
     } else if (timeRemaining > 45) {
@@ -49,6 +48,16 @@ export function useLobbyInstruction(
       setCurrentTutorial(4); // Tutorial 5
     }
   }, [timeRemaining]);
+
+  useEffect(() => {
+    const currentTime = getAdjustedCurrentTime();
+    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_GAMEPLAY) {
+      if (elapsed > lobbyState.phaseDuration) {
+        onTimeUp();
+      }
+    }
+  }, [lobbyState, timeRemaining]);
 
   return {currentTutorial, timeRemaining};
 }

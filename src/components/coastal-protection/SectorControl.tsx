@@ -1213,7 +1213,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
   )
 
   const renderScore = (
-    <div className="flex w-full justify-between text-white text-[3vh]">
+    <div className="flex w-full justify-between text-white text-[3vh] pl-[1vh] pr-[1vh]">
       <div className="flex flex-col">
         <h1>
           {coinsLeft > 0 ? "BUDGET" : "NO MORE COINS"}
@@ -1258,10 +1258,10 @@ const SectorControl: React.FC<SectorControlProps> = ({
       <div
         className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] px-[2vw] py-[1vh]"
         style={isBottom ? { bottom: 0 } : {
-          ...([GameLobbyStatus.ROUND_CUTSCENES].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
+          ...([GameLobbyStatus.ROUND_CUTSCENES, GameLobbyStatus.TEAM_NAME_INPUT].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
         }}
       >
-        <div className="absolute left-1/2 -translate-x-1/2 w-full z-10 p-2 mt-[-11vh]">
+        <div className="absolute left-1/2 -translate-x-1/2 w-[101%] z-10 p-2 mt-[-11vh]">
           {/* Budget display left */}
           {renderScore}
         </div>

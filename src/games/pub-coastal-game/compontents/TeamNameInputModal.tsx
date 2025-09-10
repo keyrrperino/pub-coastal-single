@@ -17,13 +17,11 @@ const TeamNameInputModal: React.FC<TeamNameInputModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
-      <PlayerTeamNameScreen 
-        playerNumber={playerNumber}
-        onSubmit={onSubmit}
-        onChange={onChange}
-      />
-    </div>
+    <PlayerTeamNameScreen 
+      playerNumber={playerNumber}
+      onSubmit={onSubmit}
+      onChange={onChange}
+    />
   );
 };
 

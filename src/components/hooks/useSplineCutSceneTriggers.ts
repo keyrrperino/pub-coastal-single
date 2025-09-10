@@ -7,6 +7,7 @@ import { ActivityLogType, LobbyStateType, OverallScoresTypes, RoundType } from "
 import { PHASE_DURATIONS } from "./phaseUtils";
 import { useTimer } from "./useTimer";
 import { meanSeaLevels, sceneSectorConfigurations } from "@/lib/constants";
+import { useServerTime } from "../ServerTimeContext";
 
 const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutScenesEnum[] => {
   console.log(overAllScores);
@@ -40,6 +41,8 @@ export function useCutSceneSequence(
   lobbyState: LobbyStateType,
   overAllScores: {[key in RoundType]?: OverallScoresTypes}
 ) {
+  const { getAdjustedCurrentTime } = useServerTime();
+  
   const [currentCutSceneIndex, setCurrentCutSceneIndex] = useState<number | null>(null);
   const [currentCutScene, setCurrentCutScene] = useState<CutScenesEnum | null>(null);
   const [cutSceneStatus, setCutScenesStatus] = useState<CutScenesStatusEnum>(CutScenesStatusEnum.NOT_YET_STARTED);
@@ -100,7 +103,7 @@ export function useCutSceneSequence(
   // Drive cutscene index from a 45s timer:
   // - First 3s reserved for intro news
   // - Then fixed 7s per cutscene (up to 6)
-  useTimer({
+  const { timeRemaining } = useTimer({
     duration: lobbyState.phaseDuration,
     startImmediately: lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_CUTSCENES,
     syncWithTimestamp: lobbyState.phaseStartTime,
@@ -151,6 +154,17 @@ export function useCutSceneSequence(
       }
     };
   }, []);
+
+  useEffect(() => {
+    const currentTime = getAdjustedCurrentTime();
+    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_CUTSCENES) {
+      if (elapsed > lobbyState.phaseDuration) {
+        setCutScenesStatus(CutScenesStatusEnum.ENDED);
+        setCurrentCutSceneIndex(null);
+      }
+    }
+  }, [lobbyState, timeRemaining]);
 
   return {
     currentCutScene,
