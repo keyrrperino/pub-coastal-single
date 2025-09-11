@@ -291,17 +291,10 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     window.location.reload(); 
   }
 
-
-  // Main Progress logic
-
-  const renderInputTeamName = (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.TEAM_NAME_INPUT) && (
-    <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-      style={{ borderRadius: 0 }}
-    >
-      <TeamNameInputScreen performance={totalPerformance} teamName={lobbyState?.[LobbyStateEnum.TEAM_NAME]} finalScore={totalScore} />
-    </div>
-  );
+  const backToStart = async () => {
+    await gameRoomServiceRef.current?.deleteActivities();
+    await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
+  }
 
   const renderEndingScreen = (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.ENDING) && (
     <div 
@@ -341,7 +334,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           <div className="fixed inset-0 z-20 flex items-center justify-center h-[100vh]">
             <img
               src={`/games/pub-coastal-spline/flash-reports/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.png?v=1.1`}
-              className="pointer-events-none"
+              className="pointer-events-none max-h-[100vh]"
               // style={{ objectFit: "" }}
               alt="Frame Overlay"
             />
@@ -351,41 +344,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     })
   )
 
-  const renderScore = (
-    (!triggersLoading && isGameOnGoing(lobbyState.gameLobbyStatus) && cutSceneStatus !== CutScenesStatusEnum.STARTED) && <div className="fixed inset-0 w-screen h-screen m-0 p-0 z-10">
-      <div className="flex w-full justify-between px-8 py-4  text-white text-[2vw]">
-        <div className="flex flex-col">
-          <h1>
-            {coinsLeft > 0 ? "Overall budget" : "NO MORE COINS"}
-          </h1>
-          <div className="grid grid-cols-5 gap-2">
-          {Array.from({ length: coinsLeft }).map((_, idx) => (
-            <img
-              key={'coin-' + idx}
-              src="/games/pub-coastal-spline/images/coin.svg"
-              alt="coin"
-              className="w-[3vw] h-[3vw]"
-            />
-          ))}
-          </div>
-        </div>
-        <div className="flex flex-col">
-        <h1 className="text-center text-[3vw]">
-            Round {lobbyState.round ?? 1}
-          </h1>
-        </div>
-        <div className="flex flex-col">
-          <h1 className="text-right">
-            Overall Score:
-          </h1>
-          <h2 className="text-right number-enhanced">
-            {totalScore} PTS
-          </h2>
-        </div>
-      </div>
-    </div>
-  )
-
   const renderEndingLeaderBoard = (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.LEADERBOARD_DISPLAY) && (
     <div 
       className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-80 z-10"
@@ -393,7 +351,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     >
       <EndingLeaderboardOverlay
         isOpen={true}
-        onClose={resetGame}
+        onClose={backToStart}
         topWinner={leaderboardData.topWinner || undefined}
         leaderboardData={leaderboardData.top5}
         bottomHighlight={leaderboardData.currentTeamEntry || { 
@@ -417,43 +375,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           syncWithTimestamp={lobbyState.phaseStartTime}
           lobbyState={lobbyState}
         />
-  )
-
-  const renderInstroductions = (
-    (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.INTRODUCTION) && 
-    <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-      style={{ borderRadius: 0, display: "none" }}
-    >
-      {currentTutorial === 0 && <TutorialScreen1 phaseStartTime={lobbyState.phaseStartTime} />}
-      {currentTutorial === 1 && <TutorialScreen2 phaseStartTime={lobbyState.phaseStartTime} />}
-      {currentTutorial === 2 && <TutorialScreen3 phaseStartTime={lobbyState.phaseStartTime} />}
-      {currentTutorial === 3 && <TutorialScreen4 phaseStartTime={lobbyState.phaseStartTime} />}
-      {currentTutorial === 4 && <TutorialScreen5 phaseStartTime={lobbyState.phaseStartTime} />}
-      
-      {/* DEV MODE MANUAL CONTROLS */}
-      {DEV_MODE_MANUAL_TUTORIALS && (
-        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 flex gap-4">
-          <button
-            onClick={() => setManualTutorialIndex(Math.max(0, manualTutorialIndex - 1))}
-            disabled={manualTutorialIndex === 0}
-            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-600"
-          >
-            Previous ({manualTutorialIndex > 0 ? manualTutorialIndex : 'Start'})
-          </button>
-          <div className="px-4 py-2 bg-gray-200 text-black rounded">
-            Tutorial {manualTutorialIndex + 1} of 5
-          </div>
-          <button
-            onClick={() => setManualTutorialIndex(Math.min(4, manualTutorialIndex + 1))}
-            disabled={manualTutorialIndex === 4}
-            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-600"
-          >
-            Next ({manualTutorialIndex < 4 ? manualTutorialIndex + 2 : 'End'})
-          </button>
-        </div>
-      )}
-    </div>
   )
 
   const renderStoryLine = (
@@ -500,12 +421,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       />
     )
   );
-
-  const handleCloseLeaderboard = async () => {
-    // Reset Firebase state when closing leaderboard
-    await gameRoomServiceRef.current?.updateLobbyStateKeyValue(LobbyStateEnum.SHOW_LEADERBOARD, false);
-    setIsLeaderboardOpen(false);
-  };
 
   return (
     <>

@@ -1193,25 +1193,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
     currentPhase === GameLobbyStatus.ROUND_SCORE_BREAKDOWN ||
     currentPhase === GameLobbyStatus.ROUND_ANIMATION;
 
-  const renderEndingLeaderBoard = (lobbyState.gameLobbyStatus === GameLobbyStatus.LEADERBOARD_DISPLAY) && (
-    <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-80 z-10"
-      style={{ borderRadius: 0 }}
-    >
-      <EndingLeaderboardOverlay
-        isOpen={true}
-        onClose={() => {}}
-        topWinner={leaderboardData.topWinner || undefined}
-        leaderboardData={leaderboardData.top5}
-        bottomHighlight={leaderboardData.currentTeamEntry || { 
-          name: lobbyState?.[LobbyStateEnum.TEAM_NAME], 
-          points: totalScore, 
-          position: 10 
-        }}
-      />
-    </div>
-  )
-
   const renderScore = (
     <div className="flex w-full justify-between text-white text-[3vh] pl-[1vh] pr-[1vh]">
       <div className="flex flex-col">
@@ -1572,22 +1553,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
         }}
         playerNumber={getPlayerNumber(sector)}
       />
-
-      {/* Leaderboard Overlay for ROUND_SCORE_BREAKDOWN phase */}
-      {/* <EndingLeaderboardOverlay
-        isOpen={showLeaderboardOverlay}
-        topWinner={leaderboardData.topWinner || undefined}
-        leaderboardData={leaderboardData.top5}
-        bottomHighlight={
-          leaderboardData.currentTeamEntry || {
-            name:
-              lobbyState?.[LobbyStateEnum.TEAM_NAME] ||
-              `P${getPlayerNumber(sector)}`,
-            points: totalScore,
-            position: 10,
-          }
-        }
-      /> */}
       <LeaderboardOverlay
         isOpen={isLeaderboardOpen}
         onClose={handleCloseLeaderboard}

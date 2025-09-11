@@ -290,7 +290,7 @@ export default function ScoreBreakdownModal({
                               key={`${userSector}_coin_${index}`}
                               src="/assets/coin-icon.png"
                               alt="coin"
-                              className="w-12 h-12"
+                              className="w-[1.8vh] h-[1.8vh]"
                             />
                           ))}
                       </div>

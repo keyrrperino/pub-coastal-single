@@ -8,7 +8,6 @@ import { CutScenesEnum, GameEnum, GameLobbyStatus } from "@/lib/enums";
 import { useServerTime } from "@/components/ServerTimeContext";
 
 export function useInitialize(roomName: string) {
-  console.log("roomNameawefawef", roomName)
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   
   const splineAppRef = useRef<Application | null>(null);

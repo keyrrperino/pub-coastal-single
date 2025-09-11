@@ -53,7 +53,7 @@ export default function StartScreen({
     }
   };
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-[101%] h-screen overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -108,8 +108,9 @@ export default function StartScreen({
             </p>
           </div>
 
+              
           {/* Player and Buttons Section */}
-          <div className="flex flex-col items-center gap-4 w-full">
+          {!isLeaderboardOpen && <div className="flex flex-col items-center gap-4 w-full">
             {/* Player Indicator */}
 
             {/* Buttons */}
@@ -138,11 +139,11 @@ export default function StartScreen({
                   : 'Show Leaderboard'}
               </button>
             </div>
-          </div>
+          </div>}
         </div>
 
         {/* PUB Logo - Fixed at bottom */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        {!isLeaderboardOpen && <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <button
             onClick={handleLogoClick}
             className="focus:outline-none"
@@ -150,7 +151,7 @@ export default function StartScreen({
           >
             <Logo width={123} height={76} />
           </button>
-        </div>
+        </div>}
       </div>
 
       {/* Credits Modal */}

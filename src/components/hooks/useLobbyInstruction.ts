@@ -52,7 +52,7 @@ export function useLobbyInstruction(
   useEffect(() => {
     const currentTime = getAdjustedCurrentTime();
     const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
-    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_GAMEPLAY) {
+    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.INTRODUCTION) {
       if (elapsed > lobbyState.phaseDuration) {
         onTimeUp();
       }

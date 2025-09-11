@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 
 interface WaterLevelIndicatorProps {
   minLevel: number;
+  offsetLevel?: number;
   maxLevel: number;
   currentLevel: number;
   unit?: string;
@@ -34,6 +35,7 @@ export default function WaterLevelIndicator({
   scaleMax,
   currentWaterColor,
   projectedWaterColor,
+  offsetLevel
 }: WaterLevelIndicatorProps) {
   // Get responsive height based on screen size
   const getContainerHeight = () => {
@@ -83,11 +85,13 @@ export default function WaterLevelIndicator({
           height: (currentLevel / scaleMax) * (containerHeight - 4),
           transition: { duration: 1.2, ease: 'easeOut' },
         });
+        console.log(((maxLevel - currentLevel) / scaleMax) *
+        (containerHeight - 4), 'here');
         await Promise.all([
           projectedWaterControls.start({
             height:
               ((maxLevel - currentLevel) / scaleMax) *
-              (containerHeight - 4),
+              (containerHeight - 4) - (offsetLevel ?? 0),
             transition: { duration: 1.0, ease: 'easeOut' },
           }),
         animate(animatedMaxLevelValue, maxLevel, {
