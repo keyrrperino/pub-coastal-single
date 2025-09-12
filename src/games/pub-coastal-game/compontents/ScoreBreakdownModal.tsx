@@ -52,17 +52,6 @@ export default function ScoreBreakdownModal({
   totalScore,
   upperContent
 }: ScoreBreakdownModalProps) {
-  const duration = getPhaseDuration(
-    GameLobbyStatus.ROUND_SCORE_BREAKDOWN,
-  );
-
-  const { timeRemaining } = useTimer({
-    duration,
-    onTimeUp: onDurationComplete,
-    startImmediately: isOpen,
-    syncWithTimestamp,
-  });
-
   const roundColors: {
     [key in RoundType]: { color1: string; color2: string };
   } = {
@@ -80,41 +69,7 @@ export default function ScoreBreakdownModal({
     },
   };
 
-  // Fallback timer for when sync is not available
-  useEffect(() => {
-    if (!isOpen || syncWithTimestamp || !onDurationComplete) return;
-
-    const timer = setTimeout(() => {
-      onDurationComplete();
-    }, duration * 1000);
-
-    return () => clearTimeout(timer);
-  }, [isOpen, onDurationComplete, duration, syncWithTimestamp]);
-
   if (!isOpen || !breakdown) return null;
-
-  const color = roundColorMap[roundNumber];
-  // Dummy data - will be implemented later
-
-  const previousRoundNumber =
-    roundNumber == 1
-      ? (roundNumber as RoundType)
-      : ((roundNumber - 1) as RoundType);
-
-  const prevRoundPoints =
-    (breakdown[previousRoundNumber]?.user_sector_1
-      ?.totalScoreToDeduct ?? 0) +
-    (breakdown[previousRoundNumber]?.user_sector_2
-      ?.totalScoreToDeduct ?? 0) +
-    (breakdown[previousRoundNumber]?.user_sector_3
-      ?.totalScoreToDeduct ?? 0);
-
-  const totalPoints =
-    (breakdown[roundNumber]?.user_sector_1?.totalScoreToDeduct ?? 0) +
-    (breakdown[previousRoundNumber]?.user_sector_2
-      ?.totalScoreToDeduct ?? 0) +
-    (breakdown[previousRoundNumber]?.user_sector_3
-      ?.totalScoreToDeduct ?? 0);
 
   const getTotalPoints = () => {
     let overAllScore =
@@ -200,12 +155,11 @@ export default function ScoreBreakdownModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 flex-col">
       {/* Main Container - responsive and larger */}
       <div className="relative max-w-[50vh] flex flex-col items-center justify-center h-full w-full">
-        {upperContent}
         {/* Content Container */}
         <div
           className="flex w-full flex-col rounded-[2vh] overflow-hidden"
           style={{
-            boxShadow: boxShadow[roundNumber]
+            // boxShadow: boxShadow[roundNumber]
           }}
         >
           {/* Header Section */}
@@ -219,7 +173,7 @@ export default function ScoreBreakdownModal({
 
           {/* Breakdown List in White Section */}
           <div className="flex-1 bg-white px-[3vw] py-[1vh]">
-            <div className="flex flex-col space-y-5">
+            <div className="flex flex-col space-y-[0.8vh]">
               {/* Total Points */}
               <div className="flex items-center justify-between">
                 <span className="text-[#202020] text-[3vh] leading-normal font-bold font-condensed">
@@ -317,7 +271,16 @@ export default function ScoreBreakdownModal({
               </div>
             </div>
           </div>
+          {upperContent}
         </div>
+        <button
+          onClick={() => {
+            onDurationComplete?.();
+          }}
+          className="bg-white text-blue-500 text-[3vh] px-[3vw] py-[1vh] rounded-[100px] hover:bg-blue-600 hover:text-white"
+        >
+          CONTINUE
+        </button>
       </div>
     </div>
   );

@@ -1,8 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import WaterLevelIndicator from '../WaterLevelIndicator';
 import { cn } from '@/lib/utils';
-import TimerBar from '../coastal-protection/TimerBar';
 
 interface PlayerRoundScreenProps {
   onContinue?: () => void;
@@ -25,7 +23,6 @@ export default function PlayerRoundScreen({
   year,
   info,
   waterLevelIndicator,
-  screenDuration,
 }: PlayerRoundScreenProps) {
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -39,10 +36,6 @@ export default function PlayerRoundScreen({
           priority
         />
       </div>
-
-      {/* <div className="fixed z-10 top-[2vh] left-1/2 transform -translate-x-1/2">
-        <TimerBar duration={screenDuration} isRunning={true} />
-      </div> */}
 
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/80" />
@@ -87,17 +80,15 @@ export default function PlayerRoundScreen({
       </div>
 
       {/* Countdown - always reserve space to prevent layout shift */}
-      <div className="flex items-center justify-center absolute bottom-15 left-1/2 -translate-x-1/2">
-        {timeRemaining !== undefined && (
-          <h3
-            className="text-white font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]"
-            style={{ fontSize: 'clamp(72px, 6vh, 144px)' }}
-          >
-            {Math.ceil(timeRemaining) === 0
-              ? 'GO!'
-              : `${Math.ceil(timeRemaining)}...`}
-          </h3>
-        )}
+      <div className="flex items-center justify-center absolute bottom-15 left-1/2 -translate-x-1/2 z-50">
+        <button
+          onClick={() => {
+            onContinue?.();
+          }}
+          className="bg-white text-blue-500 text-[3vh] px-[3vw] py-[1vh] rounded-[100px] hover:bg-blue-600 hover:text-white"
+        >
+          START ROUND
+        </button>
       </div>
     </div>
   );

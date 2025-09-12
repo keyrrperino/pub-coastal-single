@@ -4,17 +4,7 @@ import TimerBar from '@/components/coastal-protection/TimerBar';
 import Logo from './Logo';
 import { motion } from 'motion/react';
 
-interface TutorialScreen3Props {
-  timeRemaining?: number;
-  phaseStartTime?: number;
-  screenDuration: number;
-}
-
-export default function PlayerTutorialScreen5({
-  timeRemaining,
-  phaseStartTime,
-  screenDuration,
-}: TutorialScreen3Props) {
+export default function PlayerTutorialScreen5() {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Background Image */}
@@ -28,15 +18,11 @@ export default function PlayerTutorialScreen5({
         />
       </div>
 
-      <div className="fixed z-10 top-[2vh] left-1/2 transform -translate-x-1/2">
-        <TimerBar duration={screenDuration} isRunning={true} />
-      </div>
-
       {/* Dark Overlay with Blur */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[64px]" />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
+      <div className="relative z-10 flex flex-col items-center h-full px-4 mt-[10vh]">
         <div className="px-6 max-w-[95%] w-full">
           <div className="flex flex-col items-center gap-8">
             {/* Top Section - Instructional Text */}

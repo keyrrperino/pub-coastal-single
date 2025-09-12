@@ -32,7 +32,7 @@ import {
 import { SplineTriggerConfigItem } from '@/lib/types';
 import { useGameContext } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { useProgression } from '@/components/hooks/useProgression';
-import { getPhaseDuration } from '@/components/hooks/phaseUtils';
+import { getPhaseDuration, PHASE_DURATIONS } from '@/components/hooks/phaseUtils';
 import {
   useGameFlowController,
   createDefaultLobbyState,
@@ -121,7 +121,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
   resetWater
 }) => {
   const { triggerSingleBuild } = useGameContext();
-  const { updateFromGameRoomService } = useServerTime();
+  const { updateFromGameRoomService, getAdjustedCurrentTime } = useServerTime();
   const [gameRoomService] = useState(
     () =>
       new GameRoomService(
@@ -1418,36 +1418,19 @@ const SectorControl: React.FC<SectorControlProps> = ({
       {/* Game Flow Modals */}
       <IntroductionModal
         isOpen={showIntroduction}
-        onDurationComplete={() => {}}
+        onDurationComplete={() => { 
+          gameRoomService.updateLobbyState({
+            ...lobbyState, ...{
+            [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_STORYLINE,
+            [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+            [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_STORYLINE,
+          }});
+         }}
         duration={getPhaseDuration(GameLobbyStatus.INTRODUCTION)}
         syncWithTimestamp={
           lobbyState?.[LobbyStateEnum.PHASE_START_TIME] || undefined
         }
       />
-
-      {/* <RoundInstructionsModal
-        isOpen={showRoundInstructions}
-        round={firebaseRound as 1 | 2 | 3}
-        duration={getPhaseDuration(GameLobbyStatus.ROUND_STORYLINE)}
-        syncWithTimestamp={
-          lobbyState?.[LobbyStateEnum.PHASE_START_TIME] || undefined
-        }
-        onDurationComplete={() => {}}
-      /> */}
-
-      {/* <PostRoundModal
-        isOpen={showPostRound}
-        performance={sectorPerformance}
-        overallScoresData={overallScoresData}
-        currentRound={firebaseRound}
-        sector={
-          ('user_sector_' + getPlayerNumber(sector)) as UserSectorEnum
-        }
-      /> */}
-
-      {/* <PlayerCutsceneModal
-        isOpen={showCutscene}
-      ></PlayerCutsceneModal> */}
 
       <EndingModal
         isOpen={showEnding}

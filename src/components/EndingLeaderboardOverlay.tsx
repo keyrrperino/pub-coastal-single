@@ -250,7 +250,7 @@ export default function EndingLeaderboardOverlay({
           onClick={onClose}
           className="w-[40vh] py-[2vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-3xl font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
         >
-          BACK TO TITLE SCREEN
+          CONTINUE
         </button>
       </div>
     </div>

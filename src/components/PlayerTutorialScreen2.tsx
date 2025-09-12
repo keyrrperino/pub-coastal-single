@@ -1,20 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import TimerBar from '@/components/coastal-protection/TimerBar';
-import Logo from './Logo';
 import { motion } from 'motion/react';
 
-interface TutorialScreen2Props {
-  phaseStartTime?: number;
-  timeRemaining?: number;
-  screenDuration: number;
-}
-
-export default function PlayerTutorialScreen2({
-  phaseStartTime,
-  timeRemaining,
-  screenDuration,
-}: TutorialScreen2Props) {
+export default function PlayerTutorialScreen2() {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* Background Image */}
@@ -30,10 +18,6 @@ export default function PlayerTutorialScreen2({
 
       {/* Dark Overlay with Blur */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[64px]" />
-
-      <div className="fixed z-10 top-[2vh] left-1/2 transform -translate-x-1/2">
-        <TimerBar duration={screenDuration} isRunning={true} />
-      </div>
 
       {/* Main container to center content vertically */}
       <div className="relative z-10 h-full flex items-center justify-center">

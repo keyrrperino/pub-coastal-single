@@ -13,8 +13,9 @@ export function useLobbyInstruction(
   const { getAdjustedCurrentTime } = useServerTime();
   const [currentTutorial, setCurrentTutorial] = useState(0);
 
-  const onTimeUp = () => {
-    setTimeout(() => {
+  
+  useEffect(() => {
+    if (currentTutorial >= 5) {
       if (gameRoomServiceRef.current) {
         gameRoomServiceRef.current.updateLobbyState({
           ...lobbyState, ...{
@@ -23,41 +24,9 @@ export function useLobbyInstruction(
           [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_STORYLINE,
         }});
       }
-    }, 1000);
-  }
-
-  const {
-    timeRemaining,
-  } = useTimer({
-    duration: lobbyState.phaseDuration,
-    onTimeUp,
-    startImmediately: !triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.INTRODUCTION,
-    syncWithTimestamp: lobbyState.phaseStartTime,
-  });
-
-  useEffect(() => {
-    if (timeRemaining > 60) {
-      setCurrentTutorial(0); // Tutorial 1
-    } else if (timeRemaining > 45) {
-      setCurrentTutorial(1); // Tutorial 2
-    } else if (timeRemaining > 30) {
-      setCurrentTutorial(2); // Tutorial 3
-    } else if (timeRemaining > 15) {
-      setCurrentTutorial(3); // Tutorial 4
-    } else {
-      setCurrentTutorial(4); // Tutorial 5
     }
-  }, [timeRemaining]);
+  }, [currentTutorial]);
+  
 
-  useEffect(() => {
-    const currentTime = getAdjustedCurrentTime();
-    const elapsed = Math.floor((currentTime - lobbyState.phaseStartTime) / 1000);
-    if (timeRemaining <= 0 && lobbyState.gameLobbyStatus === GameLobbyStatus.INTRODUCTION) {
-      if (elapsed > lobbyState.phaseDuration) {
-        onTimeUp();
-      }
-    }
-  }, [lobbyState, timeRemaining]);
-
-  return {currentTutorial, timeRemaining};
+  return {currentTutorial, setCurrentTutorial};
 }

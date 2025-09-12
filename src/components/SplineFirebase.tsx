@@ -14,29 +14,14 @@ import { getPlayerNumber, isGameOnGoing } from "@/lib/utils";
 import { useSplineLoader } from "./hooks/useSplineLoader";
 import { CutScenesStatusEnum, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
 import { useHideAllTriggers } from "./hooks/useHideAllSplineTriggers";
-import AnimatedModal from "@/games/pub-coastal-game/compontents/AnimatedModal";
-import AnimatedTitle from "@/games/pub-coastal-game/compontents/AnimatedTitle";
 import RoundStartAnimationModal from "@/games/pub-coastal-game/compontents/RoundStartAnimationModal";
-import { usePreparingProgress } from "./hooks/usePreparingProgress";
 import ScoreBreakdownModal from "@/games/pub-coastal-game/compontents/ScoreBreakdownModal";
 import { SectorPerformance, useSectorScores } from "./hooks/useSectorScores";
-import TutorialScreen3 from "@/components/TutorialScreen3";
-import TutorialScreen2 from "@/components/TutorialScreen2";
-import TutorialScreen1 from "@/components/TutorialScreen1";
-import { useLobbyInstruction } from "./hooks/useLobbyInstruction";
-import Round1Screen from "./Round1Screen";
 import { useLobbyStoryline } from "./hooks/useLobbyStoryline";
-
-// DEV MODE TOGGLE - Set to true to enable manual tutorial controls
-const DEV_MODE_MANUAL_TUTORIALS = false; //process.env.NODE_ENV === 'development';
-import Round2Screen from "./Round2Screen";
-import Round3Screen from "./Round3Screen";
 import { useTimer } from "./hooks/useTimer";
 import { PHASE_DURATIONS } from "./hooks/phaseUtils";
 import EndingScreen from "./EndingScreen";
-import TeamNameInputScreen from "./TeamNameInputScreen";
 import EndingLeaderboardOverlay from "./EndingLeaderboardOverlay";
-import LeaderboardOverlay from "./LeaderboardOverlay";
 import TutorialScreen4 from "@/components/TutorialScreen4";
 import { PlayerRound1Screen, PlayerRound2Screen, PlayerRound3Screen } from "./player-screens";
 import TutorialScreen5 from "@/components/TutorialScreen5";
@@ -131,17 +116,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       }});
     }
   };
-
-  // Dev mode manual tutorial state
-  const [manualTutorialIndex, setManualTutorialIndex] = useState(0);
   
-  const {currentTutorial: timerBasedTutorial} = useLobbyInstruction(lobbyState, triggersLoading, gameRoomServiceRef);
-  const {timeRemaining: timeRemainingStoryLine} = useLobbyStoryline(lobbyState, triggersLoading, gameRoomServiceRef);
+  const {onNext: onNextStoryLine} = useLobbyStoryline(lobbyState, gameRoomServiceRef);
   
   // Use manual tutorial index in dev mode, otherwise use timer-based
-  const currentTutorial = DEV_MODE_MANUAL_TUTORIALS ? manualTutorialIndex : timerBasedTutorial;
-  const showCountdown = timeRemainingStoryLine <= 3;
-  useLobbyRoundBreakdown(lobbyState, triggersLoading, gameRoomServiceRef);
+  const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, triggersLoading, gameRoomServiceRef);
   useLobbyRoundAnimation(lobbyState, triggersLoading, gameRoomServiceRef);
 
 
@@ -384,9 +363,9 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       style={{ borderRadius: 0 }}
     >
 
-      {lobbyState.round === 1 && <PlayerRound1Screen timeRemaining={showCountdown ? timeRemainingStoryLine : undefined} />}
-      {lobbyState.round === 2 && <PlayerRound2Screen timeRemaining={showCountdown ? timeRemainingStoryLine : undefined} />}
-      {lobbyState.round === 3 && <PlayerRound3Screen timeRemaining={showCountdown ? timeRemainingStoryLine : undefined} />}
+      {lobbyState.round === 1 && <PlayerRound1Screen onContinue={onNextStoryLine} />}
+      {lobbyState.round === 2 && <PlayerRound2Screen onContinue={onNextStoryLine} />}
+      {lobbyState.round === 3 && <PlayerRound3Screen  onContinue={onNextStoryLine} />}
     </div>
   )
 
@@ -406,6 +385,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         key={lobbyState.round + "-breakdownmodal"}
         breakdown={overAllScores}
         totalScore={totalScore}
+        onDurationComplete={isScoreBreakdownTimesUp}
         roundNumber={(lobbyState.round ?? 1) as 1|2|3}
         upperContent={
           <PostRoundModal

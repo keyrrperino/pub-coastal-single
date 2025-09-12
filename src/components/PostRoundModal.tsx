@@ -131,7 +131,7 @@ export default function PostRoundModal({
 
   return (
       <div
-        className="p-[1vh] rounded-[2vh] text-center mb-[1vh] backdrop-blur-[17px] shadow-lg border border-[white]"
+        className="p-[1vh] rounded-b-[2vh] text-center mb-[1vh] backdrop-blur-[17px] shadow-lg border border-[white]"
         style={{
           backgroundColor: config.bgColor,
           borderColor: config.borderGradient,

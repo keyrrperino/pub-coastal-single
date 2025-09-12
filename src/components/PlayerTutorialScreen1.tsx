@@ -5,15 +5,11 @@ import Logo from './Logo';
 import { motion } from 'motion/react';
 
 interface TutorialScreen1Props {
-  phaseStartTime?: number;
-  timeRemaining?: number;
-  screenDuration: number;
+  onNext?: () => void;
 }
 
 export default function PlayerTutorialScreen1({
-  phaseStartTime,
-  timeRemaining,
-  screenDuration,
+  onNext
 }: TutorialScreen1Props) {
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -28,23 +24,19 @@ export default function PlayerTutorialScreen1({
         />
       </div>
 
-      <div className="fixed z-10 top-[2vh] left-1/2 transform -translate-x-1/2">
-        <TimerBar duration={screenDuration} isRunning={true} />
-      </div>
-
       {/* Dark Overlay with Blur */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[64px]" />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-8 overflow-scroll">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full pb-[1vh] overflow-scroll">
         {/* Dark Blue Central Panel with Light Gray Border */}
-        <div className="max-w-[85vw] max-h-[85%] h-full w-full px-6">
-          <div className="flex flex-col h-full justify-center uppercase gap-8">
+        <div className="max-w-[85vw] max-h-[85vh] h-full w-full mt-[-15vh]">
+          <div className="flex flex-col h-full justify-center uppercase gap-[7vh]">
             {/* Welcome Title - Centered */}
 
             <div className="text-center">
               <motion.h1
-                className="text-white text-5xl font-bold leading-tight tracking-wide"
+                className="text-white text-[7vh] font-bold leading-tight tracking-wide"
                 initial={{ opacity: 0, y: -100 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
@@ -56,7 +48,7 @@ export default function PlayerTutorialScreen1({
             </div>
 
             {/* Mission Description - Centered */}
-            <p className="text-white text-center text-3xl tracking-wider">
+            <p className="text-white text-center text-[3.5vh] tracking-wider flex flex-col gap-[4vh]">
               <motion.span
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -65,8 +57,6 @@ export default function PlayerTutorialScreen1({
                 Sea levels around Singapore are rising due to climate
                 change.
               </motion.span>
-              <br />
-              <br />
               <motion.span
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -79,8 +69,6 @@ export default function PlayerTutorialScreen1({
                 <span className="text-[#FFDD3D]">budget</span>, and{' '}
                 <span className="text-[#FFDD3D]">effectiveness</span>.
               </motion.span>
-              <br />
-              <br />
               <motion.span
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -93,7 +81,7 @@ export default function PlayerTutorialScreen1({
 
             {/* Disclaimer - Centered */}
             <motion.p
-              className="text-white text-xl text-center tracking-wider"
+              className="text-white text-[2.5vh] text-center tracking-wider"
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 5 }}

@@ -6,17 +6,7 @@ import { TUTORIAL_4_CARDS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 
-interface TutorialScreen3Props {
-  phaseStartTime?: number;
-  timeRemaining?: number;
-  screenDuration: number;
-}
-
-export default function PlayerTutorialScreen4({
-  phaseStartTime,
-  timeRemaining,
-  screenDuration,
-}: TutorialScreen3Props) {
+export default function PlayerTutorialScreen4() {
   const coinSize = window.innerHeight / 100;
 
   return (
@@ -35,12 +25,8 @@ export default function PlayerTutorialScreen4({
       {/* Dark Overlay with Blur */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[64px]" />
 
-      <div className="fixed z-10 top-[2vh] left-1/2 transform -translate-x-1/2">
-        <TimerBar duration={screenDuration} isRunning={true} />
-      </div>
-
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col gap-[0.5vh] items-center justify-center h-full px-4 pt-[1vh]">
+      <div className="relative z-10 flex flex-col gap-[0.5vh] items-center h-full px-4 mt-[10vh]">
         <div className=" w-full">
           <div className="flex flex-col items-center gap-10 uppercase">
             {/* Top Section - Instructional Text */}
