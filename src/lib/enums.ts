@@ -354,6 +354,8 @@ export enum ActivityTypeEnum {
   R1_3B_UPGRADE_HYBRID_MEASURE_WALK_PATH = "r1 3b hb ug wp",
   
   DEMOLISH = "demolish",
+
+  RESET_WATER = "water-reset"
 }
 
 export enum ActivityDemolishTypeSector1AEnum {

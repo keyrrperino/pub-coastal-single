@@ -77,6 +77,7 @@ interface SectorControlProps {
   roomName: string;
   onClickSector: (value: string) => void;
   isSplineLoading: boolean;
+  resetWater?: () => void;
 }
 
 // Helper function to get sector titles
@@ -116,7 +117,8 @@ const SectorControl: React.FC<SectorControlProps> = ({
   sector,
   roomName,
   onClickSector,
-  isSplineLoading
+  isSplineLoading,
+  resetWater
 }) => {
   const { triggerSingleBuild } = useGameContext();
   const { updateFromGameRoomService } = useServerTime();
@@ -780,19 +782,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
       );
       return;
     }
-
-    // Anyone can start the game - trigger the Spline action first
-    const btn = SplineTriggersConfig[
-      ActivityTypeEnum.START_GAME
-    ] as SplineTriggerConfigItem;
-    await gameRoomService.addElement(
-      btn.activityType!,
-      btn.buttonValue ?? '',
-      0,
-      0,
-      false,
-      SubSectorEnum.ONE_A,
-    );
 
     // Then update the lobby status to start the game flow
     gameRoomService.updateLobbyStateKeyValue(

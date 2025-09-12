@@ -101,20 +101,4 @@ export function useSplineTriggers({
     runTriggers();
     // eslint-disable-next-line
   }, [isLoaded, newActivities, splineAppRef]);
-
-  // useEffect(() => {
-  //   if (isGameOnGoing(lobbyState.gameLobbyStatus)) {
-  //     const scene1 = splineAppRef.current?.findObjectByName('Title + Instructions + Play + Screen');
-  //     const scene2 = splineAppRef.current?.findObjectByName('Overworld');
-  
-    
-  //     if (scene1) {
-  //       scene1.visible = false;
-  //     }
-    
-  //     if (scene2) {
-  //       scene2.visible = true;
-  //     }
-  //   }
-  // }, [lobbyState.gameLobbyStatus]);
 }
