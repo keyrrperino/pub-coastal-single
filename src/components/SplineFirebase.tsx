@@ -32,6 +32,8 @@ import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
+const totalAssets = (Object.values(CutScenesEnum).length * 2);
+
 interface SplineFirebaseProps {
   roomName: string;
   onClickSector: (value: string) => void;
@@ -257,119 +259,119 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     window.location.reload(); 
   }
 
-  // Preload cutscene overlay images and critical intro videos with progress
-  const cutsceneAssetUrls = useMemo(() => {
-    const values = Object.values(CutScenesEnum);
-    const toSlug = (value: string) => value?.replaceAll("-", " ").toLocaleLowerCase();
-    const imageUrls = values.map(v => `/games/pub-coastal-spline/flash-reports/images/${toSlug(v)}.png?v=1.1`);
+  // // Preload cutscene overlay images and critical intro videos with progress
+  // const cutsceneAssetUrls = useMemo(() => {
+  //   const values = Object.values(CutScenesEnum);
+  //   const toSlug = (value: string) => value?.replaceAll("-", " ").toLocaleLowerCase();
+  //   const imageUrls = values.map(v => `/games/pub-coastal-spline/flash-reports/images/${toSlug(v)}.png?v=1.1`);
 
-    const allVideoUrls = values.map(v => ({ key: v, url: `/games/pub-coastal-spline/flash-reports/videos/${toSlug(v)}.webm?v=1.1`}));
-    const isIntro = (k: string) => [CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(k as CutScenesEnum);
-    const videoCriticalUrls = allVideoUrls.filter(v => isIntro(v.key)).map(v => v.url);
-    const videoDeferredUrls = allVideoUrls.filter(v => !isIntro(v.key)).map(v => v.url);
+  //   const allVideoUrls = values.map(v => ({ key: v, url: `/games/pub-coastal-spline/flash-reports/videos/${toSlug(v)}.webm?v=1.1`}));
+  //   const isIntro = (k: string) => [CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(k as CutScenesEnum);
+  //   const videoCriticalUrls = allVideoUrls.filter(v => isIntro(v.key)).map(v => v.url);
+  //   const videoDeferredUrls = allVideoUrls.filter(v => !isIntro(v.key)).map(v => v.url);
 
-    return { imageUrls, videoCriticalUrls, videoDeferredUrls };
-  }, []);
+  //   return { imageUrls, videoCriticalUrls, videoDeferredUrls };
+  // }, []);
 
-  useEffect(() => {
-    let isCancelled = false;
+  // useEffect(() => {
+  //   let isCancelled = false;
 
-    const criticalTotal = (cutsceneAssetUrls.videoCriticalUrls.length + cutsceneAssetUrls.imageUrls.length);
-    const allTotal = criticalTotal + cutsceneAssetUrls.videoDeferredUrls.length;
-    setCriticalTotalCount(criticalTotal);
-    setAssetsTotalCount(allTotal);
+  //   const criticalTotal = (cutsceneAssetUrls.videoCriticalUrls.length + cutsceneAssetUrls.imageUrls.length);
+  //   const allTotal = criticalTotal + cutsceneAssetUrls.videoDeferredUrls.length;
+  //   setCriticalTotalCount(criticalTotal);
+  //   setAssetsTotalCount(allTotal);
 
-    if (criticalTotal === 0) {
-      setCriticalProgress(100);
-    }
-    if (allTotal === 0) {
-      setAssetsProgress(100);
-    }
+  //   if (criticalTotal === 0) {
+  //     setCriticalProgress(100);
+  //   }
+  //   if (allTotal === 0) {
+  //     setAssetsProgress(100);
+  //   }
 
-    const preloadImage = (url: string) => new Promise<void>((resolve) => {
-      try {
-        const img = new Image();
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-        img.src = url;
-      } catch {
-        resolve();
-      }
-    });
+  //   const preloadImage = (url: string) => new Promise<void>((resolve) => {
+  //     try {
+  //       const img = new Image();
+  //       img.onload = () => resolve();
+  //       img.onerror = () => resolve();
+  //       img.src = url;
+  //     } catch {
+  //       resolve();
+  //     }
+  //   });
 
-    const preloadVideoMetadata = (url: string) => new Promise<void>((resolve) => {
-      try {
-        const video = document.createElement('video');
-        video.preload = 'metadata';
-        video.muted = true;
-        const done = () => {
-          try { video.removeAttribute('src'); video.load(); } catch {}
-          resolve();
-        };
-        video.addEventListener('loadedmetadata', done, { once: true });
-        video.addEventListener('error', done, { once: true });
-        setTimeout(done, 5000);
-        video.src = url;
-      } catch {
-        resolve();
-      }
-    });
+  //   const preloadVideoMetadata = (url: string) => new Promise<void>((resolve) => {
+  //     try {
+  //       const video = document.createElement('video');
+  //       video.preload = 'metadata';
+  //       video.muted = true;
+  //       const done = () => {
+  //         try { video.removeAttribute('src'); video.load(); } catch {}
+  //         resolve();
+  //       };
+  //       video.addEventListener('loadedmetadata', done, { once: true });
+  //       video.addEventListener('error', done, { once: true });
+  //       setTimeout(done, 5000);
+  //       video.src = url;
+  //     } catch {
+  //       resolve();
+  //     }
+  //   });
 
-    const bumpCritical = () => setCriticalLoadedCount(prev => {
-      const next = prev + 1;
-      setCriticalProgress(Math.round((next / Math.max(1, criticalTotal)) * 100));
-      return next;
-    });
-    const bumpAll = () => setAssetsLoadedCount(prev => {
-      const next = prev + 1;
-      setAssetsProgress(Math.round((next / Math.max(1, allTotal)) * 100));
-      return next;
-    });
+  //   const bumpCritical = () => setCriticalLoadedCount(prev => {
+  //     const next = prev + 1;
+  //     setCriticalProgress(Math.round((next / Math.max(1, criticalTotal)) * 100));
+  //     return next;
+  //   });
+  //   const bumpAll = () => setAssetsLoadedCount(prev => {
+  //     const next = prev + 1;
+  //     setAssetsProgress(Math.round((next / Math.max(1, allTotal)) * 100));
+  //     return next;
+  //   });
 
-    const runWithConcurrency = async (
-      work: Array<{ task: () => Promise<void>; isCritical: boolean }>,
-      limit: number
-    ) => {
-      let idx = 0;
-      let running = 0;
-      return new Promise<void>((resolveAll) => {
-        const launchNext = () => {
-          if (isCancelled) return resolveAll();
-          while (running < limit && idx < work.length) {
-            const { task, isCritical } = work[idx++];
-            running++;
-            task().then(() => {
-              if (isCritical) bumpCritical();
-              bumpAll();
-            }).finally(() => {
-              running--;
-              if (idx >= work.length && running === 0) {
-                resolveAll();
-              } else {
-                launchNext();
-              }
-            });
-          }
-        };
-        launchNext();
-      });
-    };
+  //   const runWithConcurrency = async (
+  //     work: Array<{ task: () => Promise<void>; isCritical: boolean }>,
+  //     limit: number
+  //   ) => {
+  //     let idx = 0;
+  //     let running = 0;
+  //     return new Promise<void>((resolveAll) => {
+  //       const launchNext = () => {
+  //         if (isCancelled) return resolveAll();
+  //         while (running < limit && idx < work.length) {
+  //           const { task, isCritical } = work[idx++];
+  //           running++;
+  //           task().then(() => {
+  //             if (isCritical) bumpCritical();
+  //             bumpAll();
+  //           }).finally(() => {
+  //             running--;
+  //             if (idx >= work.length && running === 0) {
+  //               resolveAll();
+  //             } else {
+  //               launchNext();
+  //             }
+  //           });
+  //         }
+  //       };
+  //       launchNext();
+  //     });
+  //   };
 
-    const criticalTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
-      ...cutsceneAssetUrls.imageUrls.map((u) => ({ task: () => preloadImage(u), isCritical: true })),
-      ...cutsceneAssetUrls.videoCriticalUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: true })),
-    ];
+  //   const criticalTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
+  //     ...cutsceneAssetUrls.imageUrls.map((u) => ({ task: () => preloadImage(u), isCritical: true })),
+  //     ...cutsceneAssetUrls.videoCriticalUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: true })),
+  //   ];
 
-    const deferredTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
-      ...cutsceneAssetUrls.videoDeferredUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: false })),
-    ];
+  //   const deferredTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
+  //     ...cutsceneAssetUrls.videoDeferredUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: false })),
+  //   ];
 
-    // Start both queues; critical is allowed higher concurrency
-    runWithConcurrency(criticalTasks, 4);
-    runWithConcurrency(deferredTasks, 2);
+  //   // Start both queues; critical is allowed higher concurrency
+  //   runWithConcurrency(criticalTasks, 4);
+  //   runWithConcurrency(deferredTasks, 2);
 
-    return () => { isCancelled = true; };
-  }, [cutsceneAssetUrls]);
+  //   return () => { isCancelled = true; };
+  // }, [cutsceneAssetUrls]);
 
   const displayThankYou = async () => {
     if (gameRoomServiceRef.current) {
@@ -397,6 +399,12 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             playsInline
             controls={false}
             onLoadedMetadata={(e) => {
+              setCriticalProgress((prev) => {
+                const newTotal = prev + 1;
+                setAssetsProgress((newTotal / totalAssets) * 100);
+
+                return newTotal;
+              });
               if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
                 e.currentTarget.playbackRate = 0.7143;
               }
@@ -411,6 +419,14 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           {/* Frame Overlay */}
           <div className="fixed inset-0 z-20 flex items-center justify-center h-[100vh]">
             <img
+              onLoad={() => {
+                setCriticalProgress((prev) => {
+                  const newTotal = prev + 1;
+                  setAssetsProgress((newTotal / totalAssets) * 100);
+  
+                  return newTotal;
+                });
+              }}
               src={`/games/pub-coastal-spline/flash-reports/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.png?v=1.1`}
               className="pointer-events-none max-h-[100vh]"
               // style={{ objectFit: "" }}
@@ -527,7 +543,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         />
 
         {/* Loading overlay with combined percentage (assets + triggers) */}
-        {(triggersLoading || !isLoaded || criticalProgress < 100) && (
+        {(triggersLoading || !isLoaded || assetsProgress < 100) && (
           <div 
             className="absolute inset-0 flex flex-col items-center justify-center z-10"
           >
@@ -540,7 +556,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             }} />
             {/* Map overlay fill based on combined resources percentage */}
             {(() => {
-              const combined = Math.round((assetsProgress + Math.min(100, triggerProgress)) / 2);
+              const combined = Math.round((Math.min(100, assetsProgress) + Math.min(100, triggerProgress)) / 2);
               return (
                 <div
                   className="relative w-full flex items-end justify-center"
@@ -576,7 +592,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             </h2>
 
             <div className="mt-4 flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
-              <span>ASSETS {assetsProgress}%</span>
+              <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
             </div>
@@ -584,7 +600,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         )}
 
       </div>
-      {!triggersLoading && isLoaded && <SectorControl
+      {!triggersLoading && isLoaded && (assetsProgress >= 100) && <SectorControl
         onClickSector={onClickSector}
         sector={sector}
         roomName={roomName}
