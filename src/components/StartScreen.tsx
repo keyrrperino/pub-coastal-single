@@ -121,7 +121,7 @@ export default function StartScreen({
               2025-2100
             </h2>
             <p
-              className="text-white text-[4.5vh] text-center drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              className="text-white text-[4vh] text-center drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
               style={{
                 fontFamily: 'novecento-sans-narrow, sans-serif',
                 fontWeight: 700,

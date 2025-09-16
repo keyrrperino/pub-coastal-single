@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import Image from 'next/image';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Application, SplineEventName } from "@splinetool/runtime";
 import { GameRoomService, getGlobalLeaderboard, ProcessedLeaderboardData } from "@/lib/gameRoom";
 import ProgressBar from "@/games/pub-coastal-game/compontents/ProcessBar";
@@ -58,6 +57,13 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   } = useInitialize(roomName);
 
   const [totalScore, setTotalScore] = useState<number>(2500);
+  const [criticalProgress, setCriticalProgress] = useState<number>(0);
+  const [criticalLoadedCount, setCriticalLoadedCount] = useState<number>(0);
+  const [criticalTotalCount, setCriticalTotalCount] = useState<number>(0);
+
+  const [assetsProgress, setAssetsProgress] = useState<number>(0);
+  const [assetsLoadedCount, setAssetsLoadedCount] = useState<number>(0);
+  const [assetsTotalCount, setAssetsTotalCount] = useState<number>(0);
   useHideAllTriggers(isLoaded, splineAppRef, lobbyState);
   useLobbyPreparation({ lobbyState, gameRoomServiceRef });
 
@@ -92,11 +98,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [lobbyState]);
 
   useEffect(() => {
-    if (triggerProgress >= 100) {
+    if (triggerProgress >= 100 && criticalProgress >= 100 && isLoaded) {
       setTriggersLoading(false);
     }
 
-  }, [triggerProgress]);
+  }, [triggerProgress, criticalProgress, isLoaded]);
 
   useSplineTriggers({
     isLoaded,
@@ -250,6 +256,120 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
     window.location.reload(); 
   }
+
+  // Preload cutscene overlay images and critical intro videos with progress
+  const cutsceneAssetUrls = useMemo(() => {
+    const values = Object.values(CutScenesEnum);
+    const toSlug = (value: string) => value?.replaceAll("-", " ").toLocaleLowerCase();
+    const imageUrls = values.map(v => `/games/pub-coastal-spline/flash-reports/images/${toSlug(v)}.png?v=1.1`);
+
+    const allVideoUrls = values.map(v => ({ key: v, url: `/games/pub-coastal-spline/flash-reports/videos/${toSlug(v)}.webm?v=1.1`}));
+    const isIntro = (k: string) => [CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(k as CutScenesEnum);
+    const videoCriticalUrls = allVideoUrls.filter(v => isIntro(v.key)).map(v => v.url);
+    const videoDeferredUrls = allVideoUrls.filter(v => !isIntro(v.key)).map(v => v.url);
+
+    return { imageUrls, videoCriticalUrls, videoDeferredUrls };
+  }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const criticalTotal = (cutsceneAssetUrls.videoCriticalUrls.length + cutsceneAssetUrls.imageUrls.length);
+    const allTotal = criticalTotal + cutsceneAssetUrls.videoDeferredUrls.length;
+    setCriticalTotalCount(criticalTotal);
+    setAssetsTotalCount(allTotal);
+
+    if (criticalTotal === 0) {
+      setCriticalProgress(100);
+    }
+    if (allTotal === 0) {
+      setAssetsProgress(100);
+    }
+
+    const preloadImage = (url: string) => new Promise<void>((resolve) => {
+      try {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = url;
+      } catch {
+        resolve();
+      }
+    });
+
+    const preloadVideoMetadata = (url: string) => new Promise<void>((resolve) => {
+      try {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.muted = true;
+        const done = () => {
+          try { video.removeAttribute('src'); video.load(); } catch {}
+          resolve();
+        };
+        video.addEventListener('loadedmetadata', done, { once: true });
+        video.addEventListener('error', done, { once: true });
+        setTimeout(done, 5000);
+        video.src = url;
+      } catch {
+        resolve();
+      }
+    });
+
+    const bumpCritical = () => setCriticalLoadedCount(prev => {
+      const next = prev + 1;
+      setCriticalProgress(Math.round((next / Math.max(1, criticalTotal)) * 100));
+      return next;
+    });
+    const bumpAll = () => setAssetsLoadedCount(prev => {
+      const next = prev + 1;
+      setAssetsProgress(Math.round((next / Math.max(1, allTotal)) * 100));
+      return next;
+    });
+
+    const runWithConcurrency = async (
+      work: Array<{ task: () => Promise<void>; isCritical: boolean }>,
+      limit: number
+    ) => {
+      let idx = 0;
+      let running = 0;
+      return new Promise<void>((resolveAll) => {
+        const launchNext = () => {
+          if (isCancelled) return resolveAll();
+          while (running < limit && idx < work.length) {
+            const { task, isCritical } = work[idx++];
+            running++;
+            task().then(() => {
+              if (isCritical) bumpCritical();
+              bumpAll();
+            }).finally(() => {
+              running--;
+              if (idx >= work.length && running === 0) {
+                resolveAll();
+              } else {
+                launchNext();
+              }
+            });
+          }
+        };
+        launchNext();
+      });
+    };
+
+    const criticalTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
+      ...cutsceneAssetUrls.imageUrls.map((u) => ({ task: () => preloadImage(u), isCritical: true })),
+      ...cutsceneAssetUrls.videoCriticalUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: true })),
+    ];
+
+    const deferredTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
+      ...cutsceneAssetUrls.videoDeferredUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: false })),
+    ];
+
+    // Start both queues; critical is allowed higher concurrency
+    runWithConcurrency(criticalTasks, 4);
+    runWithConcurrency(deferredTasks, 2);
+
+    return () => { isCancelled = true; };
+  }, [cutsceneAssetUrls]);
 
   const displayThankYou = async () => {
     if (gameRoomServiceRef.current) {
@@ -406,16 +526,60 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           style={{ display: "block", borderRadius: 0, border: "none" }}
         />
 
-        {/* Loading overlay with percentage */}
-        {(triggersLoading) && (
+        {/* Loading overlay with combined percentage (assets + triggers) */}
+        {(triggersLoading || !isLoaded || criticalProgress < 100) && (
           <div 
-            className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-            style={{ borderRadius: 0 }}
+            className="absolute inset-0 flex flex-col items-center justify-center z-10"
           >
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
-            <span className="text-xl font-semibold text-blue-700 mb-2">
-              {isLoaded ? `Loading Map... ${triggerProgress}%` : "Loading Map..."}
-            </span>
+            <div className="absolute inset-0 z-[-1]" style={{
+              backgroundImage: "url('/assets/bg-loading.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#008DF0'
+            }} />
+            {/* Map overlay fill based on combined resources percentage */}
+            {(() => {
+              const combined = Math.round((assetsProgress + Math.min(100, triggerProgress)) / 2);
+              return (
+                <div
+                  className="relative w-full flex items-end justify-center"
+                >
+                  <img
+                          src="/assets/Loading Map BG.png"
+                          alt="Loading Map Overlay"
+                          className="w-[25%] h-auto select-none pointer-events-none"
+                          draggable={false}
+                        />
+                  
+                  <div className="absolute inset-0 flex items-end justify-center">
+                    <div className="w-[27%] h-full relative pt-[200px]">
+                      <div
+                        className="absolute bottom-[-1vh] left-0 right-0 overflow-hidden flex items-end justify-center"
+                        style={{ height: `${combined}%` }}
+                      >
+                        <img
+                          src="/assets/Loading Map Overlay.png"
+                          alt="Loading Map Overlay"
+                          className="w-full h-auto select-none pointer-events-none"
+                          draggable={false}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            <h2 className="mt-5 text-white text-2xl md:text-4xl font-extrabold tracking-wide text-center uppercase">
+              WE'RE GETTING THINGS READY. HOLD TIGHT!
+            </h2>
+
+            <div className="mt-4 flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
+              <span>ASSETS {assetsProgress}%</span>
+              <span className="opacity-70">|</span>
+              <span>MAP {Math.min(100, triggerProgress)}%</span>
+            </div>
           </div>
         )}
 
