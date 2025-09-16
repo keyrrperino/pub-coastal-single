@@ -952,6 +952,20 @@ const SectorControl: React.FC<SectorControlProps> = ({
     };
   }, [gameRoomService, resetLocalGameState, activityLog.length]);
 
+
+  const isScoreEndingModalTimesUp = () => {
+    if (gameRoomService) {
+      if (lobbyState.gameLobbyStatus === GameLobbyStatus.ENDING) {
+        gameRoomService.updateLobbyState({
+          ...lobbyState, ...{
+          [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.TEAM_NAME_INPUT,
+          [LobbyStateEnum.PHASE_START_TIME]: 0,
+          [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.TEAM_NAME_INPUT,
+        }});
+      }
+    }
+  };
+
   // Helper function to render sector section using ProgressionState system
   const renderSectorSection = (
     sectorId: string,
@@ -1234,12 +1248,17 @@ const SectorControl: React.FC<SectorControlProps> = ({
       {/* Main content */}
 
       <div
-        className="absolute left-1/2 -translate-x-1/2 w-full z-10 bg-[#10458B] px-[2vw] py-[1vh]"
-        style={isBottom ? { bottom: 0 } : {
+        className="absolute left-1/2 -translate-x-1/2 w-full z-10 px-[2vw] py-[1vh]"
+        style={isBottom ? { bottom: 0, background: "#10458B" } : {
           ...([GameLobbyStatus.ROUND_CUTSCENES, GameLobbyStatus.TEAM_NAME_INPUT].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
         }}
       >
-        <div className="absolute left-1/2 -translate-x-1/2 w-[101%] z-10 p-2 mt-[-11vh]">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 w-[101%] z-10 p-2 mt-[-12vh]"
+          style={{
+            ...([GameLobbyStatus.INITIALIZING].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
+          }}
+        >
           {/* Budget display left */}
           {renderScore}
         </div>
@@ -1373,7 +1392,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
             // Start/Lobby phases: Show StartScreen
             if (
-              !currentPhase ||
               currentPhase === GameLobbyStatus.INITIALIZING
             ) {
               return (
@@ -1442,7 +1460,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
       <EndingModal
         isOpen={showEnding}
-        onDurationComplete={() => {}}
+        onContinue={() => {
+          isScoreEndingModalTimesUp();
+        }}
         finalScore={finalScore}
         duration={getPhaseDuration(GameLobbyStatus.ENDING)}
         syncWithTimestamp={

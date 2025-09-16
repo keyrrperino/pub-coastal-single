@@ -3,6 +3,7 @@ import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext'
 import { useEffect, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import dynamic from 'next/dynamic';
+import { UserSectorEnum } from '@/lib/enums';
 
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
@@ -55,7 +56,7 @@ function HomePage() {
         <meta name="msapplication-TileImage" content="/assets/icon-512x512.png" />
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
-      <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+      <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 overflow-hidden">
         <GameProvider>
           {sector && room && (
             <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />

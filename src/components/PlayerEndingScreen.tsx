@@ -6,6 +6,7 @@ export type PlayerEndingType = 'success' | 'moderate' | 'failure';
 interface PlayerEndingScreenProps {
   endingType: PlayerEndingType;
   finalScore?: number;
+  onContinue?: () => void;
 }
 
 interface PlayerEndingConfig {
@@ -56,36 +57,26 @@ const playerEndingConfigs: Record<
 export default function PlayerEndingScreen({
   endingType,
   finalScore = 5000,
+  onContinue
 }: PlayerEndingScreenProps) {
   const config = playerEndingConfigs[endingType];
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/assets/start-screen-bg-updated.webp"
-          alt="Coastal background"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/80" />
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-8">
-        <div className="flex flex-col items-center gap-20 max-w-screen w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-[1vh] gap-[3vh]">
+        <div className="flex flex-col items-center max-w-screen w-full">
           {/* Header Section */}
-          <div className="flex flex-col items-center gap-10 w-full">
-            <h1 className="text-white text-7xl font-bold text-center leading-[0.8] drop-shadow-[0px_4px_4px_rgba(148,107,199,1)]">
+          <div className="flex flex-col items-center gap-[4vh] w-full">
+            <h1 className="text-white text-[6vh] font-bold text-center leading-[1] drop-shadow-[0px_4px_4px_rgba(148,107,199,1)]">
               {config.title}
             </h1>
 
-            <div className="max-w-[75vw]">
-              <p className="text-white text-4xl font-bold text-center leading-[1.2] max-w-screen drop-shadow-[0px_2px_2px_rgba(148,107,199,1)]">
+            <div className="max-w-[60vw]">
+              <p className="text-white text-[4vh] font-bold text-center leading-[1] max-w-screen drop-shadow-[0px_2px_2px_rgba(148,107,199,1)]">
                 YOUR FINAL SCORE:
                 <br />
                 <span className="text-[#FFDD3D]">
@@ -94,7 +85,7 @@ export default function PlayerEndingScreen({
               </p>
             </div>
 
-            <div className="relative max-w-[85vw] w-full rounded-[56px] backdrop-blur-[37px] shadow-[0px_13px_63px_rgba(0,0,0,0.15)]">
+            <div className="relative max-w-[60vw] w-full backdrop-blur-[37px] shadow-[0px_13px_63px_rgba(0,0,0,0.15)]">
               {/* Border using ::after pseudo-element */}
               <style jsx>{`
                 div::after {
@@ -104,8 +95,8 @@ export default function PlayerEndingScreen({
                   left: 0;
                   right: 0;
                   bottom: 0;
-                  border-radius: 56px;
-                  padding: 5px;
+                  border-radius: 3vh;
+                  padding: 0.3vh;
                   background: ${config.borderGradient};
                   -webkit-mask:
                     linear-gradient(#fff 0 0) content-box,
@@ -120,11 +111,11 @@ export default function PlayerEndingScreen({
               `}</style>
 
               <div
-                className="relative w-full h-full rounded-[56px] py-10 px-20"
+                className="relative w-full h-full rounded-[3vh] py-[4vh] px-[2vh]"
                 style={{ backgroundColor: config.bgColor }}
               >
                 <p
-                  className="text-white text-3xl font-bold text-center drop-shadow-[0px_2px_2px_rgba(148,107,199,1)] font-condensed"
+                  className="text-white text-[2.5vh] font-bold text-center drop-shadow-[0px_2px_2px_rgba(148,107,199,1)] font-condensed"
                   dangerouslySetInnerHTML={{
                     __html: config.subtitle,
                   }}
@@ -133,6 +124,14 @@ export default function PlayerEndingScreen({
             </div>
           </div>
         </div>
+        <button
+          onClick={() => {
+            onContinue?.();
+          }}
+          className="bg-white text-blue-500 text-[3vh] px-[3vh] py-[1vh] rounded-[3vh] hover:bg-blue-600 hover:text-white"
+        >
+          CONTINUE
+        </button>
       </div>
     </div>
   );

@@ -52,35 +52,49 @@ export default function StartScreen({
       firstClickTimeRef.current = null;
     }
   };
+
+  if (isLeaderboardOpen) {
+    return null;
+  }
+  
   return (
-    <div className="relative w-[101%] h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       {/* Background Image */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/assets/start-screen-bg-updated.webp"
-          alt="Coastal background"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
 
       {/* Dark Overlay with Blur */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-[12px]" />
+      <div className="absolute inset-0 bg-black/20" />
 
       {/* Content Container */}
       <div
         className={cn(
-          'relative z-10 flex flex-col items-center justify-center h-full py-8',
+          'relative z-10 flex flex-col items-center justify-between h-full py-[4vh]',
           isCreditsModalOpen && 'opacity-0',
         )}
       >
         {/* Main Content Centered */}
-        <div className="flex flex-col items-center gap-20">
+        <div className="flex flex-col items-center gap-[2vh] mt-[4vh]">
+          {/* PUB Logo - Fixed at bottom */}
+          {<div className="transform">
+            <button
+              onClick={handleLogoClick}
+              className="focus:outline-none"
+              aria-label="PUB Logo"
+            >
+              <img
+                src="/assets/PUB_RidingTheTides_White.png"
+                alt="PUB Riding the Tides Logo"
+                className={cn(
+                  'w-auto h-[7vh] 4k:!w-[342px] 4k:!h-[212px]',
+                  'object-contain',
+                )}
+              />
+            </button>
+          </div>}
+          
           {/* Title Section */}
-          <div className="flex flex-col items-center gap-4 max-w-[645px]">
+          <div className="flex flex-col items-center">
             <h1
-              className="text-white text-8xl text-center leading-[0.9] tracking-wide drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              className=" max-w-[30vw] text-white text-[8vh] text-center leading-[0.9] tracking-wide drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
               style={{
                 fontFamily: 'novecento-sans-narrow, sans-serif',
                 fontWeight: 700,
@@ -89,7 +103,7 @@ export default function StartScreen({
               COASTAL PROTECTORS
             </h1>
             <h2
-              className="text-white text-7xl text-center leading-[0.8] drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              className="text-white text-[5vh] text-center drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
               style={{
                 fontFamily: 'novecento-sans-narrow, sans-serif',
                 fontWeight: 700,
@@ -98,7 +112,7 @@ export default function StartScreen({
               2025-2100
             </h2>
             <p
-              className="text-white text-4xl text-center leading-[0.8] drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              className="text-white text-[4.5vh] text-center drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
               style={{
                 fontFamily: 'novecento-sans-narrow, sans-serif',
                 fontWeight: 700,
@@ -109,15 +123,17 @@ export default function StartScreen({
           </div>
 
               
+        </div>
+
           {/* Player and Buttons Section */}
-          {!isLeaderboardOpen && <div className="flex flex-col items-center gap-4 w-full">
+          {<div className="flex flex-col items-center justify-center gap-4">
             {/* Player Indicator */}
 
             {/* Buttons */}
             <div className="flex flex-row justify-center gap-5 w-full">
               <button
                 onClick={onStartGame}
-                className="h-[100px] px-[5vw] bg-[#005DFF] text-white text-2xl rounded-full hover:bg-[#0052e6] active:scale-95 transition-all duration-200 whitespace-nowrap"
+                className="h-[6vh] px-[6vh] bg-white text-[#005DFF] text-[2vh] rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-200 whitespace-nowrap"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
@@ -128,7 +144,7 @@ export default function StartScreen({
 
               <button
                 onClick={onShowLeaderboard}
-                className="h-[100px] px-[5vw] bg-white text-[#005DFF] text-2xl rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-200 whitespace-nowrap"
+                className="h-[6vh] px-[6vh] bg-transparent text-white text-[2vh] rounded-full hover:bg-[#005DFF] active:scale-95 transition-all duration-200 whitespace-nowrap border-[0.2vh] border-white"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
@@ -139,19 +155,8 @@ export default function StartScreen({
                   : 'Show Leaderboard'}
               </button>
             </div>
+            <span className="text-white">*BEST PLAYED ON GOOGLE CHROME</span>
           </div>}
-        </div>
-
-        {/* PUB Logo - Fixed at bottom */}
-        {!isLeaderboardOpen && <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <button
-            onClick={handleLogoClick}
-            className="focus:outline-none"
-            aria-label="PUB Logo"
-          >
-            <Logo width={123} height={76} />
-          </button>
-        </div>}
       </div>
 
       {/* Credits Modal */}

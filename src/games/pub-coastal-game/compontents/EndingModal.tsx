@@ -5,7 +5,7 @@ import { SectorPerformance } from '@/components/hooks/useSectorScores';
 
 interface EndingModalProps {
   isOpen: boolean;
-  onDurationComplete?: () => void;
+  onContinue?: () => void;
   finalScore?: number;
   duration?: number;
   syncWithTimestamp?: number;
@@ -14,29 +14,12 @@ interface EndingModalProps {
 
 const EndingModal: React.FC<EndingModalProps> = ({ 
   isOpen, 
-  onDurationComplete, 
+  onContinue, 
   finalScore = 0,
   duration = 15,
   syncWithTimestamp,
   totalPerformance = 'okay'
 }) => {
-  const { timeRemaining, progressPercentage } = useTimer({
-    duration,
-    onTimeUp: onDurationComplete,
-    startImmediately: isOpen,
-    syncWithTimestamp,
-  });
-
-  // Fallback for when sync is not available
-  useEffect(() => {
-    if (!isOpen || syncWithTimestamp) return;
-
-    const timer = setTimeout(() => {
-      onDurationComplete?.();
-    }, duration * 1000);
-
-    return () => clearTimeout(timer);
-  }, [isOpen, onDurationComplete, duration, syncWithTimestamp]);
 
   if (!isOpen) return null;
 
@@ -62,6 +45,9 @@ const EndingModal: React.FC<EndingModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 w-screen h-screen">
       <PlayerEndingScreen 
+        onContinue={() => {
+          onContinue?.();
+        }}
         endingType={endingType}
         finalScore={finalScore}
       />

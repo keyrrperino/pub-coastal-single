@@ -57,7 +57,7 @@ export default function LeaderboardOverlay({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/20">
       {/* Main Container - match Figma dimensions */}
       <div className="relative w-[60vh] h-[70vh]">
         {/* Background container */}
@@ -207,7 +207,7 @@ export default function LeaderboardOverlay({
           <div className="flex flex-col w-full items-center">
             <button
               onClick={onClose}
-              className="w-[40vh] py-[2vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-[3vh] font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
+              className="w-[200px] py-[1vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-[3vh] font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
             >
               CLOSE
             </button>

@@ -26,19 +26,8 @@ export default function PlayerRoundScreen({
 }: PlayerRoundScreenProps) {
   return (
     <div className="relative w-full h-screen overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/assets/start-screen-bg-updated.webp"
-          alt="Coastal background"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/80" />
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Content Container */}
       <div

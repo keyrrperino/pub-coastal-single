@@ -64,7 +64,9 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   useSplineLoader(
     canvasRef,
     splineAppRef,
-    setIsLoaded
+    setIsLoaded,
+    isLoaded,
+    lobbyState
   );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -122,27 +124,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   // Use manual tutorial index in dev mode, otherwise use timer-based
   const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, triggersLoading, gameRoomServiceRef);
   useLobbyRoundAnimation(lobbyState, triggersLoading, gameRoomServiceRef);
-
-
-  const isScoreEndingModalTimesUp = () => {
-    if (gameRoomServiceRef.current) {
-      if (lobbyState.gameLobbyStatus === GameLobbyStatus.ENDING) {
-        gameRoomServiceRef.current.updateLobbyState({
-          ...lobbyState, ...{
-          [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.TEAM_NAME_INPUT,
-          [LobbyStateEnum.PHASE_START_TIME]: 0,
-          [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.TEAM_NAME_INPUT,
-        }});
-      }
-    }
-  };
-
-  useTimer({
-    duration: lobbyState.phaseDuration,
-    onTimeUp: isScoreEndingModalTimesUp,
-    startImmediately: !triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.ENDING,
-    syncWithTimestamp: lobbyState.phaseStartTime,
-  });
 
   const [leaderboardData, setLeaderboardData] = useState<ProcessedLeaderboardData>({
     topWinner: null,
@@ -275,14 +256,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
   }
 
-  const renderEndingScreen = (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.ENDING) && (
-    <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
-      style={{ borderRadius: 0 }}
-    >
-      <EndingScreen performance={totalPerformance} finalScore={totalScore} />
-    </div>
-  )
   const renderAllCutScences = (
     Object.values(CutScenesEnum).map(value => {
       return (
@@ -359,7 +332,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const renderStoryLine = (
     (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_STORYLINE) && 
     <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80 z-10"
+      className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-80 z-10"
       style={{ borderRadius: 0 }}
     >
 
@@ -441,13 +414,17 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         )}
 
       </div>
-      {!triggersLoading && <SectorControl onClickSector={onClickSector} sector={sector} roomName={roomName} isSplineLoading={triggersLoading} />}
+      {!triggersLoading && <SectorControl
+        onClickSector={onClickSector}
+        sector={sector}
+        roomName={roomName}
+        isSplineLoading={triggersLoading}
+      />}
 
       {/* {renderScore} */}
       {renderProgressBar}
       {/* {renderInstroductions} */}
       {renderStoryLine}
-      {renderEndingScreen}
       {/* {renderInputTeamName} */}
       {renderEndingLeaderBoard}
       {renderRoundAnimation}
