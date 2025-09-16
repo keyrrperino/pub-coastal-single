@@ -8,18 +8,39 @@ import { UserSectorEnum } from '@/lib/enums';
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
 function HomePage() {
-  const [room, setRoom] = useState<string | null>("testing");
+  const [room, setRoom] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const getFingerprint = async () => {
-  //     const fp = await FingerprintJS.load();
-  //     const result = await fp.get();
-  //     if (result) {
-  //       setRoom(result.visitorId ?? null);
-  //     }
-  //   };
-  //   getFingerprint();
-  // }, []);
+  const getCookie = (name: string): string | null => {
+    if (typeof document === 'undefined') return null;
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : null;
+  };
+
+  const setCookie = (name: string, value: string, maxAgeSeconds: number): void => {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAgeSeconds}; path=/`;
+  };
+
+  useEffect(() => {
+    const COOKIE_NAME = 'room';
+    const existingRoom = getCookie(COOKIE_NAME);
+    if (existingRoom) {
+      setRoom(existingRoom);
+      setCookie(COOKIE_NAME, existingRoom, 60 * 60 * 24); // 1 day
+      return;
+    }
+
+    const getFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      const id = result?.visitorId ?? null;
+      if (id) {
+        setRoom(id);
+        setCookie(COOKIE_NAME, id, 60 * 60 * 24); // 1 day
+      }
+    };
+    getFingerprint();
+  }, []);
 
 
   const [ sector, setSector ] = useState<string>("sector-1");
