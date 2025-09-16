@@ -54,12 +54,8 @@ const performanceConfigs: Record<
 
 export default function PostRoundModal({
   isOpen,
-  performance,
-  onClose,
-  sector,
   overallScoresData,
   currentRound,
-  onContinue,
 }: PostRoundModalProps) {
   if (!isOpen) return null;
 
@@ -67,46 +63,48 @@ export default function PostRoundModal({
     const roundData =
       overallScoresData[(currentRound ?? 1) as RoundType];
 
-    const totalScoreRound = roundData
-      ? (roundData[sector]?.totalScoreToDeduct ?? 0)
-      : 0;
+    const totalScoreRound = Object.values(UserSectorEnum).map((userSectorEnum) => {
+      return roundData
+        ? (roundData[userSectorEnum]?.totalScoreToDeduct ?? 0)
+        : 0;
+    }).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     let performance = 'okay';
     if (currentRound === 1) {
       // Round 1: No Flooding 0 to -5, Moderate -5.01 to -60, Heavy -60.01 to -120
-      if (totalScoreRound >= 0 && totalScoreRound <= 5) {
+      if (totalScoreRound >= 0 && totalScoreRound <= 5 * 3) {
         performance = 'good';
       }
-      if (totalScoreRound > 5 && totalScoreRound <= 60) {
+      if (totalScoreRound > 5*3 && totalScoreRound <= 60*3) {
         performance = 'okay';
       }
-      if (totalScoreRound > 60 && totalScoreRound <= 120) {
+      if (totalScoreRound > 60*3 && totalScoreRound <= 120*3) {
         performance = 'bad';
       }
     }
 
     if (currentRound === 2) {
       // Round 2: No Flooding 0 to -5, Moderate -5.01 to -149.99, Heavy -150 to -300
-      if (totalScoreRound >= 0 && totalScoreRound <= 5) {
+      if (totalScoreRound >= 0 && totalScoreRound <= 5*3) {
         performance = 'good';
       }
-      if (totalScoreRound > 5 && totalScoreRound <= 149.99) {
+      if (totalScoreRound > 5*3 && totalScoreRound <= 149.99*3) {
         performance = 'okay';
       }
-      if (totalScoreRound > 149.99 && totalScoreRound <= 300) {
+      if (totalScoreRound > 149.99*3 && totalScoreRound <= 300*3) {
         performance = 'bad';
       }
     }
 
     if (currentRound === 3) {
       // Round 3: No Flooding 0 to -5, Moderate -5.01 to -179.99, Heavy -180 to -400
-      if (totalScoreRound >= 0 && totalScoreRound <= 5) {
+      if (totalScoreRound >= 0 && totalScoreRound <= 5*3) {
         performance = 'good';
       }
-      if (totalScoreRound > 5 && totalScoreRound <= 179.99) {
+      if (totalScoreRound > 5*3 && totalScoreRound <= 179.99*3) {
         performance = 'okay';
       }
-      if (totalScoreRound > 179.99 && totalScoreRound <= 400) {
+      if (totalScoreRound > 179.99*3 && totalScoreRound <= 400*3) {
         performance = 'bad';
       }
     }
@@ -115,19 +113,6 @@ export default function PostRoundModal({
   };
 
   const config = performanceConfigs[getPerformanceRound()];
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose?.();
-    }
-  };
-
-{/* <div className="bg-[#7BFFD780] p-[1vh] rounded-md text-center mb-[1vh] border border-[white]">
-      <h2 className="text-white text-[3vh] font-bold">NO FLOODING</h2>
-      <p className="text-white text-[2vh] mt-[1vh]">
-        YOU'VE SUCCESSFULLY PROTECTED OUR COASTS – CONTINUE TO IMPLEMENT FURTHER ADAPTIVE MEASURES.
-      </p>
-    </div> */}
 
   return (
       <div

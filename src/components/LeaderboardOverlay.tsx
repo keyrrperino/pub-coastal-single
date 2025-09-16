@@ -62,7 +62,7 @@ export default function LeaderboardOverlay({
       <div className="relative w-[60vh] h-[70vh]">
         {/* Background container */}
         <div className="absolute inset-0 w-full h-full">
-          <div className="absolute top-0 left-0 w-full z-20 drop-shadow-[20px_20px_0_#8491C6]">
+          <div className="absolute top-0 left-0 w-full z-20 drop-shadow-[1.5vh_1.5vh_0_#8491C6]">
             {/* Header section (white) */}
             <div className="w-full p-[2vh] bg-white rounded-t-[2vh] flex items-center justify-center">
               <h2
@@ -207,7 +207,7 @@ export default function LeaderboardOverlay({
           <div className="flex flex-col w-full items-center">
             <button
               onClick={onClose}
-              className="w-[40vh] py-[2vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-3xl font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
+              className="w-[40vh] py-[2vh] px-[3vh] bg-[white] text-[#005DFF] hover:text-[white] text-[3vh] font-bold rounded-full hover:bg-[#0052e6] transition-colors duration-200"
             >
               CLOSE
             </button>

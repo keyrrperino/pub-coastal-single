@@ -754,6 +754,7 @@ export function getSectorRoundScore(
         // is Demolished activity
         if (isLatestActivityIsDemolished && previousActivity) {
           const key = `${sectorNumber}_${sectorNumber}A_${previousActivity.action}-${meanSeaLevels[roundNumber]}-${sessionRandomizeEffect}`;
+
           ERROR_KEY = key;
           const data = sceneSectorConfigurations[key];
           const score = ((data.coin ?? 0) + 1) * 10;
@@ -765,6 +766,7 @@ export function getSectorRoundScore(
         // Still deduct all the activity that is not demolished status
         if (!isLatestActivityIsDemolished) {
           const key = `${sectorNumber}_${sectorNumber}A_${activity.action}-${meanSeaLevels[roundNumber]}-${sessionRandomizeEffect}`;
+
           ERROR_KEY = key;
           const { score, coin } = sceneSectorConfigurations[key];
           scores = addUpScoreAndCoinA(Object.assign(scores), userId, score ?? 0, coin ?? 0, key, roundNumber, currentRoundNumber, gameStatus);

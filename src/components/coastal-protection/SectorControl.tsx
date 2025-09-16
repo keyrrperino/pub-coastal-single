@@ -122,13 +122,21 @@ const SectorControl: React.FC<SectorControlProps> = ({
 }) => {
   const { triggerSingleBuild } = useGameContext();
   const { updateFromGameRoomService, getAdjustedCurrentTime } = useServerTime();
-  const [gameRoomService] = useState(
+  const [gameRoomService, setGameRoomService] = useState(
     () =>
       new GameRoomService(
         `sector-${sector.slice(-1)}`,
         roomName ?? GameEnum.DEFAULT_ROOM_NAME,
       ),
   );
+
+  useEffect(() => {
+    setGameRoomService(new GameRoomService(
+      `sector-${sector.slice(-1)}`,
+      roomName ?? GameEnum.DEFAULT_ROOM_NAME,
+    ));
+  }, [ sector ]);
+
   const [activityLog, setActivityLog] = useState<ActivityLogType[]>(
     [],
   );
@@ -963,7 +971,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
     // Get pre-calculated button sets for this sector (calculated once at round start)
     const sectorButtonSets = roundStartButtonSets[sectorId] || {};
-    console.log(`Sector ${sectorId} button sets:`, sectorButtonSets);
+    // console.log(`Sector ${sectorId} button sets:`, sectorButtonSets);
 
     // Map measure types to their display names and button sets - sector-specific order
     const getMeasureTypeConfig = (sectorId: string) => {
