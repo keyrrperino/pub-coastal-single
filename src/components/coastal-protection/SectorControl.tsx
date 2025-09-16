@@ -28,6 +28,7 @@ import { ActivityLogType, LobbyStateType } from '@/lib/types';
 import {
   SplineTriggersConfig,
   GAME_ROUND_TIMER,
+  lobbyStateDefaultValue,
 } from '@/lib/constants';
 import { SplineTriggerConfigItem } from '@/lib/types';
 import { useGameContext } from '@/games/pub-coastal-game-spline/GlobalGameContext';
@@ -71,6 +72,7 @@ import Modal from '@/games/pub-coastal-game/compontents/Modal';
 import PlayerCutsceneModal from '@/games/pub-coastal-game/compontents/PlayerCutsceneModal';
 import RoundStartAnimationModal from '@/games/pub-coastal-game/compontents/RoundStartAnimationModal';
 import { getPlayerNumber } from '@/lib/utils';
+import ThankYouScreen from '../ThankYouScreen';
 
 interface SectorControlProps {
   sector: string;
@@ -1376,23 +1378,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
               );
             }
 
-            // LEADERBOARD_DISPLAY phase: Show main menu screen
-            if (
-              currentPhase === GameLobbyStatus.LEADERBOARD_DISPLAY
-            ) {
-              return (
-                <div className="absolute inset-0 z-20">
-                  <PlayerBackToMenuScreen
-                    onBackToMainMenu={handleStartGame}
-                    playerNumber={getPlayerNumber(sector)}
-                  />
-                </div>
-              );
-            }
-
             // Start/Lobby phases: Show StartScreen
             if (
-              currentPhase === GameLobbyStatus.INITIALIZING
+              !isSplineLoading && currentPhase === GameLobbyStatus.INITIALIZING
             ) {
               return (
                 <div className="absolute inset-0 z-20">
@@ -1409,8 +1397,23 @@ const SectorControl: React.FC<SectorControlProps> = ({
               );
             }
 
+            if (
+              !isSplineLoading && currentPhase === GameLobbyStatus.THANK_YOU
+            ) {
+              return (
+                <div className="absolute inset-0 z-20">
+                  <ThankYouScreen
+                    onClose={async () => {                  
+                      await gameRoomService?.deleteActivities();
+                      await gameRoomService?.updateLobbyState(lobbyStateDefaultValue);
+                    }}
+                  />
+                </div>
+              );
+            }
+
             // Preparing phase: Show loading message
-            if (currentPhase === GameLobbyStatus.PREPARING) {
+            if (!isSplineLoading && currentPhase === GameLobbyStatus.PREPARING) {
               return (
                 <div className="w-full flex items-center justify-center mt-8">
                   <div className="bg-white rounded-[16px] px-8 py-6">

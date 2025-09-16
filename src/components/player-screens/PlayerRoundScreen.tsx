@@ -32,7 +32,7 @@ export default function PlayerRoundScreen({
       {/* Content Container */}
       <div
         className={cn(
-          'relative z-10 flex mx-auto flex-row justify-around items-center h-full w-screen max-w-[75vw] gap-[2vh]',
+          'relative z-10 flex mx-auto flex-row justify-center items-center h-full w-screen max-w-[75vw] gap-[2vh]',
           isControlScreen && 'justify-center',
         )}
       >

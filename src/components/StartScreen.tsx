@@ -94,13 +94,22 @@ export default function StartScreen({
           {/* Title Section */}
           <div className="flex flex-col items-center">
             <h1
-              className=" max-w-[30vw] text-white text-[8vh] text-center leading-[0.9] tracking-wide drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              className="text-white text-[8vh] text-center leading-[0.9] tracking-wide drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
               style={{
                 fontFamily: 'novecento-sans-narrow, sans-serif',
                 fontWeight: 700,
               }}
             >
-              COASTAL PROTECTORS
+              COASTAL
+            </h1>
+            <h1
+              className="text-white text-[8vh] text-center leading-[0.9] tracking-wide drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"
+              style={{
+                fontFamily: 'novecento-sans-narrow, sans-serif',
+                fontWeight: 700,
+              }}
+            >
+              PROTECTORS
             </h1>
             <h2
               className="text-white text-[5vh] text-center drop-shadow-[0_4px_4px_rgba(148,107,199,1)]"

@@ -16,7 +16,8 @@ export const PHASE_DURATIONS: Record<GameLobbyStatus, number> = {
   [GameLobbyStatus.RESTARTING]: 0,
   [GameLobbyStatus.STARTED]: 0,
   [GameLobbyStatus.ENDED]: 0,
-  [GameLobbyStatus.ROUND_ONE_GAME_ENDED]: 0
+  [GameLobbyStatus.ROUND_ONE_GAME_ENDED]: 0,
+  [GameLobbyStatus.THANK_YOU]: 5
 };
 
 // Utility function to get phase duration

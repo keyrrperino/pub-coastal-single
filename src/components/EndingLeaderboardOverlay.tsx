@@ -47,7 +47,7 @@ export default function EndingLeaderboardOverlay({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-evenly">
       {/* Main Container - match Figma dimensions */}
       <div className="relative w-[60vh] h-[80vh]">
         {/* Background container */}

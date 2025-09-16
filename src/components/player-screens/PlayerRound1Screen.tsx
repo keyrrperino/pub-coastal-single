@@ -16,8 +16,8 @@ export default function PlayerRound1Screen({
   isControlScreen = false,
 }: PlayerRound1ScreenProps) {
   const info = (
-    <div className="flex flex-col gap-4 py-6 px-9 4k:px-[80px] 4k:py-[50px]">
-      <p className="text-white text-3xl 4k:text-[80px] leading-tight drop-shadow-[0_1px_1px_rgba(148,107,199,1)] font-condensed">
+    <div className="py-[1.5vh] px-[2vh]">
+      <p className="text-white text-[2vh] leading-normal drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
         Sea levels are beginning to rise — slowly, but steadily. By
         2050, they could climb anywhere between{' '}
         <span className="text-[#FF6A6C]">0.2 and 0.6 metres</span>.

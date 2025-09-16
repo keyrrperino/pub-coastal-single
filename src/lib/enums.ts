@@ -442,7 +442,8 @@ export enum LobbyStateEnum {
   // Team name storage
   TEAM_NAME = "teamName",
   // Leaderboard display state
-  SHOW_LEADERBOARD = "showLeaderboard"
+  SHOW_LEADERBOARD = "showLeaderboard",
+  THANK_YOU = "thankYou"
 }
 
 export enum GameLobbyStatus {
@@ -464,6 +465,7 @@ export enum GameLobbyStatus {
   ROUND_ANIMATION = "ROUND_ANIMATION",
   ENDING = "ENDING",
   TEAM_NAME_INPUT = "TEAM_NAME_INPUT",
+  THANK_YOU = "THANK_YOU",
   LEADERBOARD_DISPLAY = "LEADERBOARD_DISPLAY",
   RESTARTING = "RESTARTING",
 }

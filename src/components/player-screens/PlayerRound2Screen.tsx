@@ -16,7 +16,7 @@ export default function PlayerRound2Screen({
   isControlScreen = false,
 }: PlayerRound2ScreenProps) {
   const info = (
-    <div className="py-[0.5vh] px-[1vh]">
+    <div className="py-[1.5vh] px-[2vh]">
       <p className="text-white text-[2vh] leading-normal drop-shadow-[0_1px_1px_rgba(148,107,199,1)]">
         Between now and 2075, mean sea levels are projected to rise by{' '}
         <span className="text-[#FF6A6C]">0.7 to 1.5 metres</span>.

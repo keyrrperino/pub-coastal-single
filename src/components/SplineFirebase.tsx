@@ -65,8 +65,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     canvasRef,
     splineAppRef,
     setIsLoaded,
-    isLoaded,
-    lobbyState
+    lobbyState,
+    isLoaded
   );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -251,9 +251,15 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     window.location.reload(); 
   }
 
-  const backToStart = async () => {
-    await gameRoomServiceRef.current?.deleteActivities();
-    await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
+  const displayThankYou = async () => {
+    if (gameRoomServiceRef.current) {
+      gameRoomServiceRef.current.updateLobbyState({
+        ...lobbyState, ...{
+        [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.THANK_YOU,
+        [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+        [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.THANK_YOU,
+      }});
+    }
   }
 
   const renderAllCutScences = (
@@ -303,7 +309,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     >
       <EndingLeaderboardOverlay
         isOpen={true}
-        onClose={backToStart}
+        onClose={displayThankYou}
         topWinner={leaderboardData.topWinner || undefined}
         leaderboardData={leaderboardData.top5}
         bottomHighlight={leaderboardData.currentTeamEntry || { 
@@ -396,7 +402,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
 
         <canvas
           ref={canvasRef}
-          className={"w-full z-9 h-[70%] m-0 p-0 " + (triggersLoading && "d-none")}
+          className={"w-full z-9 h-[70%] m-0 p-0 " + ((triggersLoading && isLoaded) && "d-none")}
           style={{ display: "block", borderRadius: 0, border: "none" }}
         />
 
@@ -414,7 +420,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         )}
 
       </div>
-      {!triggersLoading && <SectorControl
+      {!triggersLoading && isLoaded && <SectorControl
         onClickSector={onClickSector}
         sector={sector}
         roomName={roomName}

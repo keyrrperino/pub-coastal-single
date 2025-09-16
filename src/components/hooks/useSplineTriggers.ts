@@ -43,7 +43,8 @@ export function useSplineTriggers({
 
       let executed = 0;
 
-      for (const act of activities) {
+      for (const act of activities.reverse()) {
+        console.log("actactactact:", act);
         const config = SplineTriggersConfig[act.action as ActivityTypeEnum];
         if (!config) continue;
 

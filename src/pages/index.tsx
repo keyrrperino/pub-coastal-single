@@ -8,18 +8,18 @@ import { UserSectorEnum } from '@/lib/enums';
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
 function HomePage() {
-  const [room, setRoom] = useState<string | null>(null);
+  const [room, setRoom] = useState<string | null>("testing");
 
-  useEffect(() => {
-    const getFingerprint = async () => {
-      const fp = await FingerprintJS.load();
-      const result = await fp.get();
-      if (result) {
-        setRoom(result.visitorId ?? null);
-      }
-    };
-    getFingerprint();
-  }, []);
+  // useEffect(() => {
+  //   const getFingerprint = async () => {
+  //     const fp = await FingerprintJS.load();
+  //     const result = await fp.get();
+  //     if (result) {
+  //       setRoom(result.visitorId ?? null);
+  //     }
+  //   };
+  //   getFingerprint();
+  // }, []);
 
 
   const [ sector, setSector ] = useState<string>("sector-1");
