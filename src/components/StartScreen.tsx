@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import CreditsModal from './CreditsModal';
 import { cn } from '@/lib/utils';
-import Logo from './Logo';
 
 interface StartScreenProps {
   onStartGame: () => void;
