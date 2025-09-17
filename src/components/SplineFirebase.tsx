@@ -288,7 +288,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 return newTotal;
               });
             }}
-            onLoad={(e) => {
+            onLoadedMetadataCapture={(e) => {
               setCriticalProgress((prev) => {
                 const newTotal = prev + 1;
                 setAssetsProgress((newTotal / totalAssets) * 100);
@@ -490,15 +490,19 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               WE'RE GETTING THINGS READY. HOLD TIGHT!
             </h2>
 
-            <div className="mt-4 flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
-              <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
-              <span className="opacity-70">|</span>
-              <span>MAP {Math.min(100, triggerProgress)}%</span>
-              {/* <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
-              <span>IS MAP LOADED: {`${isLoaded}`}</span>
-              <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
-              <span>assetsProgress: {`${assetsProgress}`}</span>
-              <span>total assets: {`${totalAssets}`}</span> */}
+            <div className="mt-4 flex flex-col">
+              <div className="flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
+                <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
+                <span className="opacity-70">|</span>
+                <span>MAP {Math.min(100, triggerProgress)}%</span>
+              </div>
+              <div className="flex flex-col hidden">
+                <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
+                <span>IS MAP LOADED: {`${isLoaded}`}</span>
+                <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
+                <span>assetsProgress: {`${assetsProgress}`}</span>
+                <span>total assets: {`${totalAssets}`}</span>
+              </div>
             </div>
           </div>
         )}
