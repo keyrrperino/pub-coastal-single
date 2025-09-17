@@ -4,10 +4,8 @@ import React, {
   useState,
   useMemo,
 } from 'react';
-import Image from 'next/image';
 import SectorSection from './SectorSection';
 import styles from './styles.module.css';
-import BudgetDisplay from './BudgetDisplay';
 import Timer from './Timer';
 import InsufficientBudgetModal from './InsufficientBudgetModal';
 import {
@@ -21,16 +19,13 @@ import {
   GameEnum,
   GameLobbyStatus,
   LobbyStateEnum,
-  SubSectorEnum,
-  UserSectorEnum,
 } from '@/lib/enums';
-import { ActivityLogType, LobbyStateType } from '@/lib/types';
+import { ActivityLogType } from '@/lib/types';
 import {
   SplineTriggersConfig,
   GAME_ROUND_TIMER,
   lobbyStateDefaultValue,
 } from '@/lib/constants';
-import { SplineTriggerConfigItem } from '@/lib/types';
 import { useGameContext } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { useProgression } from '@/components/hooks/useProgression';
 import { getPhaseDuration, PHASE_DURATIONS } from '@/components/hooks/phaseUtils';
@@ -51,26 +46,18 @@ import {
   calculateActiveActions,
   getActiveCPMPath,
   calculateRoundStartButtonSet,
-  isSectorDemolishable,
   getActionState,
 } from '@/lib/progressionUtils';
 
-import { ActionStatus, ActionState } from '@/lib/types';
+import { ActionStatus } from '@/lib/types';
 
 // Import modal components
 import IntroductionModal from '@/games/pub-coastal-game/compontents/IntroductionModal';
-import RoundInstructionsModal from '@/games/pub-coastal-game/compontents/RoundInstructionsModal';
 
 import EndingModal from '@/games/pub-coastal-game/compontents/EndingModal';
 import TeamNameInputModal from '@/games/pub-coastal-game/compontents/TeamNameInputModal';
 import StartScreen from '@/components/StartScreen';
-import PlayerBackToMenuScreen from '@/components/PlayerBackToMenuScreen';
 import LeaderboardOverlay from '@/components/LeaderboardOverlay';
-import EndingLeaderboardOverlay from '@/components/EndingLeaderboardOverlay';
-import PostRoundModal from '@/components/PostRoundModal';
-import Modal from '@/games/pub-coastal-game/compontents/Modal';
-import PlayerCutsceneModal from '@/games/pub-coastal-game/compontents/PlayerCutsceneModal';
-import RoundStartAnimationModal from '@/games/pub-coastal-game/compontents/RoundStartAnimationModal';
 import { getPlayerNumber } from '@/lib/utils';
 import ThankYouScreen from '../ThankYouScreen';
 
@@ -120,7 +107,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
   roomName,
   onClickSector,
   isSplineLoading,
-  resetWater
 }) => {
   const { triggerSingleBuild } = useGameContext();
   const { updateFromGameRoomService, getAdjustedCurrentTime } = useServerTime();
@@ -142,9 +128,9 @@ const SectorControl: React.FC<SectorControlProps> = ({
   const [activityLog, setActivityLog] = useState<ActivityLogType[]>(
     [],
   );
-  const [localRound, setLocalRound] = useState(1);
+  const [, setLocalRound] = useState(1);
   const [previousRound, setPreviousRound] = useState(1);
-  const [roundStartActivityLog, setRoundStartActivityLog] = useState<
+  const [, setRoundStartActivityLog] = useState<
     ActivityLogType[]
   >([]);
   const [roundStartButtonSets, setRoundStartButtonSets] =
