@@ -490,7 +490,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               WE'RE GETTING THINGS READY. HOLD TIGHT!
             </h2>
 
-            <div className="mt-4 flex flex-col items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
+            <div className="mt-4 flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
               <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
