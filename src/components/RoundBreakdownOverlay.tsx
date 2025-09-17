@@ -80,7 +80,7 @@ export default function RoundBreakdownOverlay({
         {Array.from({ length: amount }, (_, i) => (
           <img
             key={i}
-            src="/assets/coin-icon.png"
+            src="/assets/coin-icon.webp"
             alt="coin"
             className="w-5 h-5"
           />

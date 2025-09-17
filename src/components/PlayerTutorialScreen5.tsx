@@ -8,7 +8,7 @@ export default function PlayerTutorialScreen5() {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/assets/tutorial-bg.png"
+          src="/assets/tutorial-bg.webp"
           alt="Coastal background"
           fill
           className="object-cover"
@@ -50,7 +50,7 @@ export default function PlayerTutorialScreen5() {
                       {Array.from({ length: 10 }).map((_, index) => (
                         <motion.img
                           key={'coin-' + index}
-                          src="/assets/coin-icon.png"
+                          src="/assets/coin-icon.webp"
                           alt="Coin"
                           className="object-contain w-[75px] h-[75px] 4k:w-[160px] 4k:h-[160px]"
                           initial={{ opacity: 0, y: 100 }}

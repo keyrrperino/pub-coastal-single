@@ -10,23 +10,23 @@ export default function PlayerTutorialScreen3() {
     },
     {
       value: 'Seawall',
-      logo: 'seawall.svg',
+      logo: 'seawall.webp',
     },
     {
       value: 'LAND RECLAMATION',
-      logo: 'land-reclemation.svg',
+      logo: 'land-reclemation.webp',
     },
     {
       value: 'COASTAL BARRIERS',
-      logo: 'coastal-barriers.svg',
+      logo: 'coastal-barriers.webp',
     },
     {
       value: 'HYBRID MEASURE',
-      logo: 'hybrid-measure.svg',
+      logo: 'hybrid-measure.webp',
     },
     {
       value: 'Artificial reef',
-      logo: 'artificial-reef.svg',
+      logo: 'artificial-reef.webp',
     },
   ];
 
@@ -35,7 +35,7 @@ export default function PlayerTutorialScreen3() {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/assets/tutorial-bg.png"
+          src="/assets/tutorial-bg.webp"
           alt="Coastal background"
           fill
           className="object-cover"

@@ -428,7 +428,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             className="absolute inset-0 flex flex-col items-center justify-center z-10"
           >
             <div className="absolute inset-0 z-[-1]" style={{
-              backgroundImage: "url('/assets/bg-loading.png')",
+              backgroundImage: "url('/assets/bg-loading.webp')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',

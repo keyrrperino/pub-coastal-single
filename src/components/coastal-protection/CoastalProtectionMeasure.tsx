@@ -34,11 +34,11 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
       case 'mangroves':
         return '/assets/mangroves-icon-3a15a8.png';
       case 'storm-surge-barrier':
-        return '/assets/storm-surge-barrier-icon.png';
+        return '/assets/storm-surge-barrier-icon.webp';
       case 'artificial-reef':
-        return '/assets/artificial-reef-icon.png';
+        return '/assets/artificial-reef-icon.webp';
       case 'hybrid-measure':
-        return '/assets/hybrid-measure-icon.png';
+        return '/assets/hybrid-measure-icon.webp';
       case 'revetment':
         return '/assets/seawall-icon-41fadd.png'; // Using seawall icon as fallback
       default:

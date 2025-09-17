@@ -14,7 +14,7 @@ export default function PlayerTutorialScreen1({
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/assets/tutorial-bg.png"
+          src="/assets/tutorial-bg.webp"
           alt="Coastal background"
           fill
           className="object-cover"

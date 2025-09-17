@@ -213,7 +213,7 @@ export default function ScoreBreakdownModal({
                           .map((_, index) => (
                             <img
                               key={`${userSector}_coin_${index}`}
-                              src="/assets/coin-icon.png"
+                              src="/assets/coin-icon.webp"
                               alt="coin"
                               className="w-[1.8vh] h-[1.8vh]"
                             />

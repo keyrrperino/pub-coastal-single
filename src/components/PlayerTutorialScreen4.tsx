@@ -11,7 +11,7 @@ export default function PlayerTutorialScreen4() {
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/assets/tutorial-bg.png"
+          src="/assets/tutorial-bg.webp"
           alt="Coastal background"
           fill
           className="object-cover"
@@ -73,7 +73,7 @@ export default function PlayerTutorialScreen4() {
                             {Array.from({ length: action.cost }).map(
                               (_) => (
                                 <Image
-                                  src="/assets/coin-icon.png"
+                                  src="/assets/coin-icon.webp"
                                   alt="Coin"
                                   width={coinSize}
                                   height={coinSize}
@@ -170,7 +170,7 @@ export default function PlayerTutorialScreen4() {
                             {Array.from({ length: action.cost }).map(
                               (_) => (
                                 <Image
-                                  src="/assets/coin-icon.png"
+                                  src="/assets/coin-icon.webp"
                                   alt="Coin"
                                   width={coinSize}
                                   height={coinSize}
