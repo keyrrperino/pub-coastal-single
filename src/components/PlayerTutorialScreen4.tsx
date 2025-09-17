@@ -1,9 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import TimerBar from '@/components/coastal-protection/TimerBar';
-import Logo from './Logo';
 import { TUTORIAL_4_CARDS } from '@/lib/constants';
-import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 
 export default function PlayerTutorialScreen4() {

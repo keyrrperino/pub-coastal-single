@@ -9,7 +9,7 @@ import { useSplineTriggers } from "./hooks/useSplineTriggers";
 import { useLobbyPreparation } from "./hooks/useLobbyPreparation";
 import { getPlayerNumber, isGameOnGoing } from "@/lib/utils";
 import { useSplineLoader } from "./hooks/useSplineLoader";
-import { CutScenesStatusEnum, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
+import { CutScenesStatusEnum, getCutScenes, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
 import { useHideAllTriggers } from "./hooks/useHideAllSplineTriggers";
 import RoundStartAnimationModal from "@/games/pub-coastal-game/compontents/RoundStartAnimationModal";
 import ScoreBreakdownModal from "@/games/pub-coastal-game/compontents/ScoreBreakdownModal";
@@ -20,13 +20,12 @@ import EndingLeaderboardOverlay from "./EndingLeaderboardOverlay";
 import { PlayerRound1Screen, PlayerRound2Screen, PlayerRound3Screen } from "./player-screens";
 import { useLobbyRoundBreakdown } from "./hooks/useLobbyRoundBreakdown";
 import { useLobbyRoundAnimation } from "./hooks/useLobbyRoundAnimation";
-import { useServerTime } from './ServerTimeContext';
 import dynamic from "next/dynamic";
 import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
-const totalAssets = (Object.values(CutScenesEnum).length * 2);
+const totalAssets = 14;
 
 interface SplineFirebaseProps {
   roomName: string;
@@ -39,7 +38,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   onClickSector,
   sector,
 }) => {
-  const { getAdjustedCurrentTime } = useServerTime();
   const {
     canvasRef,
     splineAppRef,
@@ -53,7 +51,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   } = useInitialize(roomName);
 
   const [totalScore, setTotalScore] = useState<number>(2500);
-  const [criticalProgress, setCriticalProgress] = useState<number>(0);
+  const [, setCriticalProgress] = useState<number>(0);
 
   const [assetsProgress, setAssetsProgress] = useState<number>(0);
   useHideAllTriggers(isLoaded, splineAppRef, lobbyState);
@@ -90,11 +88,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [lobbyState]);
 
   useEffect(() => {
-    if (triggerProgress >= 100 && criticalProgress >= 100 && isLoaded) {
+    if (triggerProgress >= 100 && isLoaded) {
       setTriggersLoading(false);
     }
 
-  }, [triggerProgress, criticalProgress, isLoaded]);
+  }, [triggerProgress, isLoaded]);
 
   useSplineTriggers({
     isLoaded,
@@ -111,7 +109,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       gameRoomServiceRef.current.updateLobbyState({
         ...lobbyState, ...{
         [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_CUTSCENES,
-        [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+        [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
         [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_CUTSCENES,
       }});
     }
@@ -120,7 +118,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const {onNext: onNextStoryLine} = useLobbyStoryline(lobbyState, gameRoomServiceRef);
   
   // Use manual tutorial index in dev mode, otherwise use timer-based
-  const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, triggersLoading, gameRoomServiceRef);
+  const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, gameRoomServiceRef);
   useLobbyRoundAnimation(lobbyState, triggersLoading, gameRoomServiceRef);
 
   const [leaderboardData, setLeaderboardData] = useState<ProcessedLeaderboardData>({
@@ -195,7 +193,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         gameRoomServiceRef.current.updateLobbyState({
           ...lobbyState, ...{
           [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_SCORE_BREAKDOWN,
-          [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+          [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
           [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_SCORE_BREAKDOWN,
         }});
       }
@@ -254,14 +252,20 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       gameRoomServiceRef.current.updateLobbyState({
         ...lobbyState, ...{
         [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.THANK_YOU,
-        [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+        [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
         [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.THANK_YOU,
       }});
     }
   }
 
+  const [dynamicCutScenes, setDynamicCutScenes] = useState<CutScenesEnum[]>([]);
+
+  useEffect(() => {
+    setDynamicCutScenes(getCutScenes(lobbyState.round ?? 1, overAllScores));
+  }, [ activities, newActivities ]);
+
   const renderAllCutScences = (
-    Object.values(CutScenesEnum).map(value => {
+    Object.values(dynamicCutScenes).map(value => {
       return (
         <div
           className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[101%]"
@@ -471,26 +475,32 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
+              <span>loading triggers: {`${triggersLoading}`}</span>
+              <span>is loading map: {`${!isLoaded}`}</span>
+              <span>is assets all loaded: {`${assetsProgress < 100}`}</span>
             </div>
           </div>
         )}
 
       </div>
-      {!triggersLoading && isLoaded && (assetsProgress >= 100) && <SectorControl
-        onClickSector={onClickSector}
-        sector={sector}
-        roomName={roomName}
-        isSplineLoading={triggersLoading}
-      />}
-
-      {/* {renderScore} */}
-      {renderProgressBar}
-      {/* {renderInstroductions} */}
-      {renderStoryLine}
-      {/* {renderInputTeamName} */}
-      {renderEndingLeaderBoard}
-      {renderRoundAnimation}
-      {renderRoundScoreBreakdown}
+      {!triggersLoading && isLoaded && (assetsProgress >= 100) && (
+        <>
+          <SectorControl
+            onClickSector={onClickSector}
+            sector={sector}
+            roomName={roomName}
+            isSplineLoading={triggersLoading}
+          />
+          {/* {renderScore} */}
+          {renderProgressBar}
+          {/* {renderInstroductions} */}
+          {renderStoryLine}
+          {/* {renderInputTeamName} */}
+          {renderEndingLeaderBoard}
+          {renderRoundAnimation}
+          {renderRoundScoreBreakdown}
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Application } from "@splinetool/runtime";
 import { ActivityTypeEnum } from "@/lib/enums";
 import { LobbyStateType } from "@/lib/types";

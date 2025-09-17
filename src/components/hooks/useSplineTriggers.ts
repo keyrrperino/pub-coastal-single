@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Application, SplineEventName } from "@splinetool/runtime";
 import { ActivityLogType, LobbyStateType } from "@/lib/types";
-import { demolishConfigData, SplineTriggersConfig } from "@/lib/constants";
-import { ActivityDemolishTypeSector1BEnum, ActivityTypeEnum, CutScenesEnum, GameLobbyStatus, SubSectorEnum } from "@/lib/enums";
-import { isGameOnGoing } from "@/lib/utils";
+import { SplineTriggersConfig } from "@/lib/constants";
+import { ActivityTypeEnum } from "@/lib/enums";
 
 type UseSplineTriggersProps = {
   isLoaded: boolean;
@@ -21,7 +20,6 @@ export function useSplineTriggers({
   activities,
   newActivities,
   triggerProgress,
-  lobbyState,
   setTriggerProgress,
 }: UseSplineTriggersProps) {
 
@@ -39,12 +37,9 @@ export function useSplineTriggers({
         }
       });
 
-      console.log('totalSteps: ', totalSteps);
-
       let executed = 0;
 
       for (const act of activities.reverse()) {
-        console.log("actactactact:", act);
         const config = SplineTriggersConfig[act.action as ActivityTypeEnum];
         if (!config) continue;
 
@@ -68,8 +63,6 @@ export function useSplineTriggers({
           await new Promise(res => setTimeout(res, 300));
         }
       }
-
-      console.log("executed", executed)
     };
 
     if (triggerProgress <= 0) {

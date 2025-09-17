@@ -1,4 +1,3 @@
-import { RoundType } from "@/lib/types";
 import React, { useEffect, useRef } from "react";
 
 type RoundStartAnimationModalProps = {

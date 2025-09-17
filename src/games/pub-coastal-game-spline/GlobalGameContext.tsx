@@ -118,8 +118,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSingleBuild(val);
   };
 
-  console.log(singleBuild);
-
   return (
     <GameContext.Provider value={{
       seawallValue,

@@ -1,7 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import TimerBar from '@/components/coastal-protection/TimerBar';
-import Logo from './Logo';
 import { motion } from 'motion/react';
 
 interface TutorialScreen1Props {

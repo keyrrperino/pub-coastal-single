@@ -4,7 +4,7 @@ import { Application } from "@splinetool/runtime";
 import { GameRoomService } from "@/lib/gameRoom";
 import { ActivityLogType, LobbyStateType } from "@/lib/types";
 import { lobbyStateDefaultValue } from "@/lib/constants";
-import { CutScenesEnum, GameEnum, GameLobbyStatus } from "@/lib/enums";
+import { GameEnum } from "@/lib/enums";
 import { useServerTime } from "@/components/ServerTimeContext";
 
 export function useInitialize(roomName: string) {

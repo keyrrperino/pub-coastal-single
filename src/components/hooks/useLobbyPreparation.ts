@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { ActivityTypeEnum, GameLobbyStatus, LobbyStateEnum } from "@/lib/enums";
+import { GameLobbyStatus, LobbyStateEnum } from "@/lib/enums";
 import { LobbyStateType } from "@/lib/types";
 import { GameRoomService } from "@/lib/gameRoom";
-import { GAME_STARST_IN_COUNTDOWN } from "@/lib/constants";
 import { PHASE_DURATIONS } from "./phaseUtils";
 import { useServerTime } from "@/components/ServerTimeContext";
 

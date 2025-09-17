@@ -33,7 +33,6 @@ import {
   useGameFlowController,
   createDefaultLobbyState,
 } from '@/components/hooks/useGameFlowController';
-import { useServerTime } from '@/components/ServerTimeContext';
 import {
   useSectorScores,
   SectorPerformance,
@@ -109,7 +108,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
   isSplineLoading,
 }) => {
   const { triggerSingleBuild } = useGameContext();
-  const { updateFromGameRoomService, getAdjustedCurrentTime } = useServerTime();
   const [gameRoomService, setGameRoomService] = useState(
     () =>
       new GameRoomService(
@@ -883,7 +881,6 @@ const SectorControl: React.FC<SectorControlProps> = ({
         console.log(
           '🕒 [SECTOR CONTROL] Setting GameRoomService reference in ServerTimeContext',
         );
-        updateFromGameRoomService(gameRoomService);
 
         // Listen to activity changes
         gameRoomService.onActivityChange((activities) => {
@@ -1437,7 +1434,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
           gameRoomService.updateLobbyState({
             ...lobbyState, ...{
             [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_STORYLINE,
-            [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+            [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
             [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_STORYLINE,
           }});
          }}
