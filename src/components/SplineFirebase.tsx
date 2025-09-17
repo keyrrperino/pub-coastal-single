@@ -141,13 +141,13 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   useEffect(() => {
     if (lobbyState.gameLobbyStatus !== GameLobbyStatus.TEAM_NAME_INPUT) return;
 
-    const intervalId = setInterval(() => {
+    const intervalId = setInterval(async () => {
       const now = Date.now();
       const elapsed = now - (lastInteractionRef.current || 0);
       if (elapsed >= INACTIVITY_RESET_MS) {
         clearInterval(intervalId);
         // Reset game due to inactivity while waiting for team name input
-        resetGame();
+        await backToMainScreen();
       }
     }, 2000);
 
@@ -155,6 +155,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       clearInterval(intervalId);
     };
   }, [lobbyState.gameLobbyStatus]);
+
+  const backToMainScreen = async () => {
+    await gameRoomServiceRef?.current?.deleteActivities();
+    await gameRoomServiceRef?.current?.updateLobbyState(lobbyStateDefaultValue);
+  }
 
   useEffect(() => {
     if (lobbyState.gameLobbyStatus === GameLobbyStatus.LEADERBOARD_DISPLAY) {
@@ -407,9 +412,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             performance={sectorPerformance}
             overallScoresData={overAllScores}
             currentRound={lobbyState?.[LobbyStateEnum.ROUND] || 1}
-            sector={
-              ('user_sector_' + getPlayerNumber(sector)) as UserSectorEnum
-            }
           />
         }
       />

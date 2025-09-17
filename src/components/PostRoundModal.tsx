@@ -8,7 +8,6 @@ interface PostRoundModalProps {
   isOpen: boolean;
   performance: PostRoundPerformance;
   currentRound: number;
-  sector: UserSectorEnum;
   overallScoresData: { [key in RoundType]?: OverallScoresTypes };
   onClose?: () => void;
   onContinue?: () => void;

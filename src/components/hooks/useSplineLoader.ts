@@ -17,7 +17,7 @@ export function useSplineLoader(
     if (lobbyState.gameLobbyStatus === GameLobbyStatus.INITIALIZING) {
       const playCamGrid = splineAppRef?.current?.findObjectByName("play cam grid");
       if (playCamGrid) {
-        playCamGrid.state = "Initialize";
+        playCamGrid.state = "InitializeV2";
       }
 
     } else if (![GameLobbyStatus.ROUND_GAMEPLAY, GameLobbyStatus.ROUND_SCORE_BREAKDOWN, GameLobbyStatus.ROUND_ANIMATION].includes(lobbyState.gameLobbyStatus)) {

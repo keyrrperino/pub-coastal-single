@@ -57,21 +57,20 @@ export default function StartScreen({
   }
   
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden bg-black/20 overscroll-none">
       {/* Background Image */}
 
       {/* Dark Overlay with Blur */}
-      <div className="absolute inset-0 bg-black/20" />
 
       {/* Content Container */}
       <div
         className={cn(
-          'relative z-10 flex flex-col items-center justify-between h-full py-[4vh]',
+          'relative z-10 flex flex-col items-center justify-around h-full mt-[-4vh]',
           isCreditsModalOpen && 'opacity-0',
         )}
       >
         {/* Main Content Centered */}
-        <div className="flex flex-col items-center gap-[2vh] mt-[4vh]">
+        <div className="flex flex-col items-center gap-[2vh]">
           {/* PUB Logo - Fixed at bottom */}
           {<div className="transform">
             <button

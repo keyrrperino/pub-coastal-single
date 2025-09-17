@@ -25,7 +25,7 @@ export default function PlayerRoundScreen({
   waterLevelIndicator,
 }: PlayerRoundScreenProps) {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="fixed w-full h-screen overflow-hidden">
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
