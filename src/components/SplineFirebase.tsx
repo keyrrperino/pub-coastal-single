@@ -279,7 +279,16 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             muted
             playsInline
             controls={false}
-            onLoadedMetadata={(e) => {
+            onError={(err) => {
+              console.log("CUTSCENE_PRELOAD_ERROR: ", err);
+              setCriticalProgress((prev) => {
+                const newTotal = prev + 1;
+                setAssetsProgress((newTotal / totalAssets) * 100);
+
+                return newTotal;
+              });
+            }}
+            onLoad={(e) => {
               setCriticalProgress((prev) => {
                 const newTotal = prev + 1;
                 setAssetsProgress((newTotal / totalAssets) * 100);
@@ -300,6 +309,15 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           {/* Frame Overlay */}
           <div className="fixed inset-0 z-20 flex items-center justify-center h-[100vh]">
             <img
+              onError={(err) => {
+                console.log("CUTSCENE_PRELOAD_OVERLAY_ERROR: ", err);
+                setCriticalProgress((prev) => {
+                  const newTotal = prev + 1;
+                  setAssetsProgress((newTotal / totalAssets) * 100);
+
+                  return newTotal;
+                });
+              }}
               onLoad={() => {
                 setCriticalProgress((prev) => {
                   const newTotal = prev + 1;
@@ -472,13 +490,15 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               WE'RE GETTING THINGS READY. HOLD TIGHT!
             </h2>
 
-            <div className="mt-4 flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
+            <div className="mt-4 flex flex-col items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
               <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
-              {/* <span>loading triggers: {`${triggersLoading}`}</span>
-              <span>is loading map: {`${!isLoaded}`}</span>
-              <span>is assets all loaded: {`${assetsProgress < 100}`}</span> */}
+              <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
+              <span>IS MAP LOADED: {`${isLoaded}`}</span>
+              <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
+              <span>assetsProgress: {`${assetsProgress}`}</span>
+              <span>total assets: {`${totalAssets}`}</span>
             </div>
           </div>
         )}
