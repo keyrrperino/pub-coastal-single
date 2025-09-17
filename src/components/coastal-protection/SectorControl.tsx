@@ -1223,7 +1223,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
   )
 
   return (
-    <div className="fixed min-h-screen w-full overflow-hidden"
+    <div className="fixed h-[100dvh] w-full overflow-hidden"
       style={
         {
           ...([GameLobbyStatus.ROUND_CUTSCENES].indexOf(currentPhase) >= 0 ? { display: "none"} : {})

@@ -25,14 +25,14 @@ export default function PlayerRoundScreen({
   waterLevelIndicator,
 }: PlayerRoundScreenProps) {
   return (
-    <div className="fixed w-full h-screen overflow-hidden">
+    <div className="fixed inset-0 w-full min-h-[100svh] h-[100dvh] overflow-hidden overscroll-none">
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
       {/* Content Container */}
       <div
         className={cn(
-          'relative z-10 flex mx-auto flex-row justify-center items-center h-full w-screen max-w-[75vw] gap-[2vh]',
+          'relative z-10 flex mx-auto flex-col md:flex-row justify-center items-center h-full w-full max-w-[1200px] gap-4 md:gap-6 px-4 sm:px-6 pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),6rem)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]',
           isControlScreen && 'justify-center',
         )}
       >
@@ -42,7 +42,7 @@ export default function PlayerRoundScreen({
             'flex flex-col flex-grow w-full gap-4',
             isControlScreen
               ? 'justify-center items-center'
-              : '4k:max-w-[2348px]',
+              : '',
             isCenterScreen && 'text-center',
           )}
         >
@@ -53,10 +53,10 @@ export default function PlayerRoundScreen({
               isControlScreen && 'text-center',
             )}
           >
-            <h1 className="text-white text-[4vh] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
+            <h1 className="text-white font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)] text-[clamp(20px,3.5vh,40px)]">
               ROUND {round}
             </h1>
-            <h2 className="text-white text-[4vh] font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)]">
+            <h2 className="text-white font-bold leading-tight tracking-wide drop-shadow-[0_3px_3px_rgba(148,107,199,1)] text-[clamp(20px,3.5vh,40px)]">
               YEAR {year}
             </h2>
           </div>
@@ -69,15 +69,17 @@ export default function PlayerRoundScreen({
       </div>
 
       {/* Countdown - always reserve space to prevent layout shift */}
-      <div className="flex items-center justify-center absolute bottom-15 left-1/2 -translate-x-1/2 z-50">
-        <button
-          onClick={() => {
-            onContinue?.();
-          }}
-          className="bg-white text-blue-500 text-[3vh] px-[3vw] py-[1vh] rounded-[100px] hover:bg-blue-600 hover:text-white"
-        >
-          START ROUND
-        </button>
+      <div className="absolute inset-x-0 bottom-[2dvh] z-50 p-4 pb-[max(env(safe-area-inset-bottom),1rem)]">
+        <div className="flex items-center justify-center">
+          <button
+            onClick={() => {
+              onContinue?.();
+            }}
+            className="bg-white text-blue-500 hover:bg-blue-600 hover:text-white transition text-[clamp(16px,2.4vh,24px)] px-[clamp(16px,4vw,32px)] py-[clamp(8px,1.6vh,14px)] rounded-[100px]"
+          >
+            START ROUND
+          </button>
+        </div>
       </div>
     </div>
   );

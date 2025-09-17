@@ -10,7 +10,7 @@ export default function PlayerTutorialScreen1({
   onNext
 }: TutorialScreen1Props) {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="fixed inset-0 w-full min-h-[100svh] h-[100dvh] overflow-hidden overscroll-none">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -26,15 +26,15 @@ export default function PlayerTutorialScreen1({
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[64px]" />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full pb-[1vh] overflow-scroll">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full overflow-y-auto overscroll-contain pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),1rem)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         {/* Dark Blue Central Panel with Light Gray Border */}
-        <div className="max-w-[85vw] max-h-[85vh] h-full w-full mt-[-15vh]">
-          <div className="flex flex-col h-full justify-center uppercase gap-[7vh]">
+        <div className="w-full h-full max-w-[1100px] max-h-[85vh] md:max-h-[85dvh] mt-0 xl:mt-[-10vh] px-4 sm:px-6">
+          <div className="flex flex-col h-full justify-center uppercase gap-[min(7vh,6rem)]">
             {/* Welcome Title - Centered */}
 
             <div className="text-center">
               <motion.h1
-                className="text-white text-[7vh] font-bold leading-tight tracking-wide"
+                className="text-white font-bold leading-tight tracking-wide text-[clamp(28px,6vh,72px)]"
                 initial={{ opacity: 0, y: -100 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
@@ -46,7 +46,7 @@ export default function PlayerTutorialScreen1({
             </div>
 
             {/* Mission Description - Centered */}
-            <p className="text-white text-center text-[3.5vh] tracking-wider flex flex-col gap-[4vh]">
+            <p className="text-white text-center tracking-wider flex flex-col gap-[4vh] text-[clamp(16px,3vh,28px)]">
               <motion.span
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ export default function PlayerTutorialScreen1({
 
             {/* Disclaimer - Centered */}
             <motion.p
-              className="text-white text-[2.5vh] text-center tracking-wider"
+              className="text-white text-center tracking-wider text-[clamp(14px,2.5vh,22px)]"
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 5 }}
