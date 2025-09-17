@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Application } from "@splinetool/runtime";
-import { CutScenesEnum, GameLobbyStatus, LobbyStateEnum } from "@/lib/enums";
+import { CutScenesEnum, GameLobbyStatus } from "@/lib/enums";
  
-import { GameRoomService } from "@/lib/gameRoom";
-import { ActivityLogType, LobbyStateType, OverallScoresTypes, RoundType } from "@/lib/types";
-import { PHASE_DURATIONS } from "./phaseUtils";
+import { LobbyStateType, OverallScoresTypes, RoundType } from "@/lib/types";
 import { useTimer } from "./useTimer";
-import { meanSeaLevels, sceneSectorConfigurations } from "@/lib/constants";
+import { sceneSectorConfigurations } from "@/lib/constants";
 import { useServerTime } from "../ServerTimeContext";
 
-const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutScenesEnum[] => {
-  console.log(overAllScores);
+export const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutScenesEnum[] => {
   const keys = [
     overAllScores[round]?.user_sector_1?.sectorA.keys[0],
     overAllScores[round]?.user_sector_1?.sectorB.keys[0],
@@ -55,7 +52,6 @@ export function useCutSceneSequence(
   useEffect(() => {
     if (lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_CUTSCENES) {
       const dynamicCutScenes = getCutScenes(lobbyState.round ?? 1, overAllScores);
-      console.log(dynamicCutScenes);
       setCutScenes(dynamicCutScenes);
       setCurrentCutSceneIndex(0);
     }
@@ -65,7 +61,6 @@ export function useCutSceneSequence(
   useEffect(() => {
     if (lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_CUTSCENES && cutScenes.length === 0) {
       const dynamicCutScenes = getCutScenes(lobbyState.round ?? 1, overAllScores);
-      console.log(dynamicCutScenes);
       setCutScenes(dynamicCutScenes);
       setCurrentCutSceneIndex(0);
     }

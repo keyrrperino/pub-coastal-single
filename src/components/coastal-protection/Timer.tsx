@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTimer } from '@/components/hooks/useTimer';
-import Hint from './Hint';
-import styles from './styles.module.css';
 
 interface TimerProps {
   duration: number;

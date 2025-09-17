@@ -266,25 +266,6 @@ export function useSectorScores({
       setTotalPerformance(performance);
     }
 
-    console.log({
-      1: {
-        ...sector1R1,
-        ...sector2R1,
-        ...sector3R1,
-      },
-      2: {
-
-        ...sector1R2,
-        ...sector2R2,
-        ...sector3R2,
-      },
-      3: {
-        ...sector1R3,
-        ...sector2R3,
-        ...sector3R3,
-      },
-    })
-
   }, [newActivities, triggersLoading, lobbyState.gameLobbyStatus]);
 
 

@@ -1,38 +1,31 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Application, SplineEventName } from "@splinetool/runtime";
-import { GameRoomService, getGlobalLeaderboard, ProcessedLeaderboardData } from "@/lib/gameRoom";
+import React, { useEffect, useRef, useState } from "react";
+import { getGlobalLeaderboard, ProcessedLeaderboardData } from "@/lib/gameRoom";
 import ProgressBar from "@/games/pub-coastal-game/compontents/ProcessBar";
-import { ActivityLogType, LobbyStateType, RoundType } from "@/lib/types";
-import { GAME_ROUND_TIMER, GAME_STARST_IN_COUNTDOWN, lobbyStateDefaultValue, MODAL_CLOSE_COUNTDOWN_VALUE, OVERALL_SCORE_POINTS, SPLINE_URL, SplineTriggersConfig, TOTAL_COINS_PER_ROUND } from "@/lib/constants";
-import { CutScenesEnum, GameEnum, GameLobbyStatus, LobbyStateEnum, UserSectorEnum } from "@/lib/enums";
+import { lobbyStateDefaultValue, TOTAL_COINS_PER_ROUND } from "@/lib/constants";
+import { CutScenesEnum, GameLobbyStatus, LobbyStateEnum, UserSectorEnum } from "@/lib/enums";
 import { useInitialize } from "./hooks/initialize";
  
 import { useSplineTriggers } from "./hooks/useSplineTriggers";
 import { useLobbyPreparation } from "./hooks/useLobbyPreparation";
 import { getPlayerNumber, isGameOnGoing } from "@/lib/utils";
 import { useSplineLoader } from "./hooks/useSplineLoader";
-import { CutScenesStatusEnum, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
+import { CutScenesStatusEnum, getCutScenes, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
 import { useHideAllTriggers } from "./hooks/useHideAllSplineTriggers";
 import RoundStartAnimationModal from "@/games/pub-coastal-game/compontents/RoundStartAnimationModal";
 import ScoreBreakdownModal from "@/games/pub-coastal-game/compontents/ScoreBreakdownModal";
 import { SectorPerformance, useSectorScores } from "./hooks/useSectorScores";
 import { useLobbyStoryline } from "./hooks/useLobbyStoryline";
-import { useTimer } from "./hooks/useTimer";
 import { PHASE_DURATIONS } from "./hooks/phaseUtils";
-import EndingScreen from "./EndingScreen";
 import EndingLeaderboardOverlay from "./EndingLeaderboardOverlay";
-import TutorialScreen4 from "@/components/TutorialScreen4";
 import { PlayerRound1Screen, PlayerRound2Screen, PlayerRound3Screen } from "./player-screens";
-import TutorialScreen5 from "@/components/TutorialScreen5";
 import { useLobbyRoundBreakdown } from "./hooks/useLobbyRoundBreakdown";
 import { useLobbyRoundAnimation } from "./hooks/useLobbyRoundAnimation";
-import { useServerTime } from './ServerTimeContext';
 import dynamic from "next/dynamic";
 import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
-const totalAssets = (Object.values(CutScenesEnum).length * 2);
+const totalAssets = 14;
 
 interface SplineFirebaseProps {
   roomName: string;
@@ -45,7 +38,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   onClickSector,
   sector,
 }) => {
-  const { getAdjustedCurrentTime } = useServerTime();
   const {
     canvasRef,
     splineAppRef,
@@ -59,13 +51,9 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   } = useInitialize(roomName);
 
   const [totalScore, setTotalScore] = useState<number>(2500);
-  const [criticalProgress, setCriticalProgress] = useState<number>(0);
-  const [criticalLoadedCount, setCriticalLoadedCount] = useState<number>(0);
-  const [criticalTotalCount, setCriticalTotalCount] = useState<number>(0);
+  const [, setCriticalProgress] = useState<number>(0);
 
   const [assetsProgress, setAssetsProgress] = useState<number>(0);
-  const [assetsLoadedCount, setAssetsLoadedCount] = useState<number>(0);
-  const [assetsTotalCount, setAssetsTotalCount] = useState<number>(0);
   useHideAllTriggers(isLoaded, splineAppRef, lobbyState);
   useLobbyPreparation({ lobbyState, gameRoomServiceRef });
 
@@ -80,8 +68,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const calmAudioRef = useRef<HTMLAudioElement | null>(null);
   
-  const [coinsLeft, setCoinsLeft] = useState(TOTAL_COINS_PER_ROUND); // 1. Add new state
-  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
+  const [, setCoinsLeft] = useState(TOTAL_COINS_PER_ROUND); // 1. Add new state
+  const [, setIsLeaderboardOpen] = useState(false);
 
   useEffect(() => {
     (async () => { 
@@ -100,11 +88,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [lobbyState]);
 
   useEffect(() => {
-    if (triggerProgress >= 100 && criticalProgress >= 100 && isLoaded) {
+    if (triggerProgress >= 100 && isLoaded) {
       setTriggersLoading(false);
     }
 
-  }, [triggerProgress, criticalProgress, isLoaded]);
+  }, [triggerProgress, isLoaded]);
 
   useSplineTriggers({
     isLoaded,
@@ -121,7 +109,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       gameRoomServiceRef.current.updateLobbyState({
         ...lobbyState, ...{
         [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_CUTSCENES,
-        [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+        [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
         [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_CUTSCENES,
       }});
     }
@@ -130,7 +118,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const {onNext: onNextStoryLine} = useLobbyStoryline(lobbyState, gameRoomServiceRef);
   
   // Use manual tutorial index in dev mode, otherwise use timer-based
-  const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, triggersLoading, gameRoomServiceRef);
+  const {isScoreBreakdownTimesUp} = useLobbyRoundBreakdown(lobbyState, gameRoomServiceRef);
   useLobbyRoundAnimation(lobbyState, triggersLoading, gameRoomServiceRef);
 
   const [leaderboardData, setLeaderboardData] = useState<ProcessedLeaderboardData>({
@@ -178,7 +166,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [lobbyState.gameLobbyStatus]);
 
 
-  const [totalPerformance, setTotalPerformance] = useState<SectorPerformance>('okay');
+  const [, setTotalPerformance] = useState<SectorPerformance>('okay');
   
   const [sectorPerformance, setSectorPerformance] = useState<SectorPerformance>('okay');
 
@@ -205,7 +193,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         gameRoomServiceRef.current.updateLobbyState({
           ...lobbyState, ...{
           [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.ROUND_SCORE_BREAKDOWN,
-          [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+          [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
           [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.ROUND_SCORE_BREAKDOWN,
         }});
       }
@@ -259,133 +247,25 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     window.location.reload(); 
   }
 
-  // // Preload cutscene overlay images and critical intro videos with progress
-  // const cutsceneAssetUrls = useMemo(() => {
-  //   const values = Object.values(CutScenesEnum);
-  //   const toSlug = (value: string) => value?.replaceAll("-", " ").toLocaleLowerCase();
-  //   const imageUrls = values.map(v => `/games/pub-coastal-spline/flash-reports/images/${toSlug(v)}.png?v=1.1`);
-
-  //   const allVideoUrls = values.map(v => ({ key: v, url: `/games/pub-coastal-spline/flash-reports/videos/${toSlug(v)}.webm?v=1.1`}));
-  //   const isIntro = (k: string) => [CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(k as CutScenesEnum);
-  //   const videoCriticalUrls = allVideoUrls.filter(v => isIntro(v.key)).map(v => v.url);
-  //   const videoDeferredUrls = allVideoUrls.filter(v => !isIntro(v.key)).map(v => v.url);
-
-  //   return { imageUrls, videoCriticalUrls, videoDeferredUrls };
-  // }, []);
-
-  // useEffect(() => {
-  //   let isCancelled = false;
-
-  //   const criticalTotal = (cutsceneAssetUrls.videoCriticalUrls.length + cutsceneAssetUrls.imageUrls.length);
-  //   const allTotal = criticalTotal + cutsceneAssetUrls.videoDeferredUrls.length;
-  //   setCriticalTotalCount(criticalTotal);
-  //   setAssetsTotalCount(allTotal);
-
-  //   if (criticalTotal === 0) {
-  //     setCriticalProgress(100);
-  //   }
-  //   if (allTotal === 0) {
-  //     setAssetsProgress(100);
-  //   }
-
-  //   const preloadImage = (url: string) => new Promise<void>((resolve) => {
-  //     try {
-  //       const img = new Image();
-  //       img.onload = () => resolve();
-  //       img.onerror = () => resolve();
-  //       img.src = url;
-  //     } catch {
-  //       resolve();
-  //     }
-  //   });
-
-  //   const preloadVideoMetadata = (url: string) => new Promise<void>((resolve) => {
-  //     try {
-  //       const video = document.createElement('video');
-  //       video.preload = 'metadata';
-  //       video.muted = true;
-  //       const done = () => {
-  //         try { video.removeAttribute('src'); video.load(); } catch {}
-  //         resolve();
-  //       };
-  //       video.addEventListener('loadedmetadata', done, { once: true });
-  //       video.addEventListener('error', done, { once: true });
-  //       setTimeout(done, 5000);
-  //       video.src = url;
-  //     } catch {
-  //       resolve();
-  //     }
-  //   });
-
-  //   const bumpCritical = () => setCriticalLoadedCount(prev => {
-  //     const next = prev + 1;
-  //     setCriticalProgress(Math.round((next / Math.max(1, criticalTotal)) * 100));
-  //     return next;
-  //   });
-  //   const bumpAll = () => setAssetsLoadedCount(prev => {
-  //     const next = prev + 1;
-  //     setAssetsProgress(Math.round((next / Math.max(1, allTotal)) * 100));
-  //     return next;
-  //   });
-
-  //   const runWithConcurrency = async (
-  //     work: Array<{ task: () => Promise<void>; isCritical: boolean }>,
-  //     limit: number
-  //   ) => {
-  //     let idx = 0;
-  //     let running = 0;
-  //     return new Promise<void>((resolveAll) => {
-  //       const launchNext = () => {
-  //         if (isCancelled) return resolveAll();
-  //         while (running < limit && idx < work.length) {
-  //           const { task, isCritical } = work[idx++];
-  //           running++;
-  //           task().then(() => {
-  //             if (isCritical) bumpCritical();
-  //             bumpAll();
-  //           }).finally(() => {
-  //             running--;
-  //             if (idx >= work.length && running === 0) {
-  //               resolveAll();
-  //             } else {
-  //               launchNext();
-  //             }
-  //           });
-  //         }
-  //       };
-  //       launchNext();
-  //     });
-  //   };
-
-  //   const criticalTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
-  //     ...cutsceneAssetUrls.imageUrls.map((u) => ({ task: () => preloadImage(u), isCritical: true })),
-  //     ...cutsceneAssetUrls.videoCriticalUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: true })),
-  //   ];
-
-  //   const deferredTasks: Array<{ task: () => Promise<void>; isCritical: boolean }> = [
-  //     ...cutsceneAssetUrls.videoDeferredUrls.map((u) => ({ task: () => preloadVideoMetadata(u), isCritical: false })),
-  //   ];
-
-  //   // Start both queues; critical is allowed higher concurrency
-  //   runWithConcurrency(criticalTasks, 4);
-  //   runWithConcurrency(deferredTasks, 2);
-
-  //   return () => { isCancelled = true; };
-  // }, [cutsceneAssetUrls]);
-
   const displayThankYou = async () => {
     if (gameRoomServiceRef.current) {
       gameRoomServiceRef.current.updateLobbyState({
         ...lobbyState, ...{
         [LobbyStateEnum.PHASE_DURATION]: PHASE_DURATIONS.THANK_YOU,
-        [LobbyStateEnum.PHASE_START_TIME]: getAdjustedCurrentTime(),
+        [LobbyStateEnum.PHASE_START_TIME]: Date.now(),
         [LobbyStateEnum.GAME_LOBBY_STATUS]: GameLobbyStatus.THANK_YOU,
       }});
     }
   }
 
+  const [dynamicCutScenes, setDynamicCutScenes] = useState<CutScenesEnum[]>([]);
+
+  useEffect(() => {
+    setDynamicCutScenes(getCutScenes(lobbyState.round ?? 1, overAllScores));
+  }, [ activities, newActivities ]);
+
   const renderAllCutScences = (
-    Object.values(CutScenesEnum).map(value => {
+    Object.values(dynamicCutScenes).map(value => {
       return (
         <div
           className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[101%]"
@@ -595,26 +475,32 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
+              <span>loading triggers: {`${triggersLoading}`}</span>
+              <span>is loading map: {`${!isLoaded}`}</span>
+              <span>is assets all loaded: {`${assetsProgress < 100}`}</span>
             </div>
           </div>
         )}
 
       </div>
-      {!triggersLoading && isLoaded && (assetsProgress >= 100) && <SectorControl
-        onClickSector={onClickSector}
-        sector={sector}
-        roomName={roomName}
-        isSplineLoading={triggersLoading}
-      />}
-
-      {/* {renderScore} */}
-      {renderProgressBar}
-      {/* {renderInstroductions} */}
-      {renderStoryLine}
-      {/* {renderInputTeamName} */}
-      {renderEndingLeaderBoard}
-      {renderRoundAnimation}
-      {renderRoundScoreBreakdown}
+      {!triggersLoading && isLoaded && (assetsProgress >= 100) && (
+        <>
+          <SectorControl
+            onClickSector={onClickSector}
+            sector={sector}
+            roomName={roomName}
+            isSplineLoading={triggersLoading}
+          />
+          {/* {renderScore} */}
+          {renderProgressBar}
+          {/* {renderInstroductions} */}
+          {renderStoryLine}
+          {/* {renderInputTeamName} */}
+          {renderEndingLeaderBoard}
+          {renderRoundAnimation}
+          {renderRoundScoreBreakdown}
+        </>
+      )}
     </>
   );
 };

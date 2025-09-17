@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { OverallScoresTypes, RoundType } from '@/lib/types';
 import { UserSectorEnum } from '@/lib/enums';
 

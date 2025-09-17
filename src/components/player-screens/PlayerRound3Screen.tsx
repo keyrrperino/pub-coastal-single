@@ -1,7 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
 import WaterLevelIndicator from '../WaterLevelIndicator';
-import { cn } from '@/lib/utils';
 import PlayerRoundScreen from './PlayerRoundScreen';
 interface PlayerRound3ScreenProps {
   onContinue?: () => void;

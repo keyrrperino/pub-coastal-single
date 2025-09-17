@@ -1,8 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { ActivityTypeEnum, CutScenesEnum, GameLobbyStatus, LobbyStateEnum, UserSectorEnum } from "./enums";
-import { ActivityLogType, LobbyStateType, NormalizedActivities, OverallScoresTypes, PlayerBreakdown, RoundBreakdown, RoundType, ScenarioConfigurationType, GameContentState, MainScreenContent } from "./types";
-import { meanSeaLevels, ROOMS, sceneSectorConfigurations, subSectors, userIdToSector } from "./constants";
+import { CutScenesEnum, GameLobbyStatus, UserSectorEnum } from "./enums";
+import { ActivityLogType, NormalizedActivities, OverallScoresTypes, PlayerBreakdown, RoundBreakdown, RoundType, ScenarioConfigurationType, GameContentState, MainScreenContent } from "./types";
+import { meanSeaLevels, sceneSectorConfigurations, subSectors, userIdToSector } from "./constants";
 import { push, ref, set } from "firebase/database";
 import { database } from "./firebase";
 
@@ -841,7 +841,7 @@ export function getSectorRoundScore(
       } else { // if ang previous action has action and no activity in curent round
         const key = `${sectorNumber}_${sectorNumber}A_${previousActivity.action}-None-${meanSeaLevels[roundNumber]}-${sessionRandomizeEffect}`;
         ERROR_KEY = key;
-        console.log(roundNumber, "newKey: ", key, "sectorActivitiesA: ", sectorActivitiesA, "previousSectorActivitiesA: ", previousSectorActivitiesA);
+
         try {
           const { coin, score } = sceneSectorConfigurations[key];
           scores = addUpScoreAndCoinA(Object.assign(scores), userId, score ?? 0, coin ?? 0, key, roundNumber, currentRoundNumber, gameStatus);
@@ -901,7 +901,6 @@ export function getSectorRoundScore(
         // if current acitivty is demolish but no current previous activity
         if (isLatestActivityIsDemolished && !previousActivity) {
           if (lastestPreviousRoundSectorActivity) { // Note: this activity should not demolished because the user performed demoplish so the recent activity must be a CPM
-            console.log("previousSectorActivitiesA: ", previousSectorActivitiesA, "lastestPreviousRoundSectorActivity: ", lastestPreviousRoundSectorActivity, "roundNumber: ", roundNumber);
             const key = `${sectorNumber}_${sectorNumber}A_${lastestPreviousRoundSectorActivity.action}-None-${meanSeaLevels[roundNumber]}-${sessionRandomizeEffect}`;
             ERROR_KEY = key;
 
@@ -1002,7 +1001,6 @@ export function getSectorRoundScore(
           }
 
           if (currentRoundNumber === 3 && lastestPreviousRoundSectorActivity) {
-            console.log("Current Activity: ", activity, "activies: ", sectorActivitiesA, "previous activities: ", previousSectorActivitiesA, "latest previous round activity: ", lastestPreviousRoundSectorActivity, activities);
             if (lastestPreviousRoundSectorActivity?.isDemolished) {
               const key = `${sectorNumber}_${sectorNumber}A_None-${activity.action}-${meanSeaLevels[roundNumber]}-${sessionRandomizeEffect}`;
               ERROR_KEY = key;

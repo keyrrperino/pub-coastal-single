@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
-import { usePreparingProgress } from "./usePreparingProgress";
-import { ActivityTypeEnum, GameLobbyStatus, LobbyStateEnum, SubSectorEnum } from "@/lib/enums";
+import { GameLobbyStatus, LobbyStateEnum, } from "@/lib/enums";
 import { LobbyStateType, RoundType } from "@/lib/types"; // Assuming this type exists
 import { GameRoomService } from "@/lib/gameRoom";
 import { PHASE_DURATIONS } from "./phaseUtils";
-import { useTimer } from "./useTimer";
 import { useServerTime } from "@/components/ServerTimeContext";
 
 export function useLobbyRoundBreakdown(
   lobbyState: LobbyStateType,
-  triggersLoading: boolean,
   gameRoomServiceRef: React.RefObject<GameRoomService | null>
 ) {
   const { getAdjustedCurrentTime } = useServerTime();

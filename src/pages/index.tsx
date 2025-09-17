@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { useEffect, useState } from 'react';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import dynamic from 'next/dynamic';
-import { UserSectorEnum } from '@/lib/enums';
 
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
@@ -31,6 +29,7 @@ function HomePage() {
     }
 
     const getFingerprint = async () => {
+      const { default: FingerprintJS } = await import('@fingerprintjs/fingerprintjs');
       const fp = await FingerprintJS.load();
       const result = await fp.get();
       const id = result?.visitorId ?? null;

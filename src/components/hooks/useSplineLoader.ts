@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Application } from "@splinetool/runtime";
 import { SPLINE_URL } from "@/lib/constants";
-import { CutScenesEnum, GameLobbyStatus } from "@/lib/enums";
+import { GameLobbyStatus } from "@/lib/enums";
 import { LobbyStateType } from "@/lib/types";
 
 export function useSplineLoader(
