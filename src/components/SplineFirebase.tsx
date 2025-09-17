@@ -494,11 +494,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
               <span className="opacity-70">|</span>
               <span>MAP {Math.min(100, triggerProgress)}%</span>
-              <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
+              {/* <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
               <span>IS MAP LOADED: {`${isLoaded}`}</span>
               <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
               <span>assetsProgress: {`${assetsProgress}`}</span>
-              <span>total assets: {`${totalAssets}`}</span>
+              <span>total assets: {`${totalAssets}`}</span> */}
             </div>
           </div>
         )}
