@@ -265,9 +265,10 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [ activities, newActivities ]);
 
   const renderAllCutScences = (
-    Object.values(dynamicCutScenes).map(value => {
+    Object.values(dynamicCutScenes).map((value, index) => {
       return (
         <div
+          key={`${value}-${index}`}
           className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[101%]"
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
