@@ -25,6 +25,7 @@ import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
+// const totalAssets = (Object.values(CutScenesEnum).length * 2);
 const totalAssets = 14;
 
 interface SplineFirebaseProps {
@@ -264,10 +265,44 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }
 
   const [dynamicCutScenes, setDynamicCutScenes] = useState<CutScenesEnum[]>([]);
+  const cutsceneVideoRefs = useRef<Partial<Record<CutScenesEnum, HTMLVideoElement | null>>>({});
 
   useEffect(() => {
     setDynamicCutScenes(getCutScenes(lobbyState.round ?? 1, overAllScores));
   }, [ activities, newActivities ]);
+
+
+  console.log("currentCutScene: ",currentCutScene);
+
+  useEffect(() => {
+    // Pause/reset all, then play the current cutscene's video element
+    // const refs = cutsceneVideoRefs.current;
+    // Object.values(refs).forEach((el) => {
+    //   if (!el) return;
+    //   el.pause();
+    //   el.currentTime = 0;
+    // });
+
+    if (!currentCutScene) return;
+    // console.log(document?.getElementById?.(currentCutScene + "-video"));
+    // (document?.getElementById?.(currentCutScene + "-video") as HTMLVideoElement).play();
+    
+    // const currentEl = cutsceneVideoRefs?.current[currentCutScene];
+    // currentEl?.play();
+    
+
+    // if (currentEl) {
+    //   if (![
+    //     CutScenesEnum.NEWS_INTRO_1,
+    //     CutScenesEnum.NEWS_INTRO_2,
+    //     CutScenesEnum.NEWS_INTRO_3,
+    //   ].includes(currentCutScene)) {
+    //     currentEl.playbackRate = 0.7143;
+    //   }
+    //   const playPromise = currentEl.play();
+    //   playPromise?.catch(() => {});
+    // }
+  }, [currentCutScene, dynamicCutScenes]);
 
   const renderAllCutScences = (
     Object.values(dynamicCutScenes).map((value, index) => {
@@ -278,8 +313,15 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
           <video
-            src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
+            ref={(el) => {
+              if (el) {
+                cutsceneVideoRefs.current[value] = el;
+              }
+            }}
+            // src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
+            src={`https://storage.googleapis.com/pub-coastal-game-files/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`}
             autoPlay
+            id={currentCutScene + "-video"}
             loop
             muted
             playsInline
@@ -498,8 +540,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 <span className="opacity-70">|</span>
                 <span>MAP {Math.min(100, triggerProgress)}%</span>
               </div>
-              <div className="hidden">
-                <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
+              <div className="flex flex-col">
+                <span>{roomName} IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
                 <span>IS MAP LOADED: {`${isLoaded}`}</span>
                 <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
                 <span>assetsProgress: {`${assetsProgress}`}</span>

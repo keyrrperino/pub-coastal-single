@@ -6,6 +6,9 @@ const urlsToCache = [
   '/assets/apple-touch-icon.png',
   '/assets/icon-192x192.png',
   '/assets/icon-512x512.png',
+  'https://storage.googleapis.com/pub-coastal-game-files/news intro 1.mp4',
+  'https://storage.googleapis.com/pub-coastal-game-files/news intro 2.mp4',
+  'https://storage.googleapis.com/pub-coastal-game-files/news intro 3.mp4',
   '/assets/background.svg',
   '/assets/bg-loading.webp',
   '/assets/Loading Map BG.png',
@@ -30,7 +33,7 @@ const urlsToCache = [
   '/assets/hybrid-measure.webp',
   '/assets/coastal-barriers.webp',
   '/assets/artificial-reef.webp',
-  '/assets/land-reclemation.webp'
+  '/assets/land-reclemation.webp',
   // Add other critical assets that should be cached
 ];
 
