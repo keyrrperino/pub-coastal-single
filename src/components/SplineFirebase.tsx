@@ -540,7 +540,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 <span className="opacity-70">|</span>
                 <span>MAP {Math.min(100, triggerProgress)}%</span>
               </div>
-              <div className="flex flex-col">
+              <div className="flex-col hidden">
                 <span>{roomName} IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
                 <span>IS MAP LOADED: {`${isLoaded}`}</span>
                 <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>
