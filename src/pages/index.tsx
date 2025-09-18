@@ -83,7 +83,6 @@ function HomePage() {
             <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />
           )}
         </GameProvider>
-        <h2 className="absolute text-[5vh]">{room}</h2>
       </main>
     </>
   );
