@@ -269,7 +269,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
 
   useEffect(() => {
     setDynamicCutScenes(getCutScenes(lobbyState.round ?? 1, overAllScores));
-  }, [ activities, newActivities ]);
+  }, [ activities, newActivities, lobbyState ]);
 
 
   console.log("currentCutScene: ",currentCutScene);
