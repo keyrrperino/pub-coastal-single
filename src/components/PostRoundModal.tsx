@@ -114,18 +114,18 @@ export default function PostRoundModal({
 
   return (
       <div
-        className="p-[1vh] rounded-b-[2vh] text-center mb-[1vh] backdrop-blur-[17px] shadow-lg border border-[white]"
+        className="p-[1dvh] rounded-b-[2dvh] text-center mb-[1dvh] backdrop-blur-[17px] shadow-lg border border-[white]"
         style={{
           backgroundColor: config.bgColor,
           borderColor: config.borderGradient,
         }}
       >
         {/* Content */}
-        <div className="flex flex-col items-center gap-5 text-center">
-          <h2 className="text-white text-3xl font-bold max-w-full w-full uppercase">
+        <div className="flex flex-col items-center gap-[1dvh] text-center">
+          <h2 className="text-white text-[4dvh] font-bold max-w-full w-full uppercase">
             {config.title}
           </h2>
-          <p className="text-white text-xl font-bold uppercase leading-relaxed">
+          <p className="text-white text-[3dvh] font-bold uppercase leading-relaxed">
             {config.message}
           </p>
         </div>

@@ -1190,7 +1190,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
     currentPhase === GameLobbyStatus.ROUND_ANIMATION;
 
   const renderScore = (
-    <div className="flex w-full justify-between text-white text-[3vh] pl-[1vh] pr-[1vh]">
+    <div className="flex w-full justify-between text-white text-[3dvh] pl-[1dvh] pr-[1dvh]">
       <div className="flex flex-col">
         <h1>
           {coinsLeft > 0 ? "BUDGET" : "NO MORE COINS"}
@@ -1201,7 +1201,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
             key={'coin-' + idx}
             src="/games/pub-coastal-spline/images/coin.svg"
             alt="coin"
-            className="w-[1.8vh] h-[1.8vh]"
+            className="w-[1.8dvh] h-[1.8dvh]"
           />
         ))}
         </div>
@@ -1233,13 +1233,13 @@ const SectorControl: React.FC<SectorControlProps> = ({
       {/* Main content */}
 
       <div
-        className="absolute left-1/2 -translate-x-1/2 w-full z-10 px-[2vw] py-[1vh]"
+        className="absolute left-1/2 -translate-x-1/2 w-full z-10 px-[2vw] py-[1dvh]"
         style={isBottom ? { bottom: 0, background: "#10458B" } : {
           ...([GameLobbyStatus.ROUND_CUTSCENES, GameLobbyStatus.TEAM_NAME_INPUT].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
         }}
       >
         <div
-          className="absolute left-1/2 -translate-x-1/2 w-[101%] z-10 p-2 mt-[-12vh]"
+          className="absolute left-1/2 -translate-x-1/2 w-[100%] z-10 p-2 mt-[-12dvh]"
           style={{
             ...([GameLobbyStatus.INITIALIZING].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
           }}
@@ -1247,7 +1247,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
           {/* Budget display left */}
           {renderScore}
         </div>
-        <div className="w-full flex flex-col gap-[1vh]">
+        <div className="w-full flex flex-col gap-[1dvh]">
           {/* Render content based on current phase */}
           {(() => {
             // Gameplay phases: Show Timer, Budget, and Sectors

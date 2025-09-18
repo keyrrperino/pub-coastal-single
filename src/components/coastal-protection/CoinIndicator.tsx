@@ -64,7 +64,7 @@ const CoinIndicator: React.FC<CoinIndicatorProps> = ({ count = 1, direction = 'r
   return (
     <div
       key={count}
-      className={`flex ${direction === 'row' ? 'flex-row' : 'flex-col'} gap-[0.2vw] w-auto items-center`}
+      className={`flex ${direction === 'row' ? 'flex-row' : 'flex-col'} gap-[0.2vw] w-auto items-center flex-wrap justify-center`}
     >
       {coins.map((_, index) => (
         <span

@@ -3,7 +3,8 @@
 .container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,8 +39,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 984px;
-  max-width: 90vw;
+  width: min(984px, 92vw);
+  padding: 3vh 2vh;
+  margin: 0 auto;
 }
 
 /* Player 1 Input Section */
@@ -47,7 +49,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 71px;
+  gap: 6vh;
   width: 100%;
 }
 
@@ -55,15 +57,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12.14px;
+  gap: 1.6vh;
   width: 100%;
 }
 
 .inputLabel {
   font-family: 'novecento-sans-narrow', sans-serif;
   font-weight: 700;
-  font-size: 70.58px;
-  line-height: 0.8em;
+  font-size: clamp(28px, 6.5vh, 72px);
+  line-height: 0.9em;
   text-align: center;
   color: #FFFFFF;
   white-space: nowrap;
@@ -72,7 +74,7 @@
 
 .letterInputContainer {
   display: flex;
-  gap: 20px;
+  gap: 2.2vh;
   justify-content: center;
   align-items: center;
 }
@@ -80,15 +82,15 @@
 .letterInput {
   font-family: 'novecento-sans-narrow', sans-serif;
   font-weight: 700;
-  font-size: 70.58px;
-  line-height: 0.8em;
+  font-size: clamp(28px, 6.2vh, 72px);
+  line-height: 0.9em;
   text-align: center;
   color: #FFFFFF;
   background: transparent;
   border: none;
   outline: none;
-  width: 80px;
-  height: 80px;
+  width: clamp(44px, 8vh, 84px);
+  height: clamp(44px, 8vh, 84px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,7 +103,7 @@
 }
 
 .letterDisplay {
-  height: 70px;
+  height: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,9 +114,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 70.58px;
+  font-size: inherit;
   color: #FFFFFF;
-  line-height: 0.8em;
+  line-height: 0.9em;
 }
 
 .letterInput.focused {
@@ -126,17 +128,17 @@
 .saveButton {
   font-family: 'novecento-sans-narrow', sans-serif;
   font-weight: 700;
-  font-size: 30.35px;
+  font-size: clamp(16px, 2.6vh, 30px);
   line-height: 1.2em;
   color: #FFFFFF;
   background: #005DFF;
   border: none;
   border-radius: 500px;
-  padding: 37px 45px;
+  padding: 1.8vh 4.5vh;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 120px;
-  height: 83px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -158,7 +160,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 5vh;
   width: 100%;
   text-align: center;
 }
@@ -166,7 +168,7 @@
 .infoTitle {
   font-family: 'novecento-sans-narrow', sans-serif;
   font-weight: 700;
-  font-size: 70.58px;
+  font-size: clamp(28px, 6vh, 70px);
   line-height: 0.8em;
   text-align: center;
   color: #FFFFFF;
@@ -176,7 +178,7 @@
 .infoText {
   font-family: 'novecento-sans-narrow', sans-serif;
   font-weight: 700;
-  font-size: 30.71px;
+  font-size: clamp(16px, 2.6vh, 30px);
   line-height: 1.2em;
   text-align: center;
   color: #FFFFFF;
@@ -186,88 +188,11 @@
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .inputLabel,
-  .infoTitle {
-    font-size: 50px;
-  }
-  
-  .infoText {
-    font-size: 24px;
-  }
-  
-  .letterInput {
-    font-size: 50px;
-    width: 60px;
-    height: 60px;
-  }
-  
-  .letterDisplay {
-    height: 50px;
-  }
-  
-  .dashUnderneath {
-    height: 10px;
-    font-size: 50px;
-  }
-  
-  .saveButton {
-    font-size: 30px;
-    padding: 30px 80px;
-  }
-  
-  .inputSection {
-    gap: 50px;
-  }
+  .inputSection { gap: 5vh; }
 }
 
 @media (max-width: 768px) {
-  .content {
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .inputSection {
-    flex-direction: column;
-    gap: 71px;
-  }
-  
-  .inputWrapper {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .inputLabel,
-  .infoTitle {
-    font-size: 36px;
-    width: 100%;
-  }
-  
-  .infoText {
-    font-size: 20px;
-    width: 100%;
-  }
-  
-  .letterInput {
-    font-size: 36px;
-    width: 50px;
-    height: 50px;
-  }
-  
-  .letterDisplay {
-    height: 40px;
-  }
-  
-  .dashUnderneath {
-    height: 10px;
-    font-size: 36px;
-  }
-  
-  .saveButton {
-    font-size: 30px;
-    padding: 80px 30px;
-  }
-  
-  .letterInputContainer {
-    gap: 15px;
-  }
+  .content { gap: 3vh; }
+  .inputWrapper { gap: 1.6vh; }
+  .letterInputContainer { gap: 1.8vh; }
 } 

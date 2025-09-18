@@ -125,17 +125,17 @@ export default function ScoreBreakdownModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 flex-col">
       {/* Main Container - responsive and larger */}
-      <div className="relative max-w-[50vh] flex flex-col items-center justify-center h-full w-full">
+      <div className="relative max-w-[50dvh] flex flex-col items-center justify-center h-full w-full">
         {/* Content Container */}
         <div
-          className="flex w-full flex-col rounded-[2vh] overflow-hidden"
+          className="flex w-full flex-col rounded-[2dvh] overflow-hidden"
           style={{
             // boxShadow: boxShadow[roundNumber]
           }}
         >
           {/* Header Section */}
           <div className="bg-white flex items-center justify-center">
-            <h1 className="text-[#202020] text-[4vh] font-bold text-center leading-[1.2] tracking-wide pt-[3vh]">
+            <h1 className="text-[#202020] text-[4dvh] font-bold text-center leading-[1.2] tracking-wide pt-[3dvh]">
               Round {roundNumber} SCORE
               <br />
               BREAKDOWN
@@ -143,11 +143,11 @@ export default function ScoreBreakdownModal({
           </div>
 
           {/* Breakdown List in White Section */}
-          <div className="flex-1 bg-white px-[3vw] py-[1vh]">
-            <div className="flex flex-col space-y-[0.8vh]">
+          <div className="flex-1 bg-white px-[3vw] py-[1dvh]">
+            <div className="flex flex-col space-y-[0.8dvh]">
               {/* Total Points */}
               <div className="flex items-center justify-between">
-                <span className="text-[#202020] text-[3vh] leading-normal font-bold font-condensed">
+                <span className="text-[#202020] text-[3dvh] leading-normal font-bold font-condensed">
                   ROUND START SCORE
                 </span>
                 <div
@@ -156,7 +156,7 @@ export default function ScoreBreakdownModal({
                   }}
                   className="flex-1 mx-3 border-b-[3.37px] border-dashed"
                 />
-                <span className="text-[#202020] text-[3vh] leading-normal font-bold font-condensed">
+                <span className="text-[#202020] text-[3dvh] leading-normal font-bold font-condensed">
                   {getPrviousRoundTotalPoints() ?? 0}
                 </span>
               </div>
@@ -174,7 +174,7 @@ export default function ScoreBreakdownModal({
                 return (
                   <React.Fragment key={userSector}>
                     <div className="flex items-center justify-between">
-                      <span className="text-[#202020] text-[2.5vh] leading-normal font-bold font-condensed">
+                      <span className="text-[#202020] text-[2.5dvh] leading-normal font-bold font-condensed">
                         {playerName} SCORE DEDUCTION
                       </span>
                       <div
@@ -185,7 +185,7 @@ export default function ScoreBreakdownModal({
                         className="flex-1 mx-3 border-b-[3.37px] border-dashed"
                       />
                       <span
-                        className="text-[2.5vh] leading-normal font-bold font-condensed"
+                        className="text-[2.5dvh] leading-normal font-bold font-condensed"
                         style={{
                           color:
                             playerScore > 0 ? '#FF0000' : '#202020',
@@ -197,7 +197,7 @@ export default function ScoreBreakdownModal({
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-[#202020] text-[2.5vh] leading-normal font-bold font-condensed">
+                      <span className="text-[#202020] text-[2.5dvh] leading-normal font-bold font-condensed">
                         {playerName} COINS SPENT
                       </span>
                       <div
@@ -215,7 +215,7 @@ export default function ScoreBreakdownModal({
                               key={`${userSector}_coin_${index}`}
                               src="/assets/coin-icon.webp"
                               alt="coin"
-                              className="w-[1.8vh] h-[1.8vh]"
+                              className="w-[1.8dvh] h-[1.8dvh]"
                             />
                           ))}
                       </div>
@@ -231,13 +231,13 @@ export default function ScoreBreakdownModal({
             style={{
               backgroundColor: roundColors[roundNumber].color2,
             }}
-            className="px-[1vh] py-[1vh]"
+            className="px-[1dvh] py-[1dvh]"
           >
             <div className="text-center">
-              <div className="text-[3vh] font-bold text-white">
+              <div className="text-[3dvh] font-bold text-white">
                 END OF ROUND {roundNumber} SCORE
               </div>
-              <div className="text-[3vh] font-bold text-white">
+              <div className="text-[3dvh] font-bold text-white">
                 {getTotalPoints() ?? 0}
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function ScoreBreakdownModal({
           onClick={() => {
             onDurationComplete?.();
           }}
-          className="bg-white text-blue-500 text-[3vh] px-[3vw] py-[1vh] rounded-[100px] hover:bg-blue-600 hover:text-white"
+          className="bg-white text-blue-500 text-[3dvh] px-[3vw] py-[1dvh] rounded-[100px] hover:bg-blue-600 hover:text-white"
         >
           CONTINUE
         </button>

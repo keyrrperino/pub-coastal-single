@@ -157,8 +157,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [lobbyState.gameLobbyStatus]);
 
   const backToMainScreen = async () => {
-    await gameRoomServiceRef?.current?.deleteActivities();
-    await gameRoomServiceRef?.current?.updateLobbyState(lobbyStateDefaultValue);
+    // await gameRoomServiceRef?.current?.deleteActivities();
+    // await gameRoomServiceRef?.current?.updateLobbyState(lobbyStateDefaultValue);
   }
 
   useEffect(() => {
@@ -274,7 +274,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       return (
         <div
           key={`${value}-${index}`}
-          className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[101%]"
+          className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[100%]"
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
           <video
@@ -344,7 +344,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
 
   const renderEndingLeaderBoard = (!triggersLoading && lobbyState.gameLobbyStatus === GameLobbyStatus.LEADERBOARD_DISPLAY) && (
     <div 
-      className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-80 z-10"
+      className="fixed inset-0 z-[100] w-full h-[100dvh] max-h-[100dvh] overscroll-contain"
       style={{ borderRadius: 0 }}
     >
       <EndingLeaderboardOverlay
@@ -421,7 +421,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   return (
     <>
       <div
-        className="fixed inset-0 w-[101%] h-screen m-0 p-0 bg-black z-0"
+        className="fixed inset-0 w-[100%] h-screen m-0 p-0 bg-black z-0"
         // style={{ borderRadius: 0, gap: 0 }}
       >
         {/* Only show Spline when triggers are done loading */}
@@ -498,7 +498,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 <span className="opacity-70">|</span>
                 <span>MAP {Math.min(100, triggerProgress)}%</span>
               </div>
-              <div className="flex flex-col hidden">
+              <div className="hidden">
                 <span>IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
                 <span>IS MAP LOADED: {`${isLoaded}`}</span>
                 <span>is assets all loaded: {`${assetsProgress >= 100}`}</span>

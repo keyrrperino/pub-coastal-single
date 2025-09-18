@@ -25,7 +25,7 @@ export default function PlayerRoundScreen({
   waterLevelIndicator,
 }: PlayerRoundScreenProps) {
   return (
-    <div className="fixed inset-0 w-full min-h-[100svh] h-[100dvh] overflow-hidden overscroll-none">
+    <div className="fixed inset-0 w-full min-h-[100dvh] h-[100dvh] overflow-hidden overscroll-none">
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
@@ -62,7 +62,7 @@ export default function PlayerRoundScreen({
           </div>
 
           {/* Game Info Card */}
-          <div className="bg-[rgba(175,240,255,0.3)] backdrop-blur-[22px] border-2 rounded-[33px] shadow-[0_7px_37px_rgba(0,0,0,0.15)]">
+          <div className="bg-[rgba(175,240,255,0.3)] backdrop-blur-[22px] border-2 rounded-[3dvh] shadow-[0_7px_37px_rgba(0,0,0,0.15)]">
             {info}
           </div>
         </div>

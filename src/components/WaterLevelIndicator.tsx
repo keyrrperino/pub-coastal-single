@@ -132,7 +132,7 @@ export default function WaterLevelIndicator({
   return (
     <div
       className={cn(
-        'flex w-auto items-end gap-4 h-[50vh]',
+        'flex w-auto items-end gap-4 h-[50dvh]',
         className,
       )}
     >

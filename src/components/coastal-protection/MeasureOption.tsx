@@ -121,17 +121,17 @@ const MeasureOption: React.FC<MeasureOptionProps> = ({
   const shouldPulse = status ? status === ActionStatus.COMPLETED : isSelected;
 
   return (
-    <div className={`flex flex-col items-center gap-[0.5vh] ${shouldShowAnimation ? 'floatAnimation' : ''}`}>
+    <div className={`flex flex-col items-center gap-[0.5dvh] ${shouldShowAnimation ? 'floatAnimation' : ''}`}>
       <button
         onClick={buttonDisabled ? undefined : onClick}
         disabled={buttonDisabled}
-        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[5vh] h-[5vh] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
+        className={`${styles.measureOptionButton} flex flex-col justify-center items-center w-[5dvh] h-[5dvh] rounded-[63.28px] ${shouldPulse ? 'pulseAnimation' : ''}`}
         style={getButtonStyle()}
       >
-        <div className={`text-center text-[1.5vh] font-bold mt-[-1vh] gap-[-0.1vh] flex flex-col ${styles.novecentoBold} uppercase`} 
+        <div className={`text-center text-[1.3dvh] font-bold mt-[-1dvh] gap-[-0.1dvh] flex flex-col ${styles.novecentoBold} uppercase`} 
              style={{ color: getTextColor() }}>
           {title.split(' ').map((line, index) => (
-            <div key={index} className="h-[1.2vh]">{line}</div>
+            <div key={index} className="h-[1.2dvh]">{line}</div>
           ))}
         </div>
       </button>

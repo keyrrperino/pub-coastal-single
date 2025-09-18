@@ -43,7 +43,11 @@ const EndingModal: React.FC<EndingModalProps> = ({
   console.log('🟢 ENDING MODAL: Rendering PlayerEndingScreen with type:', endingType, 'for performance:', totalPerformance);
 
   return (
-    <div className="fixed inset-0 z-50 w-screen h-screen">
+    <div
+      className="fixed inset-0 z-[100] w-full h-[100dvh] max-h-[100dvh] overscroll-contain"
+      role="dialog"
+      aria-modal="true"
+    >
       <PlayerEndingScreen 
         onContinue={() => {
           onContinue?.();

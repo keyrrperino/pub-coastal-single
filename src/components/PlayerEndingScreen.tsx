@@ -62,21 +62,21 @@ export default function PlayerEndingScreen({
   const config = playerEndingConfigs[endingType];
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden">
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-black/60" />
 
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-[1vh] gap-[3vh]">
-        <div className="flex flex-col items-center max-w-screen w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-[100dvh] px-[2vh] py-[3vh] gap-[3vh]">
+        <div className="flex flex-col items-center w-full">
           {/* Header Section */}
-          <div className="flex flex-col items-center gap-[4vh] w-full">
-            <h1 className="text-white text-[6vh] font-bold text-center leading-[1] drop-shadow-[0px_4px_4px_rgba(148,107,199,1)]">
+          <div className="flex flex-col items-center gap-[3vh] w-full max-w-[1200px]">
+            <h1 className="text-white text-[4.5vh] md:text-[5.5vh] lg:text-[6vh] font-bold text-center leading-[1] drop-shadow-[0px_4px_4px_rgba(148,107,199,1)]">
               {config.title}
             </h1>
 
-            <div className="max-w-[60vw]">
-              <p className="text-white text-[4vh] font-bold text-center leading-[1] max-w-screen drop-shadow-[0px_2px_2px_rgba(148,107,199,1)]">
+            <div className="w-full px-[1vh]">
+              <p className="text-white text-[3.2vh] md:text-[3.6vh] lg:text-[4vh] font-bold text-center leading-[1.1] drop-shadow-[0px_2px_2px_rgba(148,107,199,1)]">
                 YOUR FINAL SCORE:
                 <br />
                 <span className="text-[#FFDD3D]">
@@ -85,7 +85,7 @@ export default function PlayerEndingScreen({
               </p>
             </div>
 
-            <div className="relative max-w-[60vw] w-full backdrop-blur-[37px] shadow-[0px_13px_63px_rgba(0,0,0,0.15)]">
+            <div className="relative w-full max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw] backdrop-blur-[25px] md:backdrop-blur-[32px] shadow-[0px_13px_63px_rgba(0,0,0,0.15)]">
               {/* Border using ::after pseudo-element */}
               <style jsx>{`
                 div::after {
@@ -95,8 +95,8 @@ export default function PlayerEndingScreen({
                   left: 0;
                   right: 0;
                   bottom: 0;
-                  border-radius: 3vh;
-                  padding: 0.3vh;
+                  border-radius: 2.4vh;
+                  padding: 0.25vh;
                   background: ${config.borderGradient};
                   -webkit-mask:
                     linear-gradient(#fff 0 0) content-box,
@@ -111,11 +111,11 @@ export default function PlayerEndingScreen({
               `}</style>
 
               <div
-                className="relative w-full h-full rounded-[3vh] py-[4vh] px-[2vh]"
+                className="relative w-full h-full rounded-[2.4vh] py-[3vh] md:py-[3.5vh] px-[2vh]"
                 style={{ backgroundColor: config.bgColor }}
               >
                 <p
-                  className="text-white text-[2.5vh] font-bold text-center drop-shadow-[0px_2px_2px_rgba(148,107,199,1)] font-condensed"
+                  className="text-white text-[2.2vh] md:text-[2.4vh] lg:text-[2.6vh] font-bold text-center drop-shadow-[0px_2px_2px_rgba(148,107,199,1)] font-condensed"
                   dangerouslySetInnerHTML={{
                     __html: config.subtitle,
                   }}
@@ -128,7 +128,7 @@ export default function PlayerEndingScreen({
           onClick={() => {
             onContinue?.();
           }}
-          className="bg-white text-blue-500 text-[3vh] px-[3vh] py-[1vh] rounded-[3vh] hover:bg-blue-600 hover:text-white"
+          className="bg-white text-blue-500 text-[2.6vh] md:text-[2.8vh] lg:text-[3vh] px-[3vh] py-[1.2vh] rounded-[3vh] hover:bg-blue-600 hover:text-white active:scale-[0.98] transition-transform"
         >
           CONTINUE
         </button>
