@@ -57,7 +57,7 @@ const IntroductionModal: React.FC<IntroductionModalProps> = ({
     <div className="fixed inset-0 z-50">
       {renderCurrentScreen()}
       
-      <div className="fixed bottom-[3vh] left-1/2 transform -translate-x-1/2 z-50 flex gap-4">
+      <div className="fixed bottom-[3dvh] left-1/2 transform -translate-x-1/2 z-50 flex gap-4">
         {/* <button
           onClick={() => setManualScreen(Math.max(1, manualScreen - 1))}
           disabled={manualScreen === 1}
@@ -72,7 +72,7 @@ const IntroductionModal: React.FC<IntroductionModalProps> = ({
           onClick={() => {
             setManualScreen(Math.min(6, manualScreen + 1));
           }}
-          className="bg-white text-blue-500 text-[3vh] px-[3vw] py-[1vh] rounded-[100px] hover:bg-blue-600 hover:text-white"
+          className="bg-white text-blue-500 text-[3dvh] px-[3vw] py-[1dvh] rounded-[100px] hover:bg-blue-600 hover:text-white"
         >
           GO NEXT
         </button>

@@ -10,7 +10,7 @@ export default function PlayerTutorialScreen1({
   onNext
 }: TutorialScreen1Props) {
   return (
-    <div className="fixed inset-0 w-full min-h-[100svh] h-[100dvh] overflow-hidden overscroll-none">
+    <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -28,7 +28,7 @@ export default function PlayerTutorialScreen1({
       {/* Content Container */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full overflow-y-auto overscroll-contain pt-[max(env(safe-area-inset-top),1rem)] pb-[max(env(safe-area-inset-bottom),1rem)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         {/* Dark Blue Central Panel with Light Gray Border */}
-        <div className="w-full h-full max-w-[1100px] max-h-[85vh] md:max-h-[85dvh] mt-0 xl:mt-[-10vh] px-4 sm:px-6">
+        <div className="w-full h-full max-w-[1100px] max-h-[85dvh] md:max-h-[85dvh] mt-[-10dvh] xl:mt-[-10dvh] px-4 sm:px-6">
           <div className="flex flex-col h-full justify-center uppercase gap-[min(7vh,6rem)]">
             {/* Welcome Title - Centered */}
 

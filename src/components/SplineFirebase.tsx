@@ -278,7 +278,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
           <video
-            src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.webm?v=1.1`}
+            src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
             autoPlay
             loop
             muted
