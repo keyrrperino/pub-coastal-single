@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://pub-coastal-single.vercel.app", "http://localhost:8080", "http://192.168.0.127:8080"],
+    "method": ["GET", "HEAD", "OPTIONS"],
+    "responseHeader": ["Content-Type", "Range", "Accept-Ranges", "Content-Length"],
+    "maxAgeSeconds": 7200
+  }
+]
