@@ -77,11 +77,13 @@ function HomePage() {
         <meta name="msapplication-TileColor" content="#2563eb" />
       </Head>
       <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 overflow-hidden">
+        
         <GameProvider>
           {sector && room && (
             <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />
           )}
         </GameProvider>
+        <h2 className="absolute text-[5vh]">{room}</h2>
       </main>
     </>
   );

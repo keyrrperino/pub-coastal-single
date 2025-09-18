@@ -1384,7 +1384,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
               !isSplineLoading && currentPhase === GameLobbyStatus.THANK_YOU
             ) {
               return (
-                <div className="absolute inset-0 z-20">
+                <div className="fixed inset-0 z-[100] w-full h-[100dvh] max-h-[100dvh] overscroll-contain">
                   <ThankYouScreen
                     onClose={async () => {                  
                       await gameRoomService?.deleteActivities();
