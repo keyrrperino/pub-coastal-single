@@ -1,4 +1,9 @@
 const CACHE_NAME = 'coastal-game-v3';
+const userAgent = navigator.userAgent || "";
+const isAppleMobile = /iPad|iPhone|iPod/.test(userAgent);
+const isModernIPad = !isAppleMobile && navigator.platform === "MacIntel" && (navigator).maxTouchPoints > 1;
+const isIOS = isAppleMobile || isModernIPad;
+
 const CUT_SCENES = [
   "news intro 1",
   "news intro 2",
@@ -142,13 +147,13 @@ const urlsToCache = [
   '/assets/apple-touch-icon.png',
   '/assets/icon-192x192.png',
   '/assets/icon-512x512.png',
-  'https://storage.googleapis.com/pub-coastal-game-files/news intro 1.mp4',
-  'https://storage.googleapis.com/pub-coastal-game-files/news intro 2.mp4',
-  'https://storage.googleapis.com/pub-coastal-game-files/news intro 3.mp4',
   '/assets/background.svg',
   '/assets/bg-loading.webp',
   '/assets/Loading Map BG.png',
   '/assets/Loading Map Overlay.png',
+  `https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}news intro 1.mp4`,
+  `https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}news intro 2.mp4`,
+  `https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}news intro 3.mp4`,
   '/assets/coin-icon.webp',
   '/assets/tutorial-bg.webp',
   '/assets/arrows-down.svg',
@@ -170,7 +175,7 @@ const urlsToCache = [
   '/assets/coastal-barriers.webp',
   '/assets/artificial-reef.webp',
   '/assets/land-reclemation.webp',
-  ...Object.values(CUT_SCENES).map((value) => `https://storage.googleapis.com/pub-coastal-game-files/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`)
+  // ...Object.values(CUT_SCENES).map((value) => `https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`)
   // Add other critical assets that should be cached
 ];
 

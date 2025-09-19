@@ -25,6 +25,17 @@ import PostRoundModal from "./PostRoundModal";
 
 const SectorControl = dynamic(() => import('@/components/coastal-protection/SectorControl'), { ssr: false });
 
+
+let isIOS = false;
+
+try {
+  const userAgent = navigator.userAgent || "";
+  const isAppleMobile = /iPad|iPhone|iPod/.test(userAgent);
+  const isModernIPad = !isAppleMobile && navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1;
+  isIOS = isAppleMobile || isModernIPad;
+} catch {
+  isIOS = false;
+}
 // const totalAssets = (Object.values(CutScenesEnum).length * 2);
 const totalAssets = 14;
 
@@ -274,60 +285,47 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
 
   console.log("currentCutScene: ",currentCutScene);
 
-  useEffect(() => {
-    // Pause/reset all, then play the current cutscene's video element
-    // const refs = cutsceneVideoRefs.current;
-    // Object.values(refs).forEach((el) => {
-    //   if (!el) return;
-    //   el.pause();
-    //   el.currentTime = 0;
-    // });
+  // useEffect(() => {
+  //   // Pause/reset all, then play the current cutscene's video element
+  //   // const refs = cutsceneVideoRefs.current;
+  //   // Object.values(refs).forEach((el) => {
+  //   //   if (!el) return;
+  //   //   el.pause();
+  //   //   el.currentTime = 0;
+  //   // });
 
-    if (!currentCutScene) return;
-    // console.log(document?.getElementById?.(currentCutScene + "-video"));
-    // (document?.getElementById?.(currentCutScene + "-video") as HTMLVideoElement).play();
+  //   if (!currentCutScene) return;
+  //   // console.log(document?.getElementById?.(currentCutScene + "-video"));
+  //   // (document?.getElementById?.(currentCutScene + "-video") as HTMLVideoElement).play();
     
-    // const currentEl = cutsceneVideoRefs?.current[currentCutScene];
-    // currentEl?.play();
+  //   // const currentEl = cutsceneVideoRefs?.current[currentCutScene];
+  //   // currentEl?.play(); 
     
 
-    // if (currentEl) {
-    //   if (![
-    //     CutScenesEnum.NEWS_INTRO_1,
-    //     CutScenesEnum.NEWS_INTRO_2,
-    //     CutScenesEnum.NEWS_INTRO_3,
-    //   ].includes(currentCutScene)) {
-    //     currentEl.playbackRate = 0.7143;
-    //   }
-    //   const playPromise = currentEl.play();
-    //   playPromise?.catch(() => {});
-    // }
-  }, [currentCutScene, dynamicCutScenes]);
+  //   // if (currentEl) {
+  //   //   if (![
+  //   //     CutScenesEnum.NEWS_INTRO_1,
+  //   //     CutScenesEnum.NEWS_INTRO_2,
+  //   //     CutScenesEnum.NEWS_INTRO_3,
+  //   //   ].includes(currentCutScene)) {
+  //   //     currentEl.playbackRate = 0.7143;
+  //   //   }
+  //   //   const playPromise = currentEl.play();
+  //   //   playPromise?.catch(() => {});
+  //   // }
+  // }, [currentCutScene, dynamicCutScenes]);
 
   const renderAllCutScences = (
     Object.values(dynamicCutScenes).map((value, index) => {
       return (
         <div
           key={`${value}-${index}`}
-          className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[100%]"
+          className="fixed inset-0 h-[100dvh] m-0 p-0 bg-black z-10 w-[100%]"
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
-          <video
-            ref={(el) => {
-              if (el) {
-                cutsceneVideoRefs.current[value] = el;
-              }
-            }}
-            // src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
-            src={`https://storage.googleapis.com/pub-coastal-game-files/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`}
-            autoPlay
-            id={currentCutScene + "-video"}
-            loop
-            muted
-            playsInline
-            controls={false}
+          {/* {isIOS && <img
             onError={(err) => {
-              console.log("CUTSCENE_PRELOAD_ERROR: ", err);
+              console.log("CUTSCENE_PRELOAD_OVERLAY_ERROR: ", err);
               setCriticalProgress((prev) => {
                 const newTotal = prev + 1;
                 setAssetsProgress((newTotal / totalAssets) * 100);
@@ -335,26 +333,64 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 return newTotal;
               });
             }}
-            onLoadedMetadataCapture={(e) => {
+            onLoad={() => {
               setCriticalProgress((prev) => {
                 const newTotal = prev + 1;
                 setAssetsProgress((newTotal / totalAssets) * 100);
 
                 return newTotal;
               });
-              if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
-                e.currentTarget.playbackRate = 0.7143;
-              }
             }}
-            onPlay={(e) => {
-              if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
-                e.currentTarget.playbackRate = 0.7143;
-              }
-            }}
+            src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.gif?v=1.1`}
             className="fixed w-full h-full m-0 p-0 z-10"
-          />
+            // style={{ objectFit: "" }}
+            alt="Frame Overlay"
+          />} */null}
+          { 
+            <video
+              ref={(el) => {
+                if (el) {
+                  cutsceneVideoRefs.current[value] = el;
+                }
+              }}
+              // src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
+              src={`https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`}
+              autoPlay
+              id={currentCutScene + "-video"}
+              loop
+              muted
+              playsInline
+              controls={false}
+              onError={(err) => {
+                console.log("CUTSCENE_PRELOAD_ERROR: ", err);
+                setCriticalProgress((prev) => {
+                  const newTotal = prev + 1;
+                  setAssetsProgress((newTotal / totalAssets) * 100);
+
+                  return newTotal;
+                });
+              }}
+              onLoadedMetadataCapture={(e) => {
+                setCriticalProgress((prev) => {
+                  const newTotal = prev + 1;
+                  setAssetsProgress((newTotal / totalAssets) * 100);
+
+                  return newTotal;
+                });
+                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
+                  e.currentTarget.playbackRate = 0.7143;
+                }
+              }}
+              onPlay={(e) => {
+                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
+                  e.currentTarget.playbackRate = 0.7143;
+                }
+              }}
+              className="fixed w-full h-full m-0 p-0 z-10"
+            />
+          }
           {/* Frame Overlay */}
-          <div className="fixed inset-0 z-20 flex items-center justify-center h-[100vh]">
+          <div className="fixed inset-0 z-20 flex items-center justify-center h-[100dvh]">
             <img
               onError={(err) => {
                 console.log("CUTSCENE_PRELOAD_OVERLAY_ERROR: ", err);
@@ -373,8 +409,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                   return newTotal;
                 });
               }}
-              src={`/games/pub-coastal-spline/flash-reports/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.png?v=1.1`}
-              className="pointer-events-none max-h-[100vh]"
+              src={`https://storage.googleapis.com/pub-coastal-game-files/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.webp?v=1.1`}
+              className="pointer-events-none max-h-[100dvh]"
               // style={{ objectFit: "" }}
               alt="Frame Overlay"
             />
@@ -467,7 +503,41 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         // style={{ borderRadius: 0, gap: 0 }}
       >
         {/* Only show Spline when triggers are done loading */}
-        
+        {/* <div
+        className="fixed inset-0 h-screen m-0 p-0 bg-black z-10 w-[100%]"
+        style={{ opacity: 1, display: "block" }}
+        >
+          <video
+            // src={`/games/pub-coastal-spline/flash-reports/videos/r2 2a 6.mp4?v=1.1`}
+            src={`https://storage.googleapis.com/pub-coastal-game-files/r2 2a 6.mp4`}
+            autoPlay
+            id={currentCutScene + "-video"}
+            loop
+            muted
+            playsInline
+            controls={false}
+            onError={(err) => {
+              console.log("CUTSCENE_PRELOAD_ERROR: ", err);
+              setCriticalProgress((prev) => {
+                const newTotal = prev + 1;
+                setAssetsProgress((newTotal / totalAssets) * 100);
+
+                return newTotal;
+              });
+            }}
+            onLoadedMetadataCapture={(e) => {
+              setCriticalProgress((prev) => {
+                const newTotal = prev + 1;
+                setAssetsProgress((newTotal / totalAssets) * 100);
+
+                return newTotal;
+              });
+            }}
+            onPlay={(e) => {
+            }}
+            className="fixed w-full h-full m-0 p-0 z-10"
+          />
+        </div> */}
         {renderAllCutScences}
 
         <audio

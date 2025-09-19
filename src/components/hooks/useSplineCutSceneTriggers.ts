@@ -36,7 +36,7 @@ export enum CutScenesStatusEnum {
 
 export function useCutSceneSequence(
   lobbyState: LobbyStateType,
-  overAllScores: {[key in RoundType]?: OverallScoresTypes}
+  overAllScores: {[key in RoundType]?: OverallScoresTypes},
 ) {
   const { getAdjustedCurrentTime } = useServerTime();
   
@@ -162,6 +162,7 @@ export function useCutSceneSequence(
   }, [lobbyState, timeRemaining]);
 
   return {
+    cutScenes,
     currentCutScene,
     isSequenceActive: currentCutSceneIndex !== null,
     currentCutSceneIndex,
