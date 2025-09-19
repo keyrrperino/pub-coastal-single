@@ -229,14 +229,18 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
       calmEl.currentTime = 0;
       newsEl.loop = true;
       const playPromise = newsEl.play();
-      playPromise?.catch(() => {});
+      playPromise?.catch((e) => {
+        console.log(e);
+      });
     } else {
       // Outside cutscenes, play calm background and pause news music
       newsEl.pause();
       newsEl.currentTime = 0;
       calmEl.loop = true;
       const playPromise = calmEl.play();
-      playPromise?.catch(() => {});
+      playPromise?.catch((e) => {
+        console.log(e);
+      });
     }
   }, [lobbyState.gameLobbyStatus]);
 
@@ -554,6 +558,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           className={"w-full z-9 h-[70%] m-0 p-0 " + ((triggersLoading && isLoaded) && "d-none")}
           style={{ display: "block", borderRadius: 0, border: "none" }}
         />
+        {/* add this div to avoid zoom in and out map */}
+        <div className="absolute inset-0 bg-black/0" />
 
         {/* Loading overlay with combined percentage (assets + triggers) */}
         {(triggersLoading || !isLoaded || assetsProgress < 100) && (

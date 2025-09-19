@@ -1015,14 +1015,14 @@ export const demolishConfigData: {
 export const TUTORIAL_4_CARDS = [
   {
     name: 'MANGROVES',
-    icon: '/assets/mangroves-icon-3a15a8.png',
+    icon: '/assets/mangroves-icon-3a15a8.webp',
     bg: '#BFFFBE',
     action: [{ name: 'plant', cost: 3, selected: false }],
     active: false,
   },
   {
     name: 'SEAWALL',
-    icon: '/assets/seawall-icon-41fadd.png',
+    icon: '/assets/seawall.webp',
     bg: '#B6FFF3',
     action: [
       { name: '0.5M', cost: 1, selected: false },
@@ -1033,7 +1033,7 @@ export const TUTORIAL_4_CARDS = [
   },
   {
     name: 'LAND RECLAMATION',
-    icon: '/assets/land-reclamation-icon-6b707d.png',
+    icon: '/assets/land-reclemation.webp',
     bg: '#B6FFF3',
     action: [
       { name: '0.5M', cost: 1, selected: false },

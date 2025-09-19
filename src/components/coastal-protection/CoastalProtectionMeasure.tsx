@@ -28,19 +28,19 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
   const getIconSrc = () => {
     switch (icon) {
       case 'land-reclamation':
-        return '/assets/land-reclamation-icon-6b707d.png';
+        return '/assets/land-reclemation.webp';
       case 'seawall':
-        return '/assets/seawall-icon-41fadd.png';
+        return '/assets/seawall.webp';
       case 'mangroves':
-        return '/assets/mangroves-icon-3a15a8.png';
+        return '/assets/mangroves-icon-3a15a8.webp';
       case 'storm-surge-barrier':
-        return '/assets/storm-surge-barrier-icon.webp';
+      return '/assets/coastal-barriers.webp';
       case 'artificial-reef':
-        return '/assets/artificial-reef-icon.webp';
+        return '/assets/artificial-reef.webp';
       case 'hybrid-measure':
-        return '/assets/hybrid-measure-icon.webp';
+        return '/assets/hybrid-measure.webp';
       case 'revetment':
-        return '/assets/seawall-icon-41fadd.png'; // Using seawall icon as fallback
+        return '/assets/seawall.webp'; // Using seawall icon as fallback
       default:
         return '';
     }
