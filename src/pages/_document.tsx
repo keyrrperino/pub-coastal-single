@@ -16,6 +16,24 @@ export default function Document() {
                                     navigator.serviceWorker.register('/sw.js')
                                         .then(function(registration) {
                                             console.log('SW registered: ', registration);
+                                            // Prompt waiting worker to activate immediately
+                                            if (registration.waiting) {
+                                                registration.waiting.postMessage('SKIP_WAITING');
+                                            }
+                                            // On update found, listen for installed state and reload once activated
+                                            registration.addEventListener('updatefound', function() {
+                                                var newWorker = registration.installing;
+                                                if (!newWorker) return;
+                                                newWorker.addEventListener('statechange', function() {
+                                                    if (newWorker.state === 'installed') {
+                                                        if (navigator.serviceWorker.controller) {
+                                                            newWorker.postMessage('SKIP_WAITING');
+                                                            // Reload to get the fresh version
+                                                            window.location.reload();
+                                                        }
+                                                    }
+                                                });
+                                            });
                                         })
                                         .catch(function(registrationError) {
                                             console.log('SW registration failed: ', registrationError);
