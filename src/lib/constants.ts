@@ -706,7 +706,7 @@ export const lobbyStateDefaultValue = {
 // export const SPLINE_URL = "https://prod.spline.design/fIhV8lAzMkLzlKnk/scene.splinecode?v=1.7";
 // export const SECTOR_ONE_CUT_SCENE = "https://prod.spline.design/xavPWWNp0hXnmIpL/scene.splinecode";
 
-export const SPLINE_URL = "https://prod.spline.design/Z3MjPxIDpYQ53Xyi/scene.splinecode?v=1.1.13";
+export const SPLINE_URL = "https://prod.spline.design/Z3MjPxIDpYQ53Xyi/scene.splinecode?v=1.1.17";
 
 export const SPLINE_URL_CUT_SCENE_R1_1A_0 = "https://prod.spline.design/vdAXmxfy4PzSNkGr/scene.splinecode";
 export const SPLINE_URL_CUT_SCENE_R1_1A_1 = "https://prod.spline.design/QOFv3QcfdZwkg6iM/scene.splinecode";
