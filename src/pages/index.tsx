@@ -2,11 +2,14 @@ import Head from 'next/head';
 import { GameProvider } from '@/games/pub-coastal-game-spline/GlobalGameContext';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { APP_VERSION } from '@/lib/constants';
 
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
 function HomePage() {
   const [room, setRoom] = useState<string | null>(null);
+  const url = new URL(window.location.href);
+  const currentV = url.searchParams.get('v');
 
   const getCookie = (name: string): string | null => {
     if (typeof document === 'undefined') return null;
@@ -18,6 +21,14 @@ function HomePage() {
     if (typeof document === 'undefined') return;
     document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAgeSeconds}; path=/`;
   };
+
+  // Enforce full-page redirect to include or correct ?v=APP_VERSION
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (currentV === APP_VERSION) return;
+    url.searchParams.set('v', APP_VERSION);
+    window.location.replace(url.toString());
+  }, []);
 
   useEffect(() => {
     const COOKIE_NAME = 'room';
@@ -45,7 +56,11 @@ function HomePage() {
   const [ sector, setSector ] = useState<string>("sector-1");
   const onClickSector = (sector: string) => {
     setSector(sector);
-  } 
+  }
+
+  if (!currentV) {
+    return null;
+  }
 
   return (
     <>
