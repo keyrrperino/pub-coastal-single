@@ -14,7 +14,7 @@ interface NavigatorUserAgentData { brands?: NavigatorUserAgentDataBrand[] }
 function HomePage() {
 
   const [room, setRoom] = useState<string | null>(null);
-  const [isChrome, setIsChrome] = useState<boolean | null>(null);
+  const isChrome = navigator?.vendor?.includes('Google') || navigator?.vendor?.includes('google');
   const [uaDebug, setUaDebug] = useState<any | null>(null);
   const url = new URL(window.location.href);
   const currentV = url.searchParams.get('v');
@@ -38,49 +38,6 @@ function HomePage() {
     if (currentV === APP_VERSION) return;
     url.searchParams.set('v', APP_VERSION);
     window.location.replace(url.toString());
-  }, []);
-
-  // Robust, client-only Chrome detection
-  useEffect(() => {
-    if (typeof navigator === 'undefined') {
-      setIsChrome(false);
-      return;
-    }
-
-    if (allowAnyBrowser === '1' || allowAnyBrowser === 'true') {
-      setIsChrome(true);
-      return;
-    }
-
-    const uaData = (navigator as Navigator & { userAgentData?: NavigatorUserAgentData }).userAgentData;
-    if (uaData?.brands && Array.isArray(uaData.brands)) {
-      const brandsLower = uaData.brands.map((b) => b.brand.toLowerCase());
-      const hasChromium = brandsLower.some((b) => b.includes('chromium') || b.includes('google chrome'));
-      const isEdgeBrand = brandsLower.some((b) => b.includes('edge'));
-      const isOperaBrand = brandsLower.some((b) => b.includes('opera'));
-      setIsChrome(hasChromium && !isEdgeBrand && !isOperaBrand);
-      return;
-    }
-
-    const ua = navigator.userAgent;
-    const hasChromiumUA = /Chrome|Chromium|CriOS/.test(ua);
-    const isEdgeUA = /Edg\//.test(ua);
-    const isOperaUA = /OPR\//.test(ua);
-    const isSamsungUA = /SamsungBrowser\//.test(ua);
-    const vendor = (navigator as any).vendor || '';
-    const hasWindowChrome = typeof (window as any).chrome !== 'undefined';
-
-    if (hasChromiumUA && !isEdgeUA && !isOperaUA && !isSamsungUA) {
-      setIsChrome(true);
-      return;
-    }
-
-    if (vendor.includes('Google') && hasWindowChrome && !isEdgeUA && !isOperaUA) {
-      setIsChrome(true);
-      return;
-    }
-
-    setIsChrome(false);
   }, []);
 
   // Optional debug info for UA/UA-CH
