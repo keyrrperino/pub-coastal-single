@@ -510,7 +510,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
         setShowLongLoadNotice(false);
         longLoadTimerRef.current = setTimeout(() => {
           setShowLongLoadNotice(true);
-        }, 900);
+        }, 90000);
       }
     } else {
       setShowLongLoadNotice(false);
