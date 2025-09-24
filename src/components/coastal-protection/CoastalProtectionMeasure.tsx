@@ -89,11 +89,11 @@ const CoastalProtectionMeasure: React.FC<CoastalProtectionMeasureProps> = ({
           />
         </div>
         <div className="flex flex-col justify-center">
-          <div className={`${styles.novecentoBold} text-[1vw] leading-[14px] text-white uppercase`} style={{lineHeight: '0.8em'}}>
+          <div className={`${styles.novecentoBold} text-[1vw] leading-[14px] text-white uppercase`}>
             {title}
           </div>
           {subtitle && (
-            <div className={`${styles.novecentoBold} text-[10px] leading-[8px] text-white uppercase`} style={{lineHeight: '0.8em'}}>
+            <div className={`${styles.novecentoBold} text-[10px] leading-[8px] text-white uppercase`}>
               {subtitle}
             </div>
           )}

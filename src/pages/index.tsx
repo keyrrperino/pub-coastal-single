@@ -6,14 +6,20 @@ import { APP_VERSION } from '@/lib/constants';
 
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
+interface NavigatorUserAgentDataBrand { brand: string; version: string }
+interface NavigatorUserAgentData { brands?: NavigatorUserAgentDataBrand[] }
+
+
+
 function HomePage() {
-  const isChrome = typeof navigator !== 'undefined'
-    && /Chrome|CriOS|Chromium/.test(navigator.userAgent)
-    && !/Edg|OPR|SamsungBrowser/.test(navigator.userAgent);
 
   const [room, setRoom] = useState<string | null>(null);
+  const [isChrome, setIsChrome] = useState<boolean | null>(null);
+  const [uaDebug, setUaDebug] = useState<any | null>(null);
   const url = new URL(window.location.href);
   const currentV = url.searchParams.get('v');
+  const allowAnyBrowser = url.searchParams.get('allowAnyBrowser');
+  const debugUA = url.searchParams.get('debugUA');
 
   const getCookie = (name: string): string | null => {
     if (typeof document === 'undefined') return null;
@@ -33,6 +39,78 @@ function HomePage() {
     url.searchParams.set('v', APP_VERSION);
     window.location.replace(url.toString());
   }, []);
+
+  // Robust, client-only Chrome detection
+  useEffect(() => {
+    if (typeof navigator === 'undefined') {
+      setIsChrome(false);
+      return;
+    }
+
+    if (allowAnyBrowser === '1' || allowAnyBrowser === 'true') {
+      setIsChrome(true);
+      return;
+    }
+
+    const uaData = (navigator as Navigator & { userAgentData?: NavigatorUserAgentData }).userAgentData;
+    if (uaData?.brands && Array.isArray(uaData.brands)) {
+      const brandsLower = uaData.brands.map((b) => b.brand.toLowerCase());
+      const hasChromium = brandsLower.some((b) => b.includes('chromium') || b.includes('google chrome'));
+      const isEdgeBrand = brandsLower.some((b) => b.includes('edge'));
+      const isOperaBrand = brandsLower.some((b) => b.includes('opera'));
+      setIsChrome(hasChromium && !isEdgeBrand && !isOperaBrand);
+      return;
+    }
+
+    const ua = navigator.userAgent;
+    const hasChromiumUA = /Chrome|Chromium|CriOS/.test(ua);
+    const isEdgeUA = /Edg\//.test(ua);
+    const isOperaUA = /OPR\//.test(ua);
+    const isSamsungUA = /SamsungBrowser\//.test(ua);
+    const vendor = (navigator as any).vendor || '';
+    const hasWindowChrome = typeof (window as any).chrome !== 'undefined';
+
+    if (hasChromiumUA && !isEdgeUA && !isOperaUA && !isSamsungUA) {
+      setIsChrome(true);
+      return;
+    }
+
+    if (vendor.includes('Google') && hasWindowChrome && !isEdgeUA && !isOperaUA) {
+      setIsChrome(true);
+      return;
+    }
+
+    setIsChrome(false);
+  }, []);
+
+  // Optional debug info for UA/UA-CH
+  useEffect(() => {
+    if (!(debugUA === '1' || debugUA === 'true')) return;
+    const base: any = {
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      vendor: typeof navigator !== 'undefined' ? (navigator as any).vendor : null,
+      hasWindowChrome: typeof window !== 'undefined' ? !!(window as any).chrome : null,
+    };
+    const uaData = (navigator as Navigator & { userAgentData?: any }).userAgentData;
+    if (uaData?.getHighEntropyValues) {
+      uaData
+        .getHighEntropyValues([
+          'brands',
+          'platform',
+          'platformVersion',
+          'uaFullVersion',
+          'architecture',
+          'bitness',
+          'model',
+          'mobile',
+          'fullVersionList',
+        ])
+        .then((high: any) => setUaDebug({ ...base, high }))
+        .catch(() => setUaDebug(base));
+    } else {
+      setUaDebug(base);
+    }
+  }, [debugUA]);
 
   useEffect(() => {
     const COOKIE_NAME = 'room';
@@ -62,7 +140,7 @@ function HomePage() {
     setSector(sector);
   }
 
-  if (!currentV) {
+  if (!currentV || isChrome === null) {
     return null;
   }
 
@@ -145,6 +223,19 @@ function HomePage() {
                       <h2 className="mt-5 text-white text-2xl md:text-4xl font-extrabold tracking-wide text-center uppercase">
                       TO FULLY ENJOY THE GAME, <br />PLEASE VISIT THIS SITE ON GOOGLE CHROME
                       </h2>
+                      {(debugUA === '1' || debugUA === 'true') && (
+                        <div className="mt-6 w-full max-w-[720px] px-4">
+                          <div className="bg-white/90 text-black rounded-lg p-4 shadow-lg text-sm overflow-auto max-h-[40vh]">
+                            <div className="font-semibold mb-2">UA Debug</div>
+                            <pre className="whitespace-pre-wrap break-words">{JSON.stringify(uaDebug ?? {
+                              userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+                              vendor: typeof navigator !== 'undefined' ? (navigator as any).vendor : null,
+                              hasWindowChrome: typeof window !== 'undefined' ? !!(window as any).chrome : null,
+                            }, null, 2)}</pre>
+                            <div className="mt-2 text-xs opacity-80">Add <code>?allowAnyBrowser=1</code> to bypass temporarily.</div>
+                          </div>
+                        </div>
+                      )}
                     </div>
           )}
           {isChrome && sector && room && (

@@ -19,6 +19,7 @@ import {
   GameEnum,
   GameLobbyStatus,
   LobbyStateEnum,
+  UserSectorEnum,
 } from '@/lib/enums';
 import { ActivityLogType } from '@/lib/types';
 import {
@@ -72,19 +73,25 @@ interface SectorControlProps {
 const getSectorTitles = (sector: string) => {
   const sectorTitles: Record<
     string,
-    { sectorA: string; sectorB: string }
+    { sectorA: string; sectorB: string, bgColor: string, bgColorSelected: string }
   > = {
     'sector-1': {
       sectorA: 'Sector 1A: Industrial',
       sectorB: 'Sector 1B: RECREATIONAL',
+      bgColor: "#6d6528",
+      bgColorSelected: "#c5b645"
     },
     'sector-2': {
       sectorA: 'Sector 2A: Commercial',
       sectorB: 'Sector 2B: Industrial',
+      bgColor: "#274d3a",
+      bgColorSelected: "#5db98b"
     },
     'sector-3': {
       sectorA: 'Sector 3A: NATURE',
       sectorB: 'Sector 3B: RESIDENTIAL',
+      bgColor: '#283f6d',
+      bgColorSelected: "#4b72c0"
     },
   };
   return (
@@ -1234,7 +1241,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
 
       <div
         className="absolute left-1/2 -translate-x-1/2 w-full z-10 px-[2vw] py-[1dvh]"
-        style={isBottom ? { bottom: 0, background: "#10458B" } : {
+        style={isBottom ? { bottom: 0, background: sectorTitles.bgColor } : {
           ...([GameLobbyStatus.ROUND_CUTSCENES, GameLobbyStatus.TEAM_NAME_INPUT].indexOf(currentPhase) >= 0 ? { display: "none"} : {})
         }}
       >
@@ -1325,9 +1332,13 @@ const SectorControl: React.FC<SectorControlProps> = ({
                               )}
                               <button
                                 onClick={() => onClickSector && onClickSector(id)}
+                                style={isSelected ? {
+                                  background: sectorTitles.bgColor,
+                                  color: "#fff"
+                                } : {}}
                                 className={
                                   isSelected
-                                    ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-[#0F2C4C] bg-[#FFD447] shadow-[0_6px_0_rgba(0,0,0,0.2)] border-[0.2vh] border-[#FFE58A]'
+                                    ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-[#0F2C4C] shadow-[0_6px_0_rgba(0,0,0,0.2)] border-[0.2vh] border-[#FFE58A]'
                                     : num === 2
                                       ? 'rounded-[1.2vh] px-[3vh] py-[1vh] font-extrabold tracking-wide text-[1vh] text-nowrap text-white bg-gradient-to-b from-[#2e6e49] to-[#274d3a] border border-white/40'
                                       : num === 3
