@@ -66,6 +66,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const [, setCriticalProgress] = useState<number>(0);
 
   const [assetsProgress, setAssetsProgress] = useState<number>(0);
+  const [showLongLoadNotice, setShowLongLoadNotice] = useState<boolean>(false);
+  const longLoadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useHideAllTriggers(isLoaded, splineAppRef, lobbyState);
   useLobbyPreparation({ lobbyState, gameRoomServiceRef });
 
@@ -500,6 +502,33 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     )
   );
 
+  // Show a helpful message if loading takes longer than 90 seconds
+  const isLoadingVisible = (triggersLoading || !isLoaded || assetsProgress < 100);
+  useEffect(() => {
+    if (isLoadingVisible) {
+      if (!longLoadTimerRef.current) {
+        setShowLongLoadNotice(false);
+        longLoadTimerRef.current = setTimeout(() => {
+          setShowLongLoadNotice(true);
+        }, 900);
+      }
+    } else {
+      setShowLongLoadNotice(false);
+      if (longLoadTimerRef.current) {
+        clearTimeout(longLoadTimerRef.current);
+        longLoadTimerRef.current = null;
+      }
+    }
+
+    return () => {
+      // Cleanup on unmount
+      if (longLoadTimerRef.current) {
+        clearTimeout(longLoadTimerRef.current);
+        longLoadTimerRef.current = null;
+      }
+    };
+  }, [isLoadingVisible]);
+
   return (
     <>
       <div
@@ -610,12 +639,17 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
               WE'RE GETTING THINGS READY. HOLD TIGHT!
             </h2>
 
-            <div className="mt-4 flex flex-col">
+            <div className="mt-4 flex flex-col items-center gap-6">
               <div className="flex items-center gap-6 text-white text-base md:text-xl font-extrabold tracking-wider uppercase">
                 <span>ASSETS {Math.round(Math.min(100, assetsProgress > 1 ? assetsProgress - 1 : assetsProgress))}%</span>
                 <span className="opacity-70">|</span>
                 <span>MAP {Math.min(100, triggerProgress)}%</span>
               </div>
+              {showLongLoadNotice && (
+              <div className="text-white text-center text-base md:text-xl font-extrabold tracking-wider uppercase">
+                FIRST TIME LOADING THE GAME? PLEASE BE PATIENT. <br />ASSET LOADING TAKES A WHILE. IF STUCK AT 99%, TRY TO REFRESH THE PAGE
+              </div>
+            )}
               <div className="flex-col hidden">
                 <span>{roomName} IS TRIGGERS LOADED: {`${!triggersLoading}`}</span>
                 <span>IS MAP LOADED: {`${isLoaded}`}</span>

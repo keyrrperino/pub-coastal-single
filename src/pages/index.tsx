@@ -7,6 +7,10 @@ import { APP_VERSION } from '@/lib/constants';
 const SplineFirebase = dynamic(() => import('@/components/SplineFirebase'), { ssr: false });
 
 function HomePage() {
+  const isChrome = typeof navigator !== 'undefined'
+    && /Chrome|CriOS|Chromium/.test(navigator.userAgent)
+    && !/Edg|OPR|SamsungBrowser/.test(navigator.userAgent);
+
   const [room, setRoom] = useState<string | null>(null);
   const url = new URL(window.location.href);
   const currentV = url.searchParams.get('v');
@@ -94,7 +98,56 @@ function HomePage() {
       <main suppressHydrationWarning className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 overflow-hidden">
         
         <GameProvider>
-          {sector && room && (
+          {!isChrome && (
+                      <div 
+                      className="absolute inset-0 flex flex-col items-center justify-center z-10"
+                    >
+                      <div className="absolute inset-0 z-[-1]" style={{
+                        backgroundImage: "url('/assets/bg-loading.webp')",
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: '#008DF0'
+                      }} />
+                      {/* Map overlay fill based on combined resources percentage */}
+                      {(() => {
+                        const combined = 100;
+                        return (
+                          <div
+                            className="relative w-full flex items-end justify-center"
+                          >
+                            <img
+                                    src="/assets/Loading Map BG.png"
+                                    alt="Loading Map Overlay"
+                                    className="w-[25%] h-auto select-none pointer-events-none"
+                                    draggable={false}
+                                  />
+                            
+                            <div className="absolute inset-0 flex items-end justify-center">
+                              <div className="w-[27%] h-full relative pt-[200px]">
+                                <div
+                                  className="absolute bottom-[-1vh] left-0 right-0 overflow-hidden flex items-end justify-center"
+                                  style={{ height: `${combined}%` }}
+                                >
+                                  <img
+                                    src="/assets/Loading Map Overlay.png"
+                                    alt="Loading Map Overlay"
+                                    className="w-full h-auto select-none pointer-events-none"
+                                    draggable={false}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })()}
+          
+                      <h2 className="mt-5 text-white text-2xl md:text-4xl font-extrabold tracking-wide text-center uppercase">
+                      TO FULLY ENJOY THE GAME, <br />PLEASE VISIT THIS SITE ON GOOGLE CHROME
+                      </h2>
+                    </div>
+          )}
+          {isChrome && sector && room && (
             <SplineFirebase roomName={room} sector={sector} onClickSector={onClickSector} />
           )}
         </GameProvider>
