@@ -48,6 +48,8 @@ export function useCutSceneSequence(
   // List of cutscenes to show
   const [cutScenes, setCutScenes] = useState<CutScenesEnum[]>([]);
 
+  console.log(cutScenes);
+
   // Initialize cutscenes when entering ROUND_CUTSCENES
   useEffect(() => {
     if (lobbyState.gameLobbyStatus === GameLobbyStatus.ROUND_CUTSCENES) {

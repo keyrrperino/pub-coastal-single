@@ -37,7 +37,7 @@ const Timer: React.FC<TimerProps> = ({
       <div className="flex flex-col justify-start items-center w-full">
         {/* Round indicator */}
         {/* White box: clock + bar */}
-        <div className="flex flex-row items-center w-full rounded-[1vh] bg-white px-[0.2vh] py-[0.2vh] opacity-40">
+        <div className="flex flex-row items-center w-full rounded-[1vh] bg-white px-[1vh] py-[0.5vh] opacity-40">
           {/* Clock icon */}
           <svg
             width="15"
