@@ -8,13 +8,42 @@ import { sceneSectorConfigurations } from "@/lib/constants";
 import { useServerTime } from "../ServerTimeContext";
 
 export const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutScenesEnum[] => {
+  // Build fallback order: round 1 -> [1], round 2 -> [2,1], round 3 -> [3,2,1]
+  const roundsToCheck: RoundType[] = ((): RoundType[] => {
+    if (round === 1) return [1];
+    if (round === 2) return [2, 1];
+    return [3, 2, 1];
+  })();
+
+  const pickFirstAvailableKey = (sectorIndex: 1 | 2 | 3, side: 'A' | 'B'): string | undefined => {
+    for (const r of roundsToCheck) {
+      const value =
+        sectorIndex === 1
+          ? side === 'A'
+            ? overAllScores[r]?.user_sector_1?.sectorA?.keys?.[0]
+            : overAllScores[r]?.user_sector_1?.sectorB?.keys?.[0]
+          : sectorIndex === 2
+          ? side === 'A'
+            ? overAllScores[r]?.user_sector_2?.sectorA?.keys?.[0]
+            : overAllScores[r]?.user_sector_2?.sectorB?.keys?.[0]
+          : side === 'A'
+          ? overAllScores[r]?.user_sector_3?.sectorA?.keys?.[0]
+          : overAllScores[r]?.user_sector_3?.sectorB?.keys?.[0];
+
+      if (typeof value === 'string' && value.trim().length > 0) {
+        return value;
+      }
+    }
+    return undefined;
+  };
+
   const keys = [
-    overAllScores[round]?.user_sector_1?.sectorA.keys[0],
-    overAllScores[round]?.user_sector_1?.sectorB.keys[0],
-    overAllScores[round]?.user_sector_2?.sectorA.keys[0],
-    overAllScores[round]?.user_sector_2?.sectorB.keys[0],
-    overAllScores[round]?.user_sector_3?.sectorA.keys[0],
-    overAllScores[round]?.user_sector_3?.sectorB.keys[0],
+    pickFirstAvailableKey(1, 'A'),
+    pickFirstAvailableKey(1, 'B'),
+    pickFirstAvailableKey(2, 'A'),
+    pickFirstAvailableKey(2, 'B'),
+    pickFirstAvailableKey(3, 'A'),
+    pickFirstAvailableKey(3, 'B'),
   ].filter((key): key is string => typeof key === 'string'); // Filter out non-string values
 
   const newsIntro = {
