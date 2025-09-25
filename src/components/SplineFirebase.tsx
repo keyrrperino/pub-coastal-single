@@ -83,7 +83,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const calmAudioRef = useRef<HTMLAudioElement | null>(null);
   
   const [, setCoinsLeft] = useState(TOTAL_COINS_PER_ROUND); // 1. Add new state
-  const [, setIsLeaderboardOpen] = useState(false);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
 
   useEffect(() => {
     (async () => { 
@@ -660,7 +660,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
             </div>
           </div>
         )}
-
       </div>
       {!triggersLoading && isLoaded && (assetsProgress >= 100) && (
         <>

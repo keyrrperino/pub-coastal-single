@@ -1551,7 +1551,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
         playerNumber={getPlayerNumber(sector)}
       />
       <LeaderboardOverlay
-        isOpen={isLeaderboardOpen}
+        isOpen={lobbyState?.[LobbyStateEnum.SHOW_LEADERBOARD] ?? false}
         onClose={handleCloseLeaderboard}
       />
     </div>

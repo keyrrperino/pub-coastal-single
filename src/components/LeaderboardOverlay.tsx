@@ -59,7 +59,7 @@ export default function LeaderboardOverlay({
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/20">
       {/* Main Container - match Figma dimensions */}
-      <div className="relative w-[60vh] h-[70vh]">
+      <div className="relative w-[min(92vw,80vh)] h-[min(86dvh,80vh)] max-w-[550px]">
         {/* Background container */}
         <div className="absolute inset-0 w-full h-full">
           <div className="absolute top-0 left-0 w-full z-20 drop-shadow-[1.5vh_1.5vh_0_#8491C6]">
@@ -78,9 +78,9 @@ export default function LeaderboardOverlay({
 
             {/* Top winner section (blue) */}
             <div className="w-full bg-[#2A81FA] flex flex-col items-center justify-center px-[1vh] py-[2vh]">
-              <div className="flex items-stretch justify-between w-full mb-2">
+              <div className="flex items-stretch justify-around w-full mb-2">
                 <span
-                  className="text-white text-[3vh] font-bold leading-[1.2]"
+                  className="text-white text-[4dvh] font-bold leading-[1]"
                   style={{
                     fontFamily: 'novecento-sans-narrow, sans-serif',
                     fontWeight: 700,
@@ -89,7 +89,7 @@ export default function LeaderboardOverlay({
                   TOP 1
                 </span>
                 <span
-                  className="text-white font-bold leading-[1.2] text-[3vh]"
+                  className="text-white font-bold leading-[1] text-[4dvh]"
                   style={{
                     fontFamily: 'novecento-sans-narrow, sans-serif',
                     fontWeight: 700,
@@ -99,7 +99,7 @@ export default function LeaderboardOverlay({
                 </span>
               </div>
               <div
-                className="text-white text-[3vh] font-bold text-center leading-[1.2] tracking-wide"
+                className="text-white text-[7dvh] font-bold text-center leading-[0.7] tracking-wide"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
