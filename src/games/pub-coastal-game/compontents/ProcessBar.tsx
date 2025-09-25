@@ -47,7 +47,7 @@ const ProgressBar: React.FC<TimerProps> = ({
     }
   }, [duration, isRunning, syncWithTimestamp]);
 
-  const { progressPercentage } = useTimerBar({
+  const { progressPercentage, isRunning: isRunningTimer } = useTimerBar({
     duration,
     onTimeUp,
     startImmediately: isRunning,
@@ -61,6 +61,12 @@ const ProgressBar: React.FC<TimerProps> = ({
     const timer = setTimeout(() => setVisible(true), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!isRunningTimer && progressPercentage <= 0) {
+      onTimeUp?.();
+    }
+  }, [isRunningTimer, progressPercentage]);
 
   return (
     <>
