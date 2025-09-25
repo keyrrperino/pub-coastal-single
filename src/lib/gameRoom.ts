@@ -598,7 +598,7 @@ export async function getGlobalLeaderboard(currentTeamName?: string): Promise<Pr
 
     // Get top 2-5, excluding current team if it's in this range
     const top5Candidates = sortedEntries
-      .slice(1, 6)  // Skip the top winner, take next 4 (positions 2-5)
+      .slice(1, 5)  // Skip the top winner, take next 4 (positions 2-5)
       .filter(entry => !currentTeamName || entry.teamName !== currentTeamName);
     
     // If we filtered out the current team, take one more to fill the gap

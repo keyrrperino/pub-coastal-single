@@ -53,7 +53,7 @@ export default function EndingLeaderboardOverlay({
       aria-modal="true"
     >
       {/* Main Container - match Figma dimensions */}
-      <div className="relative w-[min(92vw,80vh)] h-[min(86dvh,80vh)] max-w-[40dvw]">
+      <div className="relative w-[min(92vw,80vh)] h-[min(86dvh,80vh)] max-w-[550px]">
         {/* Background container */}
         <div className="absolute inset-0 w-full h-full">
           <div className="absolute top-0 left-0 w-full h-full z-20 drop-shadow-[2vh_2vh_0_#8491C6]">
@@ -71,8 +71,8 @@ export default function EndingLeaderboardOverlay({
             </div>
 
             {/* Top winner section (blue) */}
-            <div className="w-full bg-[#2A81FA] flex flex-col items-center justify-center px-[1dvh] py-[2dvh]">
-              <div className="flex items-stretch justify-between w-full mb-2">
+            <div className="w-full bg-[#2A81FA] flex flex-col items-center justify-center px-[1dvh] gap-4 py-[2dvh]">
+              <div className="flex items-stretch justify-around w-full mb-2">
                 <span
                   className="text-white text-[4dvh] font-bold leading-[1]"
                   style={{
@@ -93,7 +93,7 @@ export default function EndingLeaderboardOverlay({
                 </span>
               </div>
               <div
-                className="text-white text-[5dvh] font-bold text-center leading-[0.7] tracking-wide"
+                className="text-white text-[7dvh] font-bold text-center leading-[0.7] tracking-wide"
                 style={{
                   fontFamily: 'novecento-sans-narrow, sans-serif',
                   fontWeight: 700,
@@ -106,7 +106,7 @@ export default function EndingLeaderboardOverlay({
             {/* Regular leaderboard section (white) */}
             <div
               className={cn(
-                'w-full bg-white px-[4dvh] py-[4dvh] h-auto min-h-[42dvh]'
+                'w-full bg-white px-[4dvh] py-[4dvh] h-auto min-h-[37dvh]'
               )}
             >
               {/* Header Row */}
