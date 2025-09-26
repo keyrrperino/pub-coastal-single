@@ -14,11 +14,10 @@ interface NavigatorUserAgentData { brands?: NavigatorUserAgentDataBrand[] }
 function HomePage() {
 
   const [room, setRoom] = useState<string | null>(null);
-  const isChrome = navigator?.vendor?.includes('Google') || navigator?.vendor?.includes('google');
+  const isChrome = true;
   const [uaDebug, setUaDebug] = useState<any | null>(null);
   const url = new URL(window.location.href);
   const currentV = url.searchParams.get('v');
-  const allowAnyBrowser = url.searchParams.get('allowAnyBrowser');
   const debugUA = url.searchParams.get('debugUA');
 
   const getCookie = (name: string): string | null => {
