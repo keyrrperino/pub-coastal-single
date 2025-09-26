@@ -3,7 +3,7 @@ import { optionalScenarioConfiguration, roundOneScenarioConfiguration, roundThre
 import { LobbyStateType, ScenarioConfigurationType, SectorEnum, SectorsButtonConfigType, SplineTriggerConfigItem, SplineTriggersConfigType, SubSectorType, RoundType } from "./types";
 import { getRandomEffectValue } from "./utils";
 
-export const APP_VERSION = "1.0.0";
+export const APP_VERSION = "1.0.1";
 export const ROOMS = "production-single";
 export const GAME_ROUND_TIMER = 30;
 export const GAME_STARST_IN_COUNTDOWN = 15;

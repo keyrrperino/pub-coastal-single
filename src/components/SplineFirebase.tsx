@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getGlobalLeaderboard, ProcessedLeaderboardData } from "@/lib/gameRoom";
 import ProgressBar from "@/games/pub-coastal-game/compontents/ProcessBar";
-import { lobbyStateDefaultValue, TOTAL_COINS_PER_ROUND } from "@/lib/constants";
+import { APP_VERSION, lobbyStateDefaultValue, TOTAL_COINS_PER_ROUND } from "@/lib/constants";
 import { CutScenesEnum, GameLobbyStatus, LobbyStateEnum, UserSectorEnum } from "@/lib/enums";
 import { useInitialize } from "./hooks/initialize";
  
@@ -288,39 +288,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     setDynamicCutScenes(getCutScenes(lobbyState.round ?? 1, overAllScores));
   }, [ activities, newActivities, lobbyState ]);
 
-
-  console.log("currentCutScene: ",currentCutScene);
-
-  // useEffect(() => {
-  //   // Pause/reset all, then play the current cutscene's video element
-  //   // const refs = cutsceneVideoRefs.current;
-  //   // Object.values(refs).forEach((el) => {
-  //   //   if (!el) return;
-  //   //   el.pause();
-  //   //   el.currentTime = 0;
-  //   // });
-
-  //   if (!currentCutScene) return;
-  //   // console.log(document?.getElementById?.(currentCutScene + "-video"));
-  //   // (document?.getElementById?.(currentCutScene + "-video") as HTMLVideoElement).play();
-    
-  //   // const currentEl = cutsceneVideoRefs?.current[currentCutScene];
-  //   // currentEl?.play(); 
-    
-
-  //   // if (currentEl) {
-  //   //   if (![
-  //   //     CutScenesEnum.NEWS_INTRO_1,
-  //   //     CutScenesEnum.NEWS_INTRO_2,
-  //   //     CutScenesEnum.NEWS_INTRO_3,
-  //   //   ].includes(currentCutScene)) {
-  //   //     currentEl.playbackRate = 0.7143;
-  //   //   }
-  //   //   const playPromise = currentEl.play();
-  //   //   playPromise?.catch(() => {});
-  //   // }
-  // }, [currentCutScene, dynamicCutScenes]);
-
   const renderAllCutScences = (
     Object.values(dynamicCutScenes).map((value, index) => {
       return (
@@ -329,29 +296,6 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
           className="fixed inset-0 h-[100dvh] m-0 p-0 bg-black z-10 w-[100%]"
           style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
         >
-          {/* {isIOS && <img
-            onError={(err) => {
-              console.log("CUTSCENE_PRELOAD_OVERLAY_ERROR: ", err);
-              setCriticalProgress((prev) => {
-                const newTotal = prev + 1;
-                setAssetsProgress((newTotal / totalAssets) * 100);
-
-                return newTotal;
-              });
-            }}
-            onLoad={() => {
-              setCriticalProgress((prev) => {
-                const newTotal = prev + 1;
-                setAssetsProgress((newTotal / totalAssets) * 100);
-
-                return newTotal;
-              });
-            }}
-            src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.gif?v=1.1`}
-            className="fixed w-full h-full m-0 p-0 z-10"
-            // style={{ objectFit: "" }}
-            alt="Frame Overlay"
-          />} */null}
           { 
             <video
               ref={(el) => {
@@ -359,8 +303,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                   cutsceneVideoRefs.current[value] = el;
                 }
               }}
-              // src={`/games/pub-coastal-spline/flash-reports/videos/${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=1.1`}
-              src={`https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4`}
+              src={`https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=${APP_VERSION}`}
               autoPlay
               id={currentCutScene + "-video"}
               loop
@@ -415,9 +358,8 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                   return newTotal;
                 });
               }}
-              src={`https://storage.googleapis.com/pub-coastal-game-files/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.webp?v=1.1`}
+              src={`https://storage.googleapis.com/pub-coastal-game-files/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.webp?v=${APP_VERSION}`}
               className="pointer-events-none max-h-[100dvh]"
-              // style={{ objectFit: "" }}
               alt="Frame Overlay"
             />
           </div>
