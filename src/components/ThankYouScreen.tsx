@@ -52,7 +52,7 @@ export default function ThankYouScreen({
                 fontWeight: 700,
               }}
             >
-              TO LEARN MORE ABOUT PUB’S PLANS FOR COASTAL PROTECTION in SINGAPORE, VISIT <a className="underline" href="https://www.pub.gov.sg/" target='blank'>https://www.pub.gov.sg/</a>
+              TO LEARN MORE ABOUT PUB&apos;S PLANS FOR COASTAL PROTECTION in SINGAPORE, VISIT <a className="underline" href="https://go.gov.sg/flood-resilience" target="_blank">go.gov.sg/flood-resilience</a>
             </p>
 
             {<div className="transform">
