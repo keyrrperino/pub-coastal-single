@@ -67,7 +67,7 @@ const SectorSection: React.FC<SectorSectionProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-[1vh] w-auto flex-1">
-      <div className={`${styles.novecentoBold} text-[1.5vh] font-bold text-center text-white uppercase w-full flex justify-center`}>
+      <div className={`${styles.novecentoBold} text-[2.5vh] font-bold text-center text-white uppercase w-full flex justify-center`}>
         {renderTitle}
       </div>
       <div className="flex flex-row items-center justify-center w-full">
