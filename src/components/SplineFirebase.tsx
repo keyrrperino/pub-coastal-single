@@ -173,7 +173,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   // Global per-player inactivity watchdog — persisted in localStorage so it survives page refreshes.
   // If 30 mins have elapsed since last interaction (even across refreshes), resets the game.
   useEffect(() => {
-    const THIRTY_MINUTES_MS = 30 * 1000; // 30 seconds for testing
+    const THIRTY_MINUTES_MS = 30 * 60 * 1000;
     const STORAGE_KEY = 'playerLastInteraction';
     let inactivityTimer: ReturnType<typeof setTimeout>;
 
