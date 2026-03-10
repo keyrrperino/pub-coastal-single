@@ -122,7 +122,7 @@ export default function EndingLeaderboardOverlay({
                     fontWeight: 700,
                   }}
                 >
-                  Team name
+                  Name
                 </motion.span>
                 <motion.div
                   className="flex-1 mx-4 border-b-[3.7px] border-dashed border-[#2A81FA]"

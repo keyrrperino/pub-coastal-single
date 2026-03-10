@@ -36,7 +36,7 @@ export default function PlayerTutorialScreen2() {
               >
                 Singapore is divided into three sectors with two
                 subsectors, each with its own land use. Take a look
-                around — which sector are you in charge of?
+                around — It is important to protect every sector!
               </motion.p>
             </div>
 

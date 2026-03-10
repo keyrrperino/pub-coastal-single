@@ -829,7 +829,7 @@ export function getSectorRoundScore(
 
     // If round 2 or 3 doesn't have activity, and naay activity sa previous round
     if (!isRoundOne && sectorActivitiesA.length <= 0 && previousSectorActivitiesA.length > 0) {
-      const previousActivity = previousSectorActivitiesA[previousSectorActivitiesA.length - 1];
+      const previousActivity = previousSectorActivitiesA[0]; // [0] = most recent (activities sorted newest-first)
 
       // if ang prevous activity kay demolished
       if (previousActivity?.isDemolished) {
@@ -1050,7 +1050,7 @@ export function getSectorRoundScore(
 
     // If round 2 or 3 doesn't have activity, and naay activity sa previous round
     if (!isRoundOne && sectorActivitiesB.length <= 0 && previousSectorActivitiesB.length > 0) {
-      const previousActivity = previousSectorActivitiesB[previousSectorActivitiesB.length - 1];
+      const previousActivity = previousSectorActivitiesB[0]; // [0] = most recent (activities sorted newest-first)
 
       // if ang prevous activity kay demolished
       if (previousActivity?.isDemolished) {

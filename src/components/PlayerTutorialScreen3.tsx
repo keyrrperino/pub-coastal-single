@@ -117,7 +117,7 @@ export default function PlayerTutorialScreen3({ onNext }: PlayerTutorialScreen3P
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 1 }}
               >
-                Hint: Consider your sector's land use to help you make
+                Hint: Consider each sector's land use to help you make
                 better decisions
               </motion.p>
             </div>

@@ -32,14 +32,14 @@ const getRoundSectorPerformance = (deduction: number, round: number): SectorPerf
       return 'bad';                                     // Heavy Flooding
       
     case 2:
-      // Round 2: No Flooding 0 to -5, Moderate -5.01 to -149.99, Heavy -150 to -300
-      if (absoluteDeduction <= 5) return 'good';       // No Flooding
+      // Round 2: Little Flooding 0 to -10, Moderate -10.01 to -149.99, Heavy -150 to -300
+      if (absoluteDeduction <= 10) return 'good';      // Little Flooding
       if (absoluteDeduction <= 149.99) return 'okay'; // Moderate Flooding
       return 'bad';                                     // Heavy Flooding
-      
+
     case 3:
-      // Round 3: No Flooding 0 to -5, Moderate -5.01 to -179.99, Heavy -180 to -400
-      if (absoluteDeduction <= 5) return 'good';       // No Flooding
+      // Round 3: Little Flooding 0 to -20, Moderate -20.01 to -179.99, Heavy -180 to -400
+      if (absoluteDeduction <= 20) return 'good';      // Little Flooding
       if (absoluteDeduction <= 179.99) return 'okay';  // Moderate Flooding
       return 'bad';                                     // Heavy Flooding
       

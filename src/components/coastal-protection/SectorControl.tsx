@@ -76,20 +76,20 @@ const getSectorTitles = (sector: string) => {
     { sectorA: string; sectorB: string, bgColor: string, bgColorSelected: string }
   > = {
     'sector-1': {
-      sectorA: 'Sector 1A: Industrial',
-      sectorB: 'Sector 1B: RECREATIONAL',
+      sectorA: 'Sector 1A',
+      sectorB: 'Sector 1B',
       bgColor: "#6d6528",
       bgColorSelected: "#c5b645"
     },
     'sector-2': {
-      sectorA: 'Sector 2A: Commercial',
-      sectorB: 'Sector 2B: Industrial',
+      sectorA: 'Sector 2A',
+      sectorB: 'Sector 2B',
       bgColor: "#274d3a",
       bgColorSelected: "#5db98b"
     },
     'sector-3': {
-      sectorA: 'Sector 3A: NATURE',
-      sectorB: 'Sector 3B: RESIDENTIAL',
+      sectorA: 'Sector 3A',
+      sectorB: 'Sector 3B',
       bgColor: '#283f6d',
       bgColorSelected: "#4b72c0"
     },

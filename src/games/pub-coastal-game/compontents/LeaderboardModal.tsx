@@ -35,7 +35,7 @@ export default function LeaderboardModal({ isOpen }: {
           {/* List Section */}
           <div className="px-6 py-6">
             <div className="flex justify-between items-center font-bold text-[#3496ff] text-sm mb-2">
-              <span>TEAM NAME</span>
+              <span>NAME</span>
               <span>TOTAL POINTS</span>
             </div>
             <ol className="space-y-2">

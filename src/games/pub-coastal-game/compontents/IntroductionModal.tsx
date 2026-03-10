@@ -58,16 +58,14 @@ const IntroductionModal: React.FC<IntroductionModalProps> = ({
       {renderCurrentScreen()}
       
       <div className="fixed bottom-[3dvh] left-1/2 transform -translate-x-1/2 z-50 flex gap-4">
-        {/* <button
-          onClick={() => setManualScreen(Math.max(1, manualScreen - 1))}
-          disabled={manualScreen === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-600"
-        >
-          Previous ({manualScreen > 1 ? manualScreen - 1 : 'Start'})
-        </button>
-        <div className="px-4 py-2 bg-gray-200 text-black rounded">
-          Tutorial {manualScreen} of 5
-        </div> */}
+        {manualScreen > 1 && (
+          <button
+            onClick={() => setManualScreen(Math.max(1, manualScreen - 1))}
+            className="bg-white text-blue-500 text-[3dvh] px-[3vw] py-[1dvh] rounded-[100px] hover:bg-blue-600 hover:text-white"
+          >
+            BACK
+          </button>
+        )}
         <button
           onClick={() => {
             setManualScreen(Math.min(6, manualScreen + 1));

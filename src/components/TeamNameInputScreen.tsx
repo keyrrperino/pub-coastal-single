@@ -135,8 +135,7 @@ const TeamNameInputScreen: React.FC<TeamNameInputScreenProps> = ({
           >
             <div className={styles.inputWrapper}>
               <label className={`${styles.inputLabel} drop-shadow-[0px_2.823094606399536px_2.823094606399536px_0px_rgba(148,107,199,1)]`}>
-                PLAYER 1, INPUT TEAM NAME:
-                <br />
+                Input Name
               </label>
               <div className={styles.letterInputContainer}>
                 {[0, 1, 2].map((index) => (

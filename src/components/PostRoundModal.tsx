@@ -25,7 +25,7 @@ const performanceConfigs: Record<
   PerformanceConfig
 > = {
   good: {
-    title: 'NO FLOODING',
+    title: 'LITTLE FLOODING',
     message:
       "You've successfully protected our coasts - continue to implement further adaptive measures.",
     bgColor: 'rgba(123, 255, 215, 0.5)',
@@ -82,11 +82,11 @@ export default function PostRoundModal({
     }
 
     if (currentRound === 2) {
-      // Round 2: No Flooding 0 to -5, Moderate -5.01 to -149.99, Heavy -150 to -300
-      if (totalScoreRound >= 0 && totalScoreRound <= 5*3) {
+      // Round 2: Little Flooding 0 to -10, Moderate -10.01 to -149.99, Heavy -150 to -300
+      if (totalScoreRound >= 0 && totalScoreRound <= 10*3) {
         performance = 'good';
       }
-      if (totalScoreRound > 5*3 && totalScoreRound <= 149.99*3) {
+      if (totalScoreRound > 10*3 && totalScoreRound <= 149.99*3) {
         performance = 'okay';
       }
       if (totalScoreRound > 149.99*3 && totalScoreRound <= 300*3) {
@@ -95,11 +95,11 @@ export default function PostRoundModal({
     }
 
     if (currentRound === 3) {
-      // Round 3: No Flooding 0 to -5, Moderate -5.01 to -179.99, Heavy -180 to -400
-      if (totalScoreRound >= 0 && totalScoreRound <= 5*3) {
+      // Round 3: Little Flooding 0 to -20, Moderate -20.01 to -179.99, Heavy -180 to -400
+      if (totalScoreRound >= 0 && totalScoreRound <= 20*3) {
         performance = 'good';
       }
-      if (totalScoreRound > 5*3 && totalScoreRound <= 179.99*3) {
+      if (totalScoreRound > 20*3 && totalScoreRound <= 179.99*3) {
         performance = 'okay';
       }
       if (totalScoreRound > 179.99*3 && totalScoreRound <= 400*3) {

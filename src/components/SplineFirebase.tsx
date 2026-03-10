@@ -170,6 +170,54 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     };
   }, [lobbyState.gameLobbyStatus]);
 
+  // Global per-player inactivity watchdog — persisted in localStorage so it survives page refreshes.
+  // If 30 mins have elapsed since last interaction (even across refreshes), resets the game.
+  useEffect(() => {
+    const THIRTY_MINUTES_MS = 30 * 1000; // 30 seconds for testing
+    const STORAGE_KEY = 'playerLastInteraction';
+    let inactivityTimer: ReturnType<typeof setTimeout>;
+
+    const scheduleReset = (remaining: number) => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(async () => {
+        localStorage.removeItem(STORAGE_KEY);
+        await resetGame();
+      }, remaining);
+    };
+
+    const onInteraction = () => {
+      const now = Date.now();
+      localStorage.setItem(STORAGE_KEY, String(now));
+      scheduleReset(THIRTY_MINUTES_MS);
+    };
+
+    // On mount: check if already inactive for 30 mins since last recorded interaction
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const elapsed = Date.now() - parseInt(stored, 10);
+      if (elapsed >= THIRTY_MINUTES_MS) {
+        // Already been inactive — reset immediately
+        localStorage.removeItem(STORAGE_KEY);
+        resetGame();
+        return;
+      }
+      // Resume countdown with remaining time
+      scheduleReset(THIRTY_MINUTES_MS - elapsed);
+    } else {
+      // No prior record — start fresh
+      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+      scheduleReset(THIRTY_MINUTES_MS);
+    }
+
+    const events = ['mousedown', 'keydown', 'touchstart', 'click'];
+    events.forEach(e => window.addEventListener(e, onInteraction, { passive: true }));
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(e => window.removeEventListener(e, onInteraction));
+    };
+  }, []);
+
   const backToMainScreen = async () => {
     // await gameRoomServiceRef?.current?.deleteActivities();
     // await gameRoomServiceRef?.current?.updateLobbyState(lobbyStateDefaultValue);

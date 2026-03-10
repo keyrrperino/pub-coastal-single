@@ -26,12 +26,7 @@ export default function PlayerTutorialScreen5() {
             {/* Top Section - Instructional Text */}
             <div className="flex flex-col gap-3 text-center  uppercase">
               <p className="text-white font-bold text-[clamp(18px,2.6vh,30px)]">
-                Spend wisely, your team has a{' '}
-                <span className="text-[#FFDD3D]">
-                  collective budget of{' '}
-                  <span className="number-enhanced">10</span> coins
-                  per round.
-                </span>
+                You have a budget of 10 coins per round
               </p>
             </div>
 
@@ -82,7 +77,7 @@ export default function PlayerTutorialScreen5() {
                 will deduct points from the total score.
               </p>
               <p className="text-[#FF8181] font-bold text-[clamp(18px,2.6vh,30px)]">
-                Strategize with your teammates NOW!
+                Strategise now!
               </p>
             </div>
           </div>
