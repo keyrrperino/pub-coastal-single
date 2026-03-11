@@ -1503,14 +1503,15 @@ const SectorControl: React.FC<SectorControlProps> = ({
             );
             console.log('Team name saved to lobby state:', teamName);
 
-            // Fetch user's country
+            // Fetch user's country directly from browser (works both local and production)
             let country = 'Unknown';
             try {
-              const geoRes = await fetch('/api/geo');
+              const geoRes = await fetch('https://ipapi.co/json/');
               const geoData = await geoRes.json();
-              country = geoData.country ?? 'Unknown';
-            } catch {
-              console.warn('Could not fetch country, defaulting to Unknown');
+              console.log('[geo] ipapi.co response:', JSON.stringify(geoData));
+              country = geoData.country_name ?? 'Unknown';
+            } catch (err) {
+              console.warn('Could not fetch country, defaulting to Unknown', err);
             }
 
             // Try using the gameRoomService method first

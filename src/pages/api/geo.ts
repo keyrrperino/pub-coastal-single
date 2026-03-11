@@ -15,13 +15,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
+  // Try ipwho.is first
   try {
     const response = await fetch(`https://ipwho.is/${ip}`);
     const data = await response.json();
     console.log('[geo] ipwho.is response:', JSON.stringify(data));
-    res.json({ country: data.country ?? 'Unknown' });
+    if (data.success && data.country) {
+      res.json({ country: data.country });
+      return;
+    }
+    console.warn('[geo] ipwho.is failed or no country, trying fallback');
   } catch (err) {
-    console.error('[geo] fetch error:', err);
-    res.json({ country: 'Unknown' });
+    console.error('[geo] ipwho.is error:', err);
   }
+
+  // Fallback: ipapi.co
+  try {
+    const response = await fetch(`https://ipapi.co/${ip}/json/`);
+    const data = await response.json();
+    console.log('[geo] ipapi.co response:', JSON.stringify(data));
+    if (data.country_name) {
+      res.json({ country: data.country_name });
+      return;
+    }
+    console.warn('[geo] ipapi.co failed or no country');
+  } catch (err) {
+    console.error('[geo] ipapi.co error:', err);
+  }
+
+  res.json({ country: 'Unknown' });
 }
