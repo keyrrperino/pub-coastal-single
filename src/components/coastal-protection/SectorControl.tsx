@@ -1503,17 +1503,30 @@ const SectorControl: React.FC<SectorControlProps> = ({
             );
             console.log('Team name saved to lobby state:', teamName);
 
+            // Fetch user's country
+            let country = 'Unknown';
+            try {
+              const geoRes = await fetch('/api/geo');
+              const geoData = await geoRes.json();
+              country = geoData.country ?? 'Unknown';
+            } catch {
+              console.warn('Could not fetch country, defaulting to Unknown');
+            }
+
             // Try using the gameRoomService method first
             if (typeof gameRoomService.saveTeamScore === 'function') {
               await gameRoomService.saveTeamScore(
                 teamName,
                 finalScore,
+                country,
               );
               console.log(
                 'Team score saved via gameRoomService:',
                 teamName,
                 'Score:',
                 finalScore,
+                'Country:',
+                country,
               );
             } else {
               // Fallback to standalone function
@@ -1525,6 +1538,7 @@ const SectorControl: React.FC<SectorControlProps> = ({
                 finalScore,
                 roomName,
                 `Player ${sector.slice(-1)}`,
+                country,
               );
               console.log(
                 'Team score saved via standalone function:',
