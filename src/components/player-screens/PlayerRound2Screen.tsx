@@ -57,7 +57,6 @@ export default function PlayerRound2Screen({
       info={info}
       waterLevelIndicator={
         <WaterLevelIndicator
-          offsetLevel={100}
           minLevel={0.7}
           maxLevel={1.5}
           currentLevel={0.7}

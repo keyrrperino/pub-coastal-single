@@ -58,56 +58,39 @@ export default function PostRoundModal({
   if (!isOpen) return null;
 
   const getPerformanceRound = (): PostRoundPerformance => {
-    const roundData =
-      overallScoresData[(currentRound ?? 1) as RoundType];
+    const roundData = overallScoresData[(currentRound ?? 1) as RoundType];
 
-    const totalScoreRound = Object.values(UserSectorEnum).map((userSectorEnum) => {
-      return roundData
-        ? (roundData[userSectorEnum]?.totalScoreToDeduct ?? 0)
-        : 0;
-    }).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const sectorDeductions = Object.values(UserSectorEnum).map((userSectorEnum) =>
+      roundData ? (roundData[userSectorEnum]?.totalScoreToDeduct ?? 0) : 0
+    );
 
-    let performance = 'okay';
-    if (currentRound === 1) {
-      // Round 1: No Flooding 0 to -5, Moderate -5.01 to -60, Heavy -60.01 to -120
-      if (totalScoreRound >= 0 && totalScoreRound <= 5 * 3) {
-        performance = 'good';
+    const getSectorPerf = (deduction: number): PostRoundPerformance => {
+      if (currentRound === 1) {
+        // Round 1: Little Flooding 0 to -5, Moderate -5.01 to -60, Heavy -60.01 to -120
+        if (deduction <= 5) return 'good';
+        if (deduction <= 60) return 'okay';
+        return 'bad';
       }
-      if (totalScoreRound > 5*3 && totalScoreRound <= 60*3) {
-        performance = 'okay';
+      if (currentRound === 2) {
+        // Round 2: Little Flooding 0 to -10, Moderate -10.01 to -149.99, Heavy -150 to -300
+        if (deduction <= 10) return 'good';
+        if (deduction <= 149.99) return 'okay';
+        return 'bad';
       }
-      if (totalScoreRound > 60*3 && totalScoreRound <= 120*3) {
-        performance = 'bad';
+      if (currentRound === 3) {
+        // Round 3: Little Flooding 0 to -20, Moderate -20.01 to -179.99, Heavy -180 to -400
+        if (deduction <= 20) return 'good';
+        if (deduction <= 179.99) return 'okay';
+        return 'bad';
       }
-    }
+      return 'okay';
+    };
 
-    if (currentRound === 2) {
-      // Round 2: Little Flooding 0 to -10, Moderate -10.01 to -149.99, Heavy -150 to -300
-      if (totalScoreRound >= 0 && totalScoreRound <= 10*3) {
-        performance = 'good';
-      }
-      if (totalScoreRound > 10*3 && totalScoreRound <= 149.99*3) {
-        performance = 'okay';
-      }
-      if (totalScoreRound > 149.99*3 && totalScoreRound <= 300*3) {
-        performance = 'bad';
-      }
-    }
-
-    if (currentRound === 3) {
-      // Round 3: Little Flooding 0 to -20, Moderate -20.01 to -179.99, Heavy -180 to -400
-      if (totalScoreRound >= 0 && totalScoreRound <= 20*3) {
-        performance = 'good';
-      }
-      if (totalScoreRound > 20*3 && totalScoreRound <= 179.99*3) {
-        performance = 'okay';
-      }
-      if (totalScoreRound > 179.99*3 && totalScoreRound <= 400*3) {
-        performance = 'bad';
-      }
-    }
-
-    return performance as PostRoundPerformance;
+    // Evaluate each sector individually and return the worst performance
+    const perfs = sectorDeductions.map(getSectorPerf);
+    if (perfs.includes('bad')) return 'bad';
+    if (perfs.includes('okay')) return 'okay';
+    return 'good';
   };
 
   const config = performanceConfigs[getPerformanceRound()];

@@ -42,10 +42,10 @@ const InsufficientBudgetModal: React.FC<InsufficientBudgetModalProps> = ({
             maxWidth: '100%'
           }}
         >
-          Oh no! Your team does not have enough budget for this!
+          Oh no! You do not have enough budget for this!
           <br />
           <br />
-          Speak to your team to better plan your spending next round
+          Plan your spending better next round
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   motion,
   useAnimation,
@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils';
 
 interface WaterLevelIndicatorProps {
   minLevel: number;
-  offsetLevel?: number;
   maxLevel: number;
   currentLevel: number;
   unit?: string;
@@ -35,17 +34,9 @@ export default function WaterLevelIndicator({
   scaleMax,
   currentWaterColor,
   projectedWaterColor,
-  offsetLevel
 }: WaterLevelIndicatorProps) {
-  // Get responsive height based on screen size
-  const getContainerHeight = () => {
-    if (typeof window !== 'undefined' && window.innerWidth >= 2560) {
-      return 1254; // 4K screens
-    }
-    return 627; // Non-4K screens
-  };
+  const barRef = useRef<HTMLDivElement>(null);
 
-  const containerHeight = getContainerHeight();
   // Motion values for smooth number animation
   const animatedMaxLevelValue = useMotionValue(minLevel);
   const displayMaxLevel = useTransform(
@@ -62,11 +53,14 @@ export default function WaterLevelIndicator({
   // Orchestrate the animation sequence
   useEffect(() => {
     const animateSequence = async () => {
+      const actualHeight = barRef.current?.clientHeight ?? window.innerHeight * 0.5;
+      const textOffset = actualHeight * 0.16;
+
       // Start text animations
       await Promise.all([
         textControls.start({
           opacity: 1,
-          y: -(maxLevel / scaleMax) * (containerHeight - 4) + (containerHeight >= 1254 ? 200 : 100),
+          y: -(maxLevel / scaleMax) * actualHeight + textOffset,
           transition: { duration: 0.8, ease: 'easeOut' },
         }),
         scaleControls.start({
@@ -81,19 +75,16 @@ export default function WaterLevelIndicator({
         }),
       ]);
 
-              await currentWaterControls.start({
-          height: (currentLevel / scaleMax) * (containerHeight - 4),
-          transition: { duration: 1.2, ease: 'easeOut' },
-        });
-        console.log(((maxLevel - currentLevel) / scaleMax) *
-        (containerHeight - 4), 'here');
-        await Promise.all([
-          projectedWaterControls.start({
-            height:
-              ((maxLevel - currentLevel) / scaleMax) *
-              (containerHeight - 4) - (offsetLevel ?? 0),
-            transition: { duration: 1.0, ease: 'easeOut' },
-          }),
+      await currentWaterControls.start({
+        height: `${(currentLevel / scaleMax) * 100}%`,
+        transition: { duration: 1.2, ease: 'easeOut' },
+      });
+
+      await Promise.all([
+        projectedWaterControls.start({
+          height: `${((maxLevel - currentLevel) / scaleMax) * 100}%`,
+          transition: { duration: 1.0, ease: 'easeOut' },
+        }),
         animate(animatedMaxLevelValue, maxLevel, {
           duration: 1.0,
           ease: 'easeOut',
@@ -106,7 +97,6 @@ export default function WaterLevelIndicator({
     currentLevel,
     maxLevel,
     scaleMax,
-    containerHeight,
     textControls,
     scaleControls,
     containerControls,
@@ -115,15 +105,9 @@ export default function WaterLevelIndicator({
     animatedMaxLevelValue,
   ]);
 
-  // Calculate the position of maxLevel on the scale for text positioning (use final maxLevel, not animated)
-  // Text should align with the TOP of the maxLevel water (where the line would be)
-  // Container is 627px (non-4K) or 1104px (4K), scale goes from 0 to 2m, maxLevel is 0.6m
-  // maxLevel position from bottom = (0.6/2) * (containerHeight - 4) = varies by screen size
-  // Text should be at that level, so move UP by that amount from bottom
-
   // Generate scale labels dynamically
   const scaleLabels = [];
-  const labelCount = 3; // Number of scale labels
+  const labelCount = 3;
   for (let i = 0; i < labelCount; i++) {
     const value = scaleMax - (i * scaleMax) / (labelCount - 1);
     scaleLabels.push(value);
@@ -172,14 +156,14 @@ export default function WaterLevelIndicator({
 
         {/* Water Level Container */}
         <motion.div
-          className="relative"
+          className="relative h-full"
           initial={{ opacity: 0, y: 16 }}
           animate={containerControls}
         >
           {/* Main container with border */}
           <div
+            ref={barRef}
             className="w-[3vh] h-full border-[0.1vh] border-white rounded-full relative overflow-hidden"
-            style={{  }}
           >
             {/* Current water level */}
             <motion.div
@@ -197,13 +181,9 @@ export default function WaterLevelIndicator({
               initial={{ height: 0 }}
               animate={projectedWaterControls}
               style={{
-                bottom: `${(currentLevel / scaleMax) * (containerHeight - 4)}px`,
+                bottom: `${(currentLevel / scaleMax) * 100}%`,
                 background: `linear-gradient(180deg, ${projectedWaterColor.from} 0%, ${projectedWaterColor.to} 100%)`,
-                                  borderRadius:
-                    (maxLevel / scaleMax) * (containerHeight - 4) >=
-                    containerHeight - 4
-                      ? '22px 22px 0 0'
-                      : '0',
+                borderRadius: maxLevel >= scaleMax ? '22px 22px 0 0' : '0',
               }}
             />
           </div>
@@ -212,4 +192,3 @@ export default function WaterLevelIndicator({
     </div>
   );
 }
-
