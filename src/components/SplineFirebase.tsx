@@ -315,8 +315,9 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   const resetGame = async () => {
     await gameRoomServiceRef.current?.deleteActivities();
     await gameRoomServiceRef.current?.updateLobbyState(lobbyStateDefaultValue);
-    window.location.reload(); 
+    window.location.reload();
   }
+
 
   const displayThankYou = async () => {
     if (gameRoomServiceRef.current) {

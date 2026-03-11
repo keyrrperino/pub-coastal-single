@@ -440,6 +440,14 @@ export class GameRoomService {
     await remove(activitiesRef);
   }
 
+  async setupResetOnDisconnect(): Promise<void> {
+    if (!this.roomId) return;
+    const lobbyStateRef = ref(database, `${ROOMS}/${this.roomId}/lobbyState`);
+    const activitiesRef = ref(database, `${ROOMS}/${this.roomId}/activity`);
+    await onDisconnect(lobbyStateRef).set(lobbyStateDefaultValue);
+    await onDisconnect(activitiesRef).remove();
+  }
+
   getCurrentUserId(): string {
     return this.userId;
   }

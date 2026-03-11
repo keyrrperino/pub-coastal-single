@@ -79,6 +79,9 @@ export function useInitialize(roomName: string) {
         }
       });
 
+      // Register Firebase onDisconnect so closing the browser resets the game
+      await gameRoomServiceRef.current.setupResetOnDisconnect();
+
       // Update server time context with game room service reference
       console.log('🕒 [INITIALIZE] Setting GameRoomService reference in ServerTimeContext');
       updateFromGameRoomService(gameRoomServiceRef.current);
