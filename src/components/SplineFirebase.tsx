@@ -9,7 +9,7 @@ import { useSplineTriggers } from "./hooks/useSplineTriggers";
 import { useLobbyPreparation } from "./hooks/useLobbyPreparation";
 import { getPlayerNumber, isGameOnGoing } from "@/lib/utils";
 import { useSplineLoader } from "./hooks/useSplineLoader";
-import { CutScenesStatusEnum, getCutScenes, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
+import { CutSceneEntry, CutScenesStatusEnum, getCutScenes, useCutSceneSequence } from "./hooks/useSplineCutSceneTriggers";
 import { useHideAllTriggers } from "./hooks/useHideAllSplineTriggers";
 import RoundStartAnimationModal from "@/games/pub-coastal-game/compontents/RoundStartAnimationModal";
 import ScoreBreakdownModal from "@/games/pub-coastal-game/compontents/ScoreBreakdownModal";
@@ -301,9 +301,9 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     if (lobbyState.gameLobbyStatus !== GameLobbyStatus.ROUND_CUTSCENES) return;
 
     const isIntro =
-      currentCutScene === CutScenesEnum.NEWS_INTRO_1 ||
-      currentCutScene === CutScenesEnum.NEWS_INTRO_2 ||
-      currentCutScene === CutScenesEnum.NEWS_INTRO_3;
+      currentCutScene?.cutscene === CutScenesEnum.NEWS_INTRO_1 ||
+      currentCutScene?.cutscene === CutScenesEnum.NEWS_INTRO_2 ||
+      currentCutScene?.cutscene === CutScenesEnum.NEWS_INTRO_3;
 
     el.volume = isIntro ? 1.0 : 0.5;
     if (el.paused) {
@@ -330,7 +330,7 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
     }
   }
 
-  const [dynamicCutScenes, setDynamicCutScenes] = useState<CutScenesEnum[]>([]);
+  const [dynamicCutScenes, setDynamicCutScenes] = useState<{ cutscene: CutScenesEnum; overlay: CutScenesEnum }[]>([]);
   const cutsceneVideoRefs = useRef<Partial<Record<CutScenesEnum, HTMLVideoElement | null>>>({});
 
   useEffect(() => {
@@ -338,23 +338,25 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
   }, [ activities, newActivities, lobbyState ]);
 
   const renderAllCutScences = (
-    Object.values(dynamicCutScenes).map((value, index) => {
+    Object.values(dynamicCutScenes).map((entry, index) => {
+      const videoCutscene = entry.cutscene;
+      const overlayCutscene = entry.overlay;
       return (
         <div
-          key={`${value}-${index}`}
+          key={`${videoCutscene}-${index}`}
           className="fixed inset-0 h-[100dvh] m-0 p-0 bg-black z-10 w-[100%]"
-          style={{ opacity: 1, display: value === currentCutScene ? "block" : "none" }}
+          style={{ opacity: 1, display: videoCutscene === currentCutScene?.cutscene ? "block" : "none" }}
         >
-          { 
+          {
             <video
               ref={(el) => {
                 if (el) {
-                  cutsceneVideoRefs.current[value] = el;
+                  cutsceneVideoRefs.current[videoCutscene] = el;
                 }
               }}
-              src={`https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${value?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=${APP_VERSION}`}
+              src={`https://storage.googleapis.com/pub-coastal-game-files/${isIOS ? "mobile/" : ""}${videoCutscene?.replaceAll("-", " ").toLocaleLowerCase()}.mp4?v=${APP_VERSION}`}
               autoPlay
-              id={currentCutScene + "-video"}
+              id={currentCutScene?.cutscene + "-video"}
               loop
               muted
               playsInline
@@ -375,12 +377,12 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
 
                   return newTotal;
                 });
-                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
+                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(videoCutscene)) {
                   e.currentTarget.playbackRate = 0.7143;
                 }
               }}
               onPlay={(e) => {
-                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(value)) {
+                if (![CutScenesEnum.NEWS_INTRO_1, CutScenesEnum.NEWS_INTRO_2, CutScenesEnum.NEWS_INTRO_3].includes(videoCutscene)) {
                   e.currentTarget.playbackRate = 0.7143;
                 }
               }}
@@ -403,11 +405,11 @@ const SplineFirebase: React.FC<SplineFirebaseProps> = ({
                 setCriticalProgress((prev) => {
                   const newTotal = prev + 1;
                   setAssetsProgress((newTotal / totalAssets) * 100);
-  
+
                   return newTotal;
                 });
               }}
-              src={`https://storage.googleapis.com/pub-coastal-game-files/images/${value?.replaceAll("-", " ").toLocaleLowerCase()}.webp?v=${APP_VERSION}`}
+              src={`https://storage.googleapis.com/pub-coastal-game-files/images/${overlayCutscene?.replaceAll("-", " ").toLocaleLowerCase()}.webp?v=${APP_VERSION}`}
               className="pointer-events-none max-h-[100dvh]"
               alt="Frame Overlay"
             />
