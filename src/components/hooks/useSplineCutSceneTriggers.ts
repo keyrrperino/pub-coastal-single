@@ -7,7 +7,9 @@ import { useTimer } from "./useTimer";
 import { sceneSectorConfigurations } from "@/lib/constants";
 import { useServerTime } from "../ServerTimeContext";
 
-export const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutScenesEnum[] => {
+export type CutSceneEntry = { cutscene: CutScenesEnum; overlay: CutScenesEnum };
+
+export const getCutScenes = (round: RoundType, overAllScores: { [key in RoundType]?: OverallScoresTypes }): CutSceneEntry[] => {
   // Build fallback order: round 1 -> [1], round 2 -> [2,1], round 3 -> [3,2,1]
   const roundsToCheck: RoundType[] = ((): RoundType[] => {
     if (round === 1) return [1];
@@ -52,9 +54,15 @@ export const getCutScenes = (round: RoundType, overAllScores: { [key in RoundTyp
     3: CutScenesEnum.NEWS_INTRO_3,
   }
 
-  return [...[newsIntro[round]], ...keys.map((value) => {
-    return sceneSectorConfigurations[value].cutscene as CutScenesEnum;
-  })];
+  return [
+    { cutscene: newsIntro[round], overlay: newsIntro[round] },
+    ...keys.map((value) => {
+      const config = sceneSectorConfigurations[value];
+      const cutscene = config.cutscene as CutScenesEnum;
+      const overlay = (config.overlay ?? config.cutscene) as CutScenesEnum;
+      return { cutscene, overlay };
+    })
+  ];
 };
 
 export enum CutScenesStatusEnum {
@@ -70,12 +78,12 @@ export function useCutSceneSequence(
   const { getAdjustedCurrentTime } = useServerTime();
   
   const [currentCutSceneIndex, setCurrentCutSceneIndex] = useState<number | null>(null);
-  const [currentCutScene, setCurrentCutScene] = useState<CutScenesEnum | null>(null);
+  const [currentCutScene, setCurrentCutScene] = useState<CutSceneEntry | null>(null);
   const [cutSceneStatus, setCutScenesStatus] = useState<CutScenesStatusEnum>(CutScenesStatusEnum.NOT_YET_STARTED);
   const splineAppRef = useRef<Application | null>(null);
 
   // List of cutscenes to show
-  const [cutScenes, setCutScenes] = useState<CutScenesEnum[]>([]);
+  const [cutScenes, setCutScenes] = useState<CutSceneEntry[]>([]);
 
   console.log(cutScenes);
 
